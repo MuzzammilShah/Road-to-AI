@@ -1,0 +1,191 @@
+/* Light theme: Header and navbar are white */
+body[data-md-color-scheme="default"] .md-header,
+body[data-md-color-scheme="default"] .md-tabs {
+  background-color: white;
+  color: black;
+}
+body[data-md-color-scheme="default"] .md-header a,
+body[data-md-color-scheme="default"] .md-tabs a {
+  color: black; /* Text and links */
+}
+body[data-md-color-scheme="default"] .md-tabs a.md-tabs__link--active {
+  border-bottom: 2px solid black; /* Active tab indicator */
+  font-weight: bold;
+}
+
+/* Dark theme: Header and navbar are black */
+body[data-md-color-scheme="slate"] {
+  background-color: #121212;
+}
+body[data-md-color-scheme="slate"] .md-header,
+body[data-md-color-scheme="slate"] .md-tabs {
+  background-color: #121212;
+  color: white;
+}
+body[data-md-color-scheme="slate"] .md-header a,
+body[data-md-color-scheme="slate"] .md-tabs a {
+  color: white; /* Text and links */
+}
+body[data-md-color-scheme="slate"] .md-tabs a.md-tabs__link--active {
+  border-bottom: 2px solid white; /* Active tab indicator */
+}
+
+/* Remove gradient in dark theme for both primary and secondary sidebars */
+body[data-md-color-scheme="slate"] .md-sidebar--primary,
+body[data-md-color-scheme="slate"] .md-sidebar--secondary,
+body[data-md-color-scheme="slate"] .md-sidebar--primary .md-sidebar__inner,
+body[data-md-color-scheme="slate"] .md-sidebar--secondary .md-sidebar__inner,
+body[data-md-color-scheme="slate"] .md-nav,
+body[data-md-color-scheme="slate"] .md-nav__list,
+body[data-md-color-scheme="slate"] .md-nav__item,
+body[data-md-color-scheme="slate"] .md-nav__source,
+body[data-md-color-scheme="slate"] .md-nav__title {
+  background: #121212 !important;
+  background-color: #121212 !important;
+  background-image: none !important;
+  box-shadow: none !important; /* Remove any shadow that might mimic gradient */
+}
+
+/* Remove gradient from pseudo-elements */
+body[data-md-color-scheme="slate"] .md-sidebar--primary::before,
+body[data-md-color-scheme="slate"] .md-sidebar--primary::after,
+body[data-md-color-scheme="slate"] .md-sidebar--primary .md-sidebar__inner::before,
+body[data-md-color-scheme="slate"] .md-sidebar--primary .md-sidebar__inner::after,
+body[data-md-color-scheme="slate"] .md-nav::before,
+body[data-md-color-scheme="slate"] .md-nav::after {
+  background: #121212 !important;
+  background-image: none !important;
+}
+
+/* Override nested elements within the primary sidebar */
+body[data-md-color-scheme="slate"] .md-sidebar--primary *,
+body[data-md-color-scheme="slate"] .md-nav__item * {
+  background: #121212 !important;
+  background-image: none !important;
+}
+
+/* Override CSS variables that might be applying the gradient */
+body[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #121212 !important;
+  --md-primary-bg-color: #121212 !important;
+  --md-primary-fg-color: white !important;
+}
+
+/* Ensure text remains readable */
+/* body[data-md-color-scheme="slate"] .md-nav a,
+body[data-md-color-scheme="slate"] .md-nav__title {
+  color: white !important;
+} */
+
+/* Shadow effect for header and navbar */
+.md-tabs {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Consistent shadow */
+}
+
+/* Light theme: Match footer and bottom navigation bar to header (white) */
+body[data-md-color-scheme="default"] .md-footer-nav,
+body[data-md-color-scheme="default"] .md-footer {
+  background-color: white !important;
+  color: black !important;
+}
+body[data-md-color-scheme="default"] .md-footer-meta.md-typeset,
+body[data-md-color-scheme="default"] .md-footer-copyright,
+body[data-md-color-scheme="default"] .md-footer-social a,
+body[data-md-color-scheme="default"] .md-footer-nav__link {
+  background-color: rgb(0, 0, 0) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Dark theme: Match footer and bottom navigation bar to header (#121212) */
+body[data-md-color-scheme="slate"] .md-footer-nav,
+body[data-md-color-scheme="slate"] .md-footer {
+  background-color: #121212 !important;
+  color: white !important;
+}
+body[data-md-color-scheme="slate"] .md-footer-meta.md-typeset,
+body[data-md-color-scheme="slate"] .md-footer-copyright,
+body[data-md-color-scheme="slate"] .md-footer-social a,
+body[data-md-color-scheme="slate"] .md-footer-nav__link {
+  background-color: black !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+
+/* Hero Section Container */
+/* Center the hero section horizontally */
+.centered-hero {
+  display: flex;
+  justify-content: center;
+}
+
+/* Hero Content */
+.hero-content {
+  text-align: center;
+}
+
+.hero-logo {
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.hero-content h1 {
+  font-size: 0.1em;
+}
+
+.hero-content p {
+  font-size: 1.2em;
+}
+
+.hero-button {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Light Theme Styles */
+body[data-md-color-scheme="default"] .hero-content h1,
+body[data-md-color-scheme="default"] .hero-content p {
+  color: #000000;
+}
+
+body[data-md-color-scheme="default"] .hero-button {
+  background-color: #191919;
+  color: #ffffff;
+}
+
+body[data-md-color-scheme="default"] .hero-button:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Dark Theme Styles */
+body[data-md-color-scheme="slate"] .hero-content h1,
+body[data-md-color-scheme="slate"] .hero-content p {
+  color: #ffffff;
+}
+
+body[data-md-color-scheme="slate"] .hero-button {
+  background-color: #f0f0f0;
+  color: #000000;
+}
+
+body[data-md-color-scheme="slate"] .hero-button:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.home .md-sidebar--secondary {
+  display: none;
+}
+
+
+/* Logo theme toggle */
+body[data-md-color-scheme="default"] .hero-logo {
+  content: url('../assets/images/white-bg.png');
+}
+body[data-md-color-scheme="slate"] .hero-logo {
+  content: url('../assets/images/dark-bg.png');
+}
