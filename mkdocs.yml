@@ -125,6 +125,9 @@ nav:
       - Intro to LLMs: ZeroToHero/General-MISC/intro-llms.md
       - Deep Dive into LLMs: ZeroToHero/General-MISC/deepdive-llms.md
       - Using LLMs: ZeroToHero/General-MISC/using-llms.md
+  - Python:
+    - Python Programming: PythonProgramming/index.md
+    - Practical Python: PythonProgramming/practical-python/index.md
 
 markdown_extensions:
   - toc:
