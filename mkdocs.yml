@@ -124,7 +124,18 @@ nav:
     - General MISC:
       - Intro to LLMs: ZeroToHero/General-MISC/intro-llms.md
       - Deep Dive into LLMs: ZeroToHero/General-MISC/deepdive-llms.md
-      - Using LLMs: ZeroToHero/General-MISC/using-llms.md
+  - Python:
+    - Python Programming: PythonProgramming/index.md
+    - Practical Python:
+      - Dabeaz course: PythonProgramming/practical-python/index.md
+      - Introduction:
+        - Overview: PythonProgramming/practical-python/01_Introduction/00_Overview.md
+        - Python: PythonProgramming/practical-python/01_Introduction/01_Python.md
+        - HelloWorld: PythonProgramming/practical-python/01_Introduction/02_Hello_world.md
+        - Numbers: PythonProgramming/practical-python/01_Introduction/03_Numbers.md
+        - Strings: PythonProgramming/practical-python/01_Introduction/04_Strings.md
+        - Lists: PythonProgramming/practical-python/01_Introduction/05_Lists.md
+        - Files: PythonProgramming/practical-python/01_Introduction/06_Files.md
 
 markdown_extensions:
   - toc:
