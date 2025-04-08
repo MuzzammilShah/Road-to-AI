@@ -1,3 +1,7 @@
-## Practical Python - Dabeaz Course
+!!! warning "Status: Ongoing"
 
-Landing Introduction page to explain this course, will be followed by the contents that I learn from there.
+**Timeline: 7th April, 2025 - PRESENT**
+
+### Table of Contents
+
+[1. Introduction to Python](01_Introduction/00_Overview.md)
