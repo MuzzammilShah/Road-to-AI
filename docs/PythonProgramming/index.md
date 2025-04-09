@@ -1,3 +1,1 @@
-!!! warning "This section is still under construction"
-
-Learning and Improving on my python programming skills, from basics to advance.
+### 🚀 Learning and improving my Python programming skills — progressing from the basics to advanced concepts.
