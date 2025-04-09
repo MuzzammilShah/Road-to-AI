@@ -126,16 +126,17 @@ nav:
       - Deep Dive into LLMs: ZeroToHero/General-MISC/deepdive-llms.md
   - Python:
     - Python Programming: PythonProgramming/index.md
-    - Practical Python:
-      - Dabeaz course: PythonProgramming/practical-python/index.md
-      - Introduction:
+    - Dabeaz course I:
+      - Practical Python: PythonProgramming/practical-python/index.md
+      - Module 1:
         - Overview: PythonProgramming/practical-python/01_Introduction/00_Overview.md
         - Python: PythonProgramming/practical-python/01_Introduction/01_Python.md
-        - HelloWorld: PythonProgramming/practical-python/01_Introduction/02_Hello_world.md
+        - Hello World: PythonProgramming/practical-python/01_Introduction/02_Hello_world.md
         - Numbers: PythonProgramming/practical-python/01_Introduction/03_Numbers.md
         - Strings: PythonProgramming/practical-python/01_Introduction/04_Strings.md
         - Lists: PythonProgramming/practical-python/01_Introduction/05_Lists.md
         - Files: PythonProgramming/practical-python/01_Introduction/06_Files.md
+        - Functions: PythonProgramming/practical-python/01_Introduction/07_Functions.md
 
 markdown_extensions:
   - toc:
