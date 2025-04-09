@@ -113,15 +113,15 @@ body[data-md-color-scheme="slate"] .md-footer-nav__link {
 
 /* Hero Section Container */
 /* Center the hero section horizontally */
-.centered-hero {
+/* .centered-hero {
   display: flex;
   justify-content: center;
-}
+} */
 
 /* Hero Content */
-.hero-content {
+/* .hero-content {
   text-align: center;
-}
+} */
 
 .hero-logo {
   width: 80%;
@@ -139,7 +139,7 @@ body[data-md-color-scheme="slate"] .md-footer-nav__link {
 .hero-button {
   display: inline-block;
   padding: 8px 18px;
-  border-radius: 50px;
+  border-radius: 20px;
   text-decoration: none;
   text-transform: uppercase;
   transition: background-color 0.3s, color 0.3s;
@@ -184,8 +184,93 @@ body.home .md-sidebar--secondary {
 
 /* Logo theme toggle */
 body[data-md-color-scheme="default"] .hero-logo {
-  content: url('../assets/images/white-bg.png');
+  content: url('../assets/images/white-bg-3.png');
 }
 body[data-md-color-scheme="slate"] .hero-logo {
-  content: url('../assets/images/dark-bg.png');
+  content: url('../assets/images/dark-bg-3.png');
+}
+
+
+
+/* Reset theme container margins and padding */
+.landing-page ~ .md-main__inner.md-grid,
+.landing-page ~ .md-content__inner.md-typeset {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Vanta.js background container */
+#vanta-background {
+  position: fixed; /* Use fixed positioning to cover the entire viewport */
+  top: 0;
+  left: 0;
+  min-height: 100vh; /* Minimum height of the viewport */
+  width: 100vw; /* Full viewport width */
+  overflow: hidden; /* Prevents content overflow */
+  z-index: -1; /* Send to back so content stays on top */
+}
+
+/* Hide secondary sidebar (Table of Contents) on landing page */
+.landing-page ~ .md-sidebar--secondary {
+  display: none !important;
+}
+
+/* Hero content positioning and alignment */
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  transform: translateY(-50%);
+  width: 40%; /* Default width for desktop */
+  text-align: left;
+  padding: 20px; /* Add padding for better spacing */
+  z-index: 1; /* Ensure content stays above the background */
+}
+
+/* Logo styling and theme toggle */
+.hero-logo {
+  display: none;
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+body[data-md-color-scheme="default"] .light-logo {
+  display: block;
+}
+
+body[data-md-color-scheme="slate"] .dark-logo {
+  display: block;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .hero-content {
+    left: calc(10% + (100% - 40%) * (768px - 100vw) / (768px - 320px)); /* Dynamic left adjustment */
+    width: 40%; /* Maintain original width */
+    padding: 10px; /* Reduced padding for mobile */
+  }
+
+  .hero-logo {
+    width: 100%; /* Maintain original logo size */
+  }
+
+  .hero-content h1 {
+    font-size: inherit; /* Maintain original size */
+  }
+
+  .hero-content p {
+    font-size: 1.2em; /* Maintain original size */
+  }
+
+  .hero-button {
+    padding: 5px 15px; /* Maintain original padding */
+    font-size: 0.8;
+  }
+}
+
+/* Ensure text remains readable over the animation */
+.hero-content h1,
+.hero-content p {
+  color: inherit; /* Inherits theme color from body */
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: Add shadow for readability */
 }
