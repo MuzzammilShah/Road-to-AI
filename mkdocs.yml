@@ -8,6 +8,7 @@ theme:
       note: material/pencil-circle
       warning: material/alert
       info: material/alert-circle
+      question: material/head-question-outline
   favicon: assets/images/favicon.png
   font:
     text: "Inter"
@@ -137,6 +138,15 @@ nav:
         - Lists: PythonProgramming/practical-python/01_Introduction/05_Lists.md
         - Files: PythonProgramming/practical-python/01_Introduction/06_Files.md
         - Functions: PythonProgramming/practical-python/01_Introduction/07_Functions.md
+      - Module 2:
+        - Overview: PythonProgramming/practical-python/02_Working_with_data/00_Overview.md
+        - Datatypes: PythonProgramming/practical-python/02_Working_with_data/01_Datatypes.md
+        - Containers: PythonProgramming/practical-python/02_Working_with_data/02_Containers.md
+        - Formatting: PythonProgramming/practical-python/02_Working_with_data/03_Formatting.md
+        - Sequences: PythonProgramming/practical-python/02_Working_with_data/04_Sequences.md
+        - Collections: PythonProgramming/practical-python/02_Working_with_data/05_Collections.md
+        - List Comprehension: PythonProgramming/practical-python/02_Working_with_data/06_List_comprehension.md
+        - Objects: PythonProgramming/practical-python/02_Working_with_data/07_Objects.md
 
 markdown_extensions:
   - toc:
