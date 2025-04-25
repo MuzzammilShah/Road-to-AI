@@ -82,7 +82,7 @@ with open('outfile', 'wt') as out:
     ...
 ```
 
-## Exercises
+## **Exercises**
 
 These exercises depend on a file `Data/portfolio.csv`.  The file
 contains a list of lines with information on a portfolio of stocks.
@@ -97,7 +97,7 @@ it's running by doing this:
 >>>
 ```
 
-### Exercise 1.26: File Preliminaries
+### **Exercise 1.26: File Preliminaries**
 
 First, try reading the entire file all at once as a big string:
 
@@ -190,7 +190,7 @@ For example, try this:
 
 *Note: In these examples, `f.close()` is being called explicitly because the `with` statement isn’t being used.*
 
-### Exercise 1.27: Reading a data file
+### **Exercise 1.27: Reading a data file**
 
 Now that you know how to read a file, let’s write a program to perform a simple calculation.
 
@@ -207,7 +207,7 @@ Your program should print output such as the following:
 Total cost 44671.15
 ```
 
-### Exercise 1.28: Other kinds of "files"
+### **Exercise 1.28: Other kinds of "files"**
 
 What if you wanted to read a non-text file such as a gzip-compressed
 datafile?  The builtin `open()` function won’t help you here, but

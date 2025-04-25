@@ -238,12 +238,12 @@ except items[2]:    # ValueError
 
 With great power comes responsibility.  Just because you can do that doesn't mean you should.
 
-## Exercises
+## **Exercises**
 
 In this set of exercises, we look at some of the power that comes from first-class
 objects.
 
-### Exercise 2.24: First-class Data
+### **Exercise 2.24: First-class Data**
 
 In the file `Data/portfolio.csv`, we read data organized as columns that look like this:
 
@@ -381,7 +381,7 @@ The above code can be compressed into a single list comprehension.
 >>>
 ```
 
-### Exercise 2.25: Making dictionaries
+### **Exercise 2.25: Making dictionaries**
 
 Remember how the `dict()` function can easily make a dictionary if you
 have a sequence of key names and values?  Let’s make a dictionary from
@@ -406,7 +406,7 @@ whole conversion in a single step using a dict-comprehension:
 >>>
 ```
 
-### Exercise 2.26: The Big Picture
+### **Exercise 2.26: The Big Picture**
 
 Using the techniques in this exercise, you could write statements that
 easily convert fields from just about any column-oriented datafile

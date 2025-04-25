@@ -104,9 +104,9 @@ Traceback (most recent call last):
 RuntimeError: What a kerfuffle
 ```
 
-## Exercises
+## **Exercises**
 
-### Exercise 1.29: Defining a function
+### **Exercise 1.29: Defining a function**
 
 Try defining a simple function:
 
@@ -125,7 +125,7 @@ Hello Paula
 If the first statement of a function is a string, it serves as documentation.
 Try typing a command such as `help(greeting)` to see it displayed.
 
-### Exercise 1.30: Turning a script into a function
+### **Exercise 1.30: Turning a script into a function**
 
 Take the code you wrote for the `pcost.py` program in [Exercise 1.27](06_Files.md)
 and turn it into a function `portfolio_cost(filename)`.  This
@@ -164,7 +164,7 @@ This will allow you to call your function from the interactive mode.
 Being able to experiment with your code interactively is useful for
 testing and debugging.
 
-### Exercise 1.31: Error handling
+### **Exercise 1.31: Error handling**
 
 What happens if you try your function on a file with some missing fields?
 
@@ -186,7 +186,7 @@ manner.
 Modify the `pcost.py` program to catch the exception, print a warning
 message, and continue processing the rest of the file.
 
-### Exercise 1.32: Using a library function
+### **Exercise 1.32: Using a library function**
 
 Python comes with a large standard library of useful functions.  One
 library that might be useful here is the `csv` module. You should use
@@ -222,7 +222,7 @@ away from the names in the first column.
 Modify your `pcost.py` program so that it uses the `csv` module for
 parsing and try running earlier examples.
 
-### Exercise 1.33: Reading from the command line
+### **Exercise 1.33: Reading from the command line**
 
 In the `pcost.py` program, the name of the input file has been hardwired into the code:
 

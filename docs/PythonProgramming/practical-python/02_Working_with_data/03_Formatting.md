@@ -120,9 +120,9 @@ b'Dave has 37 messages'
 >>>
 ```
 
-## Exercises
+## **Exercises**
 
-### Exercise 2.8: How to format numbers
+### **Exercise 2.8: How to format numbers**
 
 A common problem with printing numbers is specifying the number of
 decimal places. One way to fix this is to use f-strings. Try these
@@ -168,7 +168,7 @@ If you want to save a formatted string. Just assign it to a variable.
 >>>
 ```
 
-### Exercise 2.9: Collecting Data
+### **Exercise 2.9: Collecting Data**
 
 In Exercise 2.7, you wrote a program called `report.py` that computed the gain/loss of a
 stock portfolio.  In this exercise, you're going to start modifying it to produce a table like this:
@@ -214,7 +214,7 @@ if you try it interactively:
 >>>
 ```
 
-### Exercise 2.10: Printing a formatted table
+### **Exercise 2.10: Printing a formatted table**
 
 Redo the for-loop in Exercise 2.9, but change the print statement to
 format the tuples.
@@ -248,7 +248,7 @@ You can also expand the values and use f-strings. For example:
 Take the above statements and add them to your `report.py` program.
 Have your program take the output of the `make_report()` function and print a nicely formatted table as shown.
 
-### Exercise 2.11: Adding some headers
+### **Exercise 2.11: Adding some headers**
 
 Suppose you had a tuple of header names like this:
 
@@ -285,7 +285,7 @@ When you’re done, your program should produce the table shown at the top of th
        IBM        100     106.28      35.84
 ```
 
-### Exercise 2.12: Formatting Challenge
+### **Exercise 2.12: Formatting Challenge**
 
 How would you modify your code so that the price includes the currency symbol ($) and the output looks like this:
 
