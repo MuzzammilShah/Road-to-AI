@@ -250,7 +250,7 @@ A string with formatted expression substitution.
 **Note: This requires Python 3.6 or newer.**  The meaning of the format codes
 is covered later.
 
-## Exercises
+## **Exercises**
 
 In these exercises, you'll experiment with operations on Python's
 string type.  You should do this at the Python interactive prompt
@@ -270,7 +270,7 @@ Start by defining a string containing a series of stock ticker symbols like this
 >>>
 ```
 
-### Exercise 1.13: Extracting individual characters and substrings
+### **Exercise 1.13: Extracting individual characters and substrings**
 
 Strings are arrays of characters. Try extracting a few characters:
 
@@ -300,7 +300,7 @@ TypeError: 'str' object does not support item assignment
 >>>
 ```
 
-### Exercise 1.14: String concatenation
+### **Exercise 1.14: String concatenation**
 
 Although string data is read-only, you can always reassign a variable
 to a newly created string.
@@ -340,7 +340,7 @@ time. When the variable name `symbols` is reassigned, it points to the
 newly created string.  Afterwards, the old string is destroyed since
 it's not being used anymore.
 
-### Exercise 1.15: Membership testing (substring testing)
+### **Exercise 1.15: Membership testing (substring testing)**
 
 Experiment with the `in` operator to check for substrings.  At the
 interactive prompt, try these operations:
@@ -357,7 +357,7 @@ True
 
 *Why did the check for `'AA'` return `True`?*
 
-### Exercise 1.16: String Methods
+### **Exercise 1.16: String Methods**
 
 At the Python interactive prompt, try experimenting with some of the string methods.
 
@@ -393,7 +393,7 @@ Try some more operations:
 >>>
 ```
 
-### Exercise 1.17: f-strings
+### **Exercise 1.17: f-strings**
 
 Sometimes you want to create a string and embed the values of
 variables into it.
@@ -413,7 +413,7 @@ Modify the `mortgage.py` program from [Exercise 1.10](03_Numbers.md) to create i
 Try to make it so that output is nicely aligned.
 
 
-### Exercise 1.18: Regular Expressions
+### **Exercise 1.18: Regular Expressions**
 
 One limitation of the basic string operations is that they don't
 support any kind of advanced pattern matching.  For that, you

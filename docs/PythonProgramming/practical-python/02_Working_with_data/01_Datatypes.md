@@ -179,7 +179,7 @@ s['price']
 s[2]
 ```
 
-## Exercises
+## **Exercises**
 
 In the last few exercises, you wrote a program that read a datafile
 `Data/portfolio.csv`. Using the `csv` module, it is easy to read the
@@ -216,7 +216,7 @@ To do more, you typically want to interpret the raw data in some way
 and turn it into a more useful kind of object so that you can work
 with it later.  Two simple options are tuples or dictionaries.
 
-### Exercise 2.1: Tuples
+### **Exercise 2.1: Tuples**
 
 At the interactive prompt, create the following tuple that represents
 the above row, but with the numeric columns converted to proper
@@ -306,7 +306,7 @@ Take the above variables and pack them back into a tuple
 >>>
 ```
 
-### Exercise 2.2: Dictionaries as a data structure
+### **Exercise 2.2: Dictionaries as a data structure**
 
 An alternative to a tuple is to create a dictionary instead.
 
@@ -351,7 +351,7 @@ attributes:
 >>>
 ```
 
-### Exercise 2.3: Some additional dictionary operations
+### **Exercise 2.3: Some additional dictionary operations**
 
 If you turn a dictionary into a list, you’ll get all of its keys:
 

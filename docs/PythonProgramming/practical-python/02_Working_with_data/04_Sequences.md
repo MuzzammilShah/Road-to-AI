@@ -266,9 +266,9 @@ A common use of `zip` is to create key/value pairs for constructing dictionaries
 d = dict(zip(columns, values))
 ```
 
-## Exercises
+## **Exercises**
 
-### Exercise 2.13: Counting
+### **Exercise 2.13: Counting**
 
 Try some basic counting examples:
 
@@ -288,7 +288,7 @@ Try some basic counting examples:
 >>>
 ```
 
-### Exercise 2.14: More sequence operations
+### **Exercise 2.14: More sequence operations**
 
 Interactively experiment with some of the sequence reduction operations.
 
@@ -342,7 +342,7 @@ it’s inefficient with memory and it runs a lot slower.  Just use a
 normal `for` loop if you want to iterate over data.  Use `enumerate()`
 if you happen to need the index for some reason.
 
-### Exercise 2.15: A practical enumerate() example
+### **Exercise 2.15: A practical enumerate() example**
 
 Recall that the file `Data/missing.csv` contains data for a stock
 portfolio, but has some rows with missing data.  Using `enumerate()`,
@@ -367,7 +367,7 @@ for rowno, row in enumerate(rows, start=1):
         print(f'Row {rowno}: Bad row: {row}')
 ```
 
-### Exercise 2.16: Using the zip() function
+### **Exercise 2.16: Using the zip() function**
 
 In the file `Data/portfolio.csv`, the first line contains column
 headers. In all previous code, we’ve been discarding them.
@@ -469,7 +469,7 @@ the same technique to pick out column headers.
 Try running the `report.py` program on the `Data/portfoliodate.csv`
 file and see that it produces the same answer as before.
 
-### Exercise 2.17: Inverting a dictionary
+### **Exercise 2.17: Inverting a dictionary**
 
 A dictionary maps keys to values. For example, a dictionary of stock prices.
 

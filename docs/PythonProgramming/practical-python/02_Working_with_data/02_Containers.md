@@ -203,12 +203,12 @@ s1 & s2                 # Set intersection { 'c' }
 s1 - s2                 # Set difference { 'a', 'b' }
 ```
 
-## Exercises
+## **Exercises**
 
 In these exercises, you start building one of the major programs used
 for the rest of this course.  Do your work in the file `Work/report.py`.
 
-### Exercise 2.4: A list of tuples
+### **Exercise 2.4: A list of tuples**
 
 The file `Data/portfolio.csv` contains a list of stocks in a
 portfolio.  In [Exercise 1.30](../01_Introduction/07_Functions.md), you
@@ -304,7 +304,7 @@ That said, you can also rewrite the last for-loop using a statement like this:
 >>>
 ```
 
-### Exercise 2.5: List of Dictionaries
+### **Exercise 2.5: List of Dictionaries**
 
 Take the function you wrote in Exercise 2.4 and modify to represent each
 stock in the portfolio with a dictionary instead of a tuple.  In this
@@ -356,7 +356,7 @@ output for debugging, consider using the `pprint` function.
 >>>
 ```
 
-### Exercise 2.6: Dictionaries as a container
+### **Exercise 2.6: Dictionaries as a container**
 
 A dictionary is a useful way to keep track of items where you want to
 look up items using an index other than an integer.  In the Python
@@ -440,7 +440,7 @@ interactively to make sure it works:
 >>>
 ```
 
-### Exercise 2.7: Finding out if you can retire
+### **Exercise 2.7: Finding out if you can retire**
 
 Tie all of this work together by adding a few additional statements to
 your `report.py` program that computes gain/loss. These statements

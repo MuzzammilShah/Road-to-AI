@@ -161,7 +161,7 @@ t = sorted(s)               # s unchanged, t holds sorted values
 Specifically, lists don't represent vectors/matrices as in MATLAB, Octave, R, etc.
 However, there are some packages to help you with that (e.g. [numpy](https://numpy.org)).
 
-## Exercises
+## **Exercises**
 
 In this exercise, we experiment with Python's list datatype. In the last section,
 you worked with strings containing stock symbols.
@@ -176,7 +176,7 @@ Split it into a list of names using the `split()` operation of strings:
 >>> symlist = symbols.split(',')
 ```
 
-### Exercise 1.19: Extracting and reassigning list elements
+### **Exercise 1.19: Extracting and reassigning list elements**
 
 Try a few lookups:
 
@@ -232,7 +232,7 @@ You can reassign a portion of a list to another list. For example:
 When you do this, the list on the left-hand-side (`symlist`) will be resized as appropriate to make the right-hand-side (`mysyms`) fit.
 For instance, in the above example, the last two items of `symlist` got replaced by the single item in the list `mysyms`.
 
-### Exercise 1.20: Looping over list items
+### **Exercise 1.20: Looping over list items**
 
 The `for` loop works by looping over data in a sequence such as a list.
 Check this out by typing the following loop and watching what happens:
@@ -243,7 +243,7 @@ Check this out by typing the following loop and watching what happens:
 # Look at the output
 ```
 
-### Exercise 1.21: Membership tests
+### **Exercise 1.21: Membership tests**
 
 Use the `in` or `not in` operator to check if `'AIG'`,`'AA'`, and `'CAT'` are in the list of symbols.
 
@@ -257,7 +257,7 @@ True
 >>>
 ```
 
-### Exercise 1.22: Appending, inserting, and deleting items
+### **Exercise 1.22: Appending, inserting, and deleting items**
 
 Use the `append()` method to add the symbol `'RHT'` to end of `symlist`.
 
@@ -327,7 +327,7 @@ Remove the first occurrence of `'YHOO'`.
 Just so you know, there is no method to find or remove all occurrences of an item.
 However, we'll see an elegant way to do this in section 2.
 
-### Exercise 1.23: Sorting
+### **Exercise 1.23: Sorting**
 
 Want to sort a list?  Use the `sort()` method. Try it out:
 
@@ -349,7 +349,7 @@ Want to sort in reverse? Try this:
 
 Note: Sorting a list modifies its contents 'in-place'.  That is, the elements of the list are shuffled around, but no new list is created as a result.
 
-### Exercise 1.24: Putting it all back together
+### **Exercise 1.24: Putting it all back together**
 
 Want to take a list of strings and join them together into one string?
 Use the `join()` method of strings like this (note: this looks funny at first).
@@ -367,7 +367,7 @@ Use the `join()` method of strings like this (note: this looks funny at first).
 >>>
 ```
 
-### Exercise 1.25: Lists of anything
+### **Exercise 1.25: Lists of anything**
 
 Lists can contain any kind of object, including other lists (e.g., nested lists).
 Try this out:

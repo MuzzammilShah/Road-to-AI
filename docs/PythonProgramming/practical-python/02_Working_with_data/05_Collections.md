@@ -77,7 +77,7 @@ with open(filename) as f:
         ...
 ```
 
-## Exercises
+## **Exercises**
 
 The `collections` module might be one of the most useful library
 modules for dealing with special purpose kinds of data handling
@@ -91,7 +91,7 @@ stocks loaded in the interactive mode.
 bash % python3 -i report.py
 ```
 
-### Exercise 2.18: Tabulating with Counters
+### **Exercise 2.18: Tabulating with Counters**
 
 Suppose you wanted to tabulate the total number of shares of each stock.
 This is easy using `Counter` objects. Try it:
