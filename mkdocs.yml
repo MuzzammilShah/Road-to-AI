@@ -9,6 +9,7 @@ theme:
       warning: material/alert
       info: material/alert-circle
       question: material/head-question-outline
+    annotation: material/magnify-expand
   favicon: assets/images/favicon.png
   font:
     text: "Inter"
@@ -147,6 +148,47 @@ nav:
         - Collections: PythonProgramming/practical-python/02_Working_with_data/05_Collections.md
         - List Comprehension: PythonProgramming/practical-python/02_Working_with_data/06_List_comprehension.md
         - Objects: PythonProgramming/practical-python/02_Working_with_data/07_Objects.md
+      - Module 3:
+        - Overview: PythonProgramming/practical-python/
+        - Script: PythonProgramming/practical-python/
+        - Functions: PythonProgramming/practical-python/
+        - Error checking: PythonProgramming/practical-python/
+        - Modules: PythonProgramming/practical-python/
+        - Main Module: PythonProgramming/practical-python/
+        - Design Discussion: PythonProgramming/practical-python/
+      - Module 4: 
+        - Overview: PythonProgramming/practical-python/
+        - Class: PythonProgramming/practical-python/
+        - Inheritance: PythonProgramming/practical-python/
+        - Special Methods: PythonProgramming/practical-python/
+        - Exceptions: PythonProgramming/practical-python/
+      - Module 5: 
+        - Overview: PythonProgramming/practical-python/
+        - Dictionary: PythonProgramming/practical-python/
+        - Encapsulation: PythonProgramming/practical-python/
+      - Module 6: 
+        - Overview: PythonProgramming/practical-python/
+        - Iteration: PythonProgramming/practical-python/
+        - Iteration II: PythonProgramming/practical-python/
+        - Prod-Cons: PythonProgramming/practical-python/
+        - Generators II: PythonProgramming/practical-python/
+      - Module 7: 
+        - Overview: PythonProgramming/practical-python/
+        - Variable args: PythonProgramming/practical-python/
+        - Functions I: PythonProgramming/practical-python/
+        - Functions II: PythonProgramming/practical-python/
+        - Decorated Methods: PythonProgramming/practical-python/ 
+      - Module 8: 
+        - Overview: PythonProgramming/practical-python/
+        - Testing: PythonProgramming/practical-python/
+        - Logging: PythonProgramming/practical-python/
+        - Debugging: PythonProgramming/practical-python/
+      - Module 9: 
+        - Overview: PythonProgramming/practical-python/
+        - Packages: PythonProgramming/practical-python/
+        - Third party: PythonProgramming/practical-python/
+        - Distribution: PythonProgramming/practical-python/
+        - THE END: PythonProgramming/practical-python/
 
 markdown_extensions:
   - toc:
