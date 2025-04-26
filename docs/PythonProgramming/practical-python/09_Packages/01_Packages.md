@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (8.3 Debugging)](../08_Testing_debugging/03_Debugging.md) \| [Next (9.2 Third Party Packages)](02_Third_party.md)
-
 # 9.1 Packages
 
 If writing a larger program, you don't really want to organize it as a
@@ -440,5 +438,3 @@ porty-app/
         ticker.py
         typedproperty.py
 ```
-
-[Contents](../Contents.md) \| [Previous (8.3 Debugging)](../08_Testing_debugging/03_Debugging.md) \| [Next (9.2 Third Party Packages)](02_Third_party.md)

@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Prev (8 Testing and Debugging)](../08_Testing_debugging/00_Overview.md)
-
 # 9 Packages
 
 We conclude the course with a few details on how to organize your code
@@ -15,5 +13,3 @@ away or manage dependencies.
 * [9.1 Packages](01_Packages.md)
 * [9.2 Third Party Modules](02_Third_party.md)
 * [9.3 Giving your code to others](03_Distribution.md)
-
-[Contents](../Contents.md) \| [Prev (8 Testing and Debugging)](../08_Testing_debugging/00_Overview.md)

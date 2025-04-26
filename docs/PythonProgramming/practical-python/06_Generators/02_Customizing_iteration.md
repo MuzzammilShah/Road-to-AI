@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (6.1 Iteration Protocol)](01_Iteration_protocol.md) \| [Next (6.3 Producer/Consumer)](03_Producers_consumers.md)
-
 # 6.2 Customizing Iteration
 
 This section looks at how you can customize iteration using a generator function.
@@ -267,4 +265,3 @@ is now this completely general purpose utility that you can use in any program. 
 example, you could use it to watch server logs, debugging logs, and other similar data sources.
 That's kind of cool.
 
-[Contents](../Contents.md) \| [Previous (6.1 Iteration Protocol)](01_Iteration_protocol.md) \| [Next (6.3 Producer/Consumer)](03_Producers_consumers.md)

@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (7.5 Decorated Methods)](../07_Advanced_Topics/05_Decorated_methods.md) \| [Next (8.2 Logging)](02_Logging.md)
-
 # 8.1 Testing
 
 ## Testing Rocks, Debugging Sucks
@@ -289,5 +287,3 @@ class TestStock(unittest.TestCase):
          with self.assertRaises(TypeError):
              s.shares = '100'
 ```
-
-[Contents](../Contents.md) \| [Previous (7.5 Decorated Methods)](../07_Advanced_Topics/05_Decorated_methods.md) \| [Next (8.2 Logging)](02_Logging.md)

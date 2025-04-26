@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (6.2 Customizing Iteration)](02_Customizing_iteration.md) \| [Next (6.4 Generator Expressions)](04_More_generators.md)
-
 # 6.3 Producers, Consumers and Pipelines
 
 Generators are a useful tool for setting various kinds of
@@ -299,5 +297,3 @@ chain them together to perform processing involving data-flow
 pipelines.  In addition, you can create functions that package a
 series of pipeline stages into a single function call (for example,
 the `parse_stock_data()` function).
-
-[Contents](../Contents.md) \| [Previous (6.2 Customizing Iteration)](02_Customizing_iteration.md) \| [Next (6.4 Generator Expressions)](04_More_generators.md)

@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (6.3 Producer/Consumer)](03_Producers_consumers.md) \| [Next (7 Advanced Topics)](../07_Advanced_Topics/00_Overview.md)
-
 # 6.4 More Generators
 
 This section introduces a few additional generator related topics
@@ -178,6 +176,3 @@ rows = (row for row in rows if row['name'] in names)
 
 Modify the `ticker.py` program to use generator expressions
 as appropriate.
-
-
-[Contents](../Contents.md) \| [Previous (6.3 Producer/Consumer)](03_Producers_consumers.md) \| [Next (7 Advanced Topics)](../07_Advanced_Topics/00_Overview.md)

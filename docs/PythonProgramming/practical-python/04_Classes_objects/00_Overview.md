@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Prev (3 Program Organization)](../03_Program_organization/00_Overview.md) \| [Next (5 Inner Workings of Python Objects)](../05_Object_model/00_Overview.md)
-
 # 4. Classes and Objects
 
 So far, our programs have only used built-in Python datatypes.  In
@@ -14,5 +12,3 @@ and defining new exceptions.
 * [4.2 Inheritance](02_Inheritance.md)
 * [4.3 Special Methods](03_Special_methods.md)
 * [4.4 Defining new Exception](04_Defining_exceptions.md)
-
-[Contents](../Contents.md) \| [Prev (3 Program Organization)](../03_Program_organization/00_Overview.md) \| [Next (5 Inner Workings of Python Objects)](../05_Object_model/00_Overview.md)

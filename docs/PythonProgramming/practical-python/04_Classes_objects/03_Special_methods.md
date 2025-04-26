@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (4.2 Inheritance)](02_Inheritance.md) \| [Next (4.4 Exceptions)](04_Defining_exceptions.md)
-
 # 4.3 Special Methods
 
 Various parts of Python's behavior can be customized via special or so-called "magic" methods.
@@ -287,6 +285,3 @@ it should work:
        IBM        100      70.44
 >>>
 ```
-
-[Contents](../Contents.md) \| [Previous (4.2 Inheritance)](02_Inheritance.md) \| [Next (4.4 Exceptions)](04_Defining_exceptions.md)
-

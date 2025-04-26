@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (7.3 Returning Functions)](03_Returning_functions.md) \| [Next (7.5 Decorated Methods)](05_Decorated_methods.md)
-
 # 7.4 Function Decorators
 
 This section introduces the concept of a decorator.  This is an advanced
@@ -156,5 +154,3 @@ __main__.countdown : 0.076562
 Discussion:  This `@timethis` decorator can be placed in front of any
 function definition.   Thus, you might use it as a diagnostic tool for
 performance tuning.
-
-[Contents](../Contents.md) \| [Previous (7.3 Returning Functions)](03_Returning_functions.md) \| [Next (7.5 Decorated Methods)](05_Decorated_methods.md)

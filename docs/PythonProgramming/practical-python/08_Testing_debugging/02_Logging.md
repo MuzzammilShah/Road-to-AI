@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (8.1 Testing)](01_Testing.md) \| [Next (8.3 Debugging)](03_Debugging.md)
-
 # 8.2 Logging
 
 This section briefly introduces the logging module.
@@ -305,5 +303,3 @@ logging.basicConfig(
 
 Again, you'd need to put this someplace in the startup steps of your
 program.  For example, where would you put this in your `report.py` program?
-
-[Contents](../Contents.md) \| [Previous (8.1 Testing)](01_Testing.md) \| [Next (8.3 Debugging)](03_Debugging.md)

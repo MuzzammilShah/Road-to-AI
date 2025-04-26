@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (3.4 Modules)](04_Modules.md) \| [Next (3.6 Design Discussion)](06_Design_discussion.md)
-
 # 3.5 Main Module
 
 This section introduces the concept of a main program or main module.
@@ -302,5 +300,3 @@ bash $ python3 report.py Data/portfolio.csv Data/prices.csv
 bash $ python3 pcost.py Data/portfolio.csv
 Total cost: 44671.15
 ```
-
-[Contents](../Contents.md) \| [Previous (3.4 Modules)](04_Modules.md) \| [Next (3.6 Design Discussion)](06_Design_discussion.md)

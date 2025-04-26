@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (4.4 Exceptions)](../04_Classes_objects/04_Defining_exceptions.md) \| [Next (5.2 Encapsulation)](02_Classes_encapsulation.md)
-
 # 5.1 Dictionaries Revisited
 
 The Python object system is largely based on an implementation
@@ -655,5 +653,3 @@ Here's how the `cost()` method of instance `n` above would be found:
 <function cost at 0x101aed598>
 >>>
 ```
-
-[Contents](../Contents.md) \| [Previous (4.4 Exceptions)](../04_Classes_objects/04_Defining_exceptions.md) \| [Next (5.2 Encapsulation)](02_Classes_encapsulation.md)

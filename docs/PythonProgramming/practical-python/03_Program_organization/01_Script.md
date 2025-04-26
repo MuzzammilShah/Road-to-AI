@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (2.7 Object Model)](../02_Working_with_data/07_Objects.md) \| [Next (3.2 More on Functions)](02_More_functions.md)
-
 # 3.1 Scripting
 
 In this part we look more closely at the practice of writing Python
@@ -298,5 +296,3 @@ big picture, it's almost always better to utilize functions whenever
 you can.  At some point, that script is going to grow and you'll wish
 you had a bit more organization.  Also, a little known fact is that Python
 runs a bit faster if you use functions.
-
-[Contents](../Contents.md) \| [Previous (2.7 Object Model)](../02_Working_with_data/07_Objects.md) \| [Next (3.2 More on Functions)](02_More_functions.md)

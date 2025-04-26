@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (3.1 Scripting)](01_Script.md) \| [Next (3.3 Error Checking)](03_Error_checking.md)
-
 # 3.2 More on Functions
 
 Although functions were introduced earlier, very few details were provided on how
@@ -512,5 +510,3 @@ that’s genuinely useful.  You can use it to parse arbitrary CSV files,
 select out columns of interest, perform type conversions, without
 having to worry too much about the inner workings of files or the
 `csv` module.
-
-[Contents](../Contents.md) \| [Previous (3.1 Scripting)](01_Script.md) \| [Next (3.3 Error Checking)](03_Error_checking.md)

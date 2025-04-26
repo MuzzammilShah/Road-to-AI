@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (9.2 Third Party Packages)](02_Third_party.md) \| [Next (The End)](TheEnd.md)
-
 # 9.3 Distribution
 
 At some point you might want to give your code to someone else, possibly just a co-worker.
@@ -77,11 +75,3 @@ Create a source distribution file by running `python setup.py sdist`.
 
 As a final step, see if you can install your package into a Python
 virtual environment.
-
-[Contents](../Contents.md) \| [Previous (9.2 Third Party Packages)](02_Third_party.md) \| [Next (The End)](TheEnd.md)
-
-
-
-
-
-

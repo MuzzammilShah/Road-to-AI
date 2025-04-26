@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (5.1 Dictionaries Revisited)](01_Dicts_revisited.md) \| [Next (6 Generators)](../06_Generators/00_Overview.md)
-
 # 5.2 Classes and Encapsulation
 
 When writing classes, it is common to try and encapsulate internal details.
@@ -354,5 +352,3 @@ It should be noted that `__slots__` is most commonly used as an
 optimization on classes that serve as data structures.  Using slots
 will make such programs use far-less memory and run a bit faster.
 You should probably avoid `__slots__` on most other classes however.
-
-[Contents](../Contents.md) \| [Previous (5.1 Dictionaries Revisited)](01_Dicts_revisited.md) \| [Next (6 Generators)](../06_Generators/00_Overview.md)

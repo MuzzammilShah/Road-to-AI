@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (5.2 Encapsulation)](../05_Object_model/02_Classes_encapsulation.md) \| [Next (6.2 Customizing Iteration)](02_Customizing_iteration.md)
-
 # 6.1 Iteration Protocol
 
 This section looks at the underlying process of iteration.
@@ -313,5 +311,3 @@ One important observation about this--generally code is considered
 Python normally work.  For container objects, supporting iteration,
 indexing, containment, and other kinds of operators is an important
 part of this.
-
-[Contents](../Contents.md) \| [Previous (5.2 Encapsulation)](../05_Object_model/02_Classes_encapsulation.md) \| [Next (6.2 Customizing Iteration)](02_Customizing_iteration.md)

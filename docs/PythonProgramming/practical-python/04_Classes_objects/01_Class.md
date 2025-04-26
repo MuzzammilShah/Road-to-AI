@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (3.6 Design discussion)](../03_Program_organization/06_Design_discussion.md) \| [Next (4.2 Inheritance)](02_Inheritance.md)
-
 # 4.1 Classes
 
 This section introduces the class statement and the idea of creating new objects.
@@ -294,5 +292,3 @@ You should be able to run your functions the same as before:
        IBM        100     106.28      35.84
 >>>
 ```
-
-[Contents](../Contents.md) \| [Previous (3.6 Design discussion)](../03_Program_organization/06_Design_discussion.md) \| [Next (4.2 Inheritance)](02_Inheritance.md)

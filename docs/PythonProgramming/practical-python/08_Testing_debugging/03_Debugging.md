@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (8.2 Logging)](02_Logging.md) \| [Next (9 Packages)](../09_Packages/00_Overview.md)
-
 # 8.3 Debugging
 
 ### Debugging Tips
@@ -157,5 +155,3 @@ For breakpoints location is one of the following.
 ### Exercise 8.4:  Bugs? What Bugs?
 
 It runs. Ship it!
-
-[Contents](../Contents.md) \| [Previous (8.2 Logging)](02_Logging.md) \| [Next (9 Packages)](../09_Packages/00_Overview.md)

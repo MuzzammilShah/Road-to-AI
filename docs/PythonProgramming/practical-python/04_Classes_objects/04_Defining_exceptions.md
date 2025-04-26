@@ -1,5 +1,3 @@
-[Contents](../Contents.md) \| [Previous (4.3 Special methods)](03_Special_methods.md) \| [Next (5 Object Model)](../05_Object_model/00_Overview.md)
-
 # 4.4 Defining Exceptions
 
 User defined exceptions are defined by classes.
@@ -50,5 +48,3 @@ Traceback (most recent call last):
 FormatError: Unknown table format xls
 >>>
 ```
-
-[Contents](../Contents.md) \| [Previous (4.3 Special methods)](03_Special_methods.md) \| [Next (5 Object Model)](../05_Object_model/00_Overview.md)
