@@ -1,4 +1,4 @@
-# 🚀 Zero to Hero Series
+# :simple-neutralinojs: Zero to Hero Series
 
 This repository serves as a structured documentation hub for my journey in understanding and implementing artificial intelligence and machine learning concepts, with a primary focus on building a GPT model. The content is heavily based on [Andrej Karpathy](https://karpathy.ai)'s **Neural Networks: Zero to Hero series** and aims to provide well-organized insights, implementations, and notes for anyone following a similar path.
 

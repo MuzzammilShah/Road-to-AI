@@ -3,7 +3,7 @@ hide:
   - navigation
 --- -->
 
-# **BACKPROPAGATION - Using an AutoGrad Engine**
+# **:material-chart-timeline-variant-shimmer: BACKPROPAGATION - Using an AutoGrad Engine**
 
 **Timeline: 2nd - 27th October, 2024**
 

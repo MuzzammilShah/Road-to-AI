@@ -1,4 +1,4 @@
-# **Practical Python**
+# **:material-language-python: PRACTICAL PYTHON**
 
 **Timeline: 7th April, 2025 - PRESENT**
 

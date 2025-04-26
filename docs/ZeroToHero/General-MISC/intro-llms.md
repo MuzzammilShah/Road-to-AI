@@ -1,4 +1,4 @@
-# **INTRODUCTION TO LLMs**
+# **:material-brain: INTRODUCTION TO LLMs**
 
 **Timeline: 7th & 17th-19th March, 2025**
 
