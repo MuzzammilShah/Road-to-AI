@@ -1,4 +1,4 @@
-# 5. Inner Workings of Python Objects
+# Module 5: Inner Workings of Python Objects
 
 This section covers some of the inner workings of Python objects.
 Programmers coming from other programming languages often find

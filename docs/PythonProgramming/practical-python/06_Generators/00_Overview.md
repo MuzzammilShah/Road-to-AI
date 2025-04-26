@@ -1,4 +1,4 @@
-# 6. Generators
+# Module 6: Generators
 
 Iteration (the `for`-loop) is one of the most common programming
 patterns in Python.  Programs do a lot of iteration to process lists,

@@ -1,4 +1,4 @@
-# 7. Advanced Topics
+# Module 7: Advanced Topics
 
 In this section, we look at a small set of somewhat more advanced
 Python features that you might encounter in your day-to-day coding.

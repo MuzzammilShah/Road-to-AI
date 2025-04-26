@@ -1,4 +1,4 @@
-# 8. Testing and debugging
+# Module 8: Testing and debugging
 
 This section introduces a few basic topics related to testing,
 logging, and debugging.

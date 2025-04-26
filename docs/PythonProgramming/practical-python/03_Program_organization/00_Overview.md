@@ -1,4 +1,4 @@
-# 3. Program Organization
+# Module 3: Program Organization
 
 So far, we've learned some Python basics and have written some short scripts.
 However, as you start to write larger programs, you'll want to get organized.

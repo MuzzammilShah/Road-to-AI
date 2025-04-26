@@ -1,4 +1,4 @@
-# 9 Packages
+# Module 9: Packages
 
 We conclude the course with a few details on how to organize your code
 into a package structure.  We'll also discuss the installation of

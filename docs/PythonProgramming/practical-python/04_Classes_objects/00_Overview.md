@@ -1,4 +1,4 @@
-# 4. Classes and Objects
+# Module 4: Classes and Objects
 
 So far, our programs have only used built-in Python datatypes.  In
 this section, we introduce the concept of classes and objects.  You'll
