@@ -128,7 +128,7 @@ You can write functions that make code.
 
 One of the more powerful features of closures is their use in
 generating repetitive code.  If you refer back to [Exercise
-5.7](../05_Object_model/02_Classes_encapsulation), recall the code for
+5.7](../05_Object_model/02_Classes_encapsulation.md), recall the code for
 defining a property with type checking.
 
 ```python

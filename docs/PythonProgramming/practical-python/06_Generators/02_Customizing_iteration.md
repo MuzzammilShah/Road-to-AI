@@ -254,7 +254,7 @@ if __name__ == '__main__':
 ```
 
 Note: For this to work, your `Portfolio` class must support the `in`
-operator.  See [Exercise 6.3](01_Iteration_protocol) and make sure you
+operator.  See [Exercise 6.3](01_Iteration_protocol.md) and make sure you
 implement the `__contains__()` operator.
 
 ### Discussion

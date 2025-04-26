@@ -229,7 +229,7 @@ Python's `unittest` module.
 In earlier exercises, you wrote a file `stock.py` that contained a
 `Stock` class.  For this exercise, it assumed that you're using the
 code written for [Exercise
-7.9](../07_Advanced_Topics/03_Returning_functions) involving
+7.9](../07_Advanced_Topics/03_Returning_functions.md) involving
 typed-properties.  If, for some reason, that's not working, you might
 want to copy the solution from `Solutions/7_9` to your working
 directory.
