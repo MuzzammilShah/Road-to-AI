@@ -222,9 +222,10 @@ body[data-md-color-scheme="slate"] .hero-logo {
   left: 10%;
   transform: translateY(-50%);
   width: 40%; /* Default width for desktop */
-  text-align: left;
+  /* text-align: left; */
   padding: 20px; /* Add padding for better spacing */
   z-index: 1; /* Ensure content stays above the background */
+  align-items: flex-start;
 }
 
 /* Logo styling and theme toggle */
