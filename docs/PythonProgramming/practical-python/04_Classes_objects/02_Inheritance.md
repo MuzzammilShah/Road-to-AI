@@ -3,7 +3,7 @@
 Inheritance is a commonly used tool for writing extensible programs.
 This section explores that idea.
 
-### Introduction
+## Introduction
 
 Inheritance is used to specialize existing objects:
 
@@ -19,7 +19,7 @@ The new class `Child` is called a derived class or subclass.  The
 `Parent` class is known as base class or superclass.  `Parent` is
 specified in `()` after the class name, `class Child(Parent):`.
 
-### Extending
+## Extending
 
 With inheritance, you are taking an existing class and:
 
@@ -29,7 +29,7 @@ With inheritance, you are taking an existing class and:
 
 In the end you are **extending existing code**.
 
-### Example
+## Example
 
 Suppose that this is your starting class:
 
@@ -49,7 +49,7 @@ class Stock:
 
 You can change any part of this via inheritance.
 
-### Add a new method
+## Add a new method
 
 ```python
 class MyStock(Stock):
@@ -70,7 +70,7 @@ Usage example.
 >>>
 ```
 
-### Redefining an existing method
+## Redefining an existing method
 
 ```python
 class MyStock(Stock):
@@ -116,7 +116,7 @@ Use `super()` to call the previous version.
 actual_cost = super(MyStock, self).cost()
 ```
 
-### `__init__` and inheritance
+## `__init__` and inheritance
 
 If `__init__` is redefined, it is essential to initialize the parent.
 
@@ -140,7 +140,7 @@ class MyStock(Stock):
 You should call the `__init__()` method on the `super` which is the
 way to call the previous version as shown previously.
 
-### Using Inheritance
+## Using Inheritance
 
 Inheritance is sometimes used to organize related objects.
 
@@ -170,7 +170,7 @@ class CustomHandler(TCPHandler):
 The base class contains some general purpose code.
 Your class inherits and customized specific parts.
 
-### "is a" relationship
+## "is a" relationship
 
 Inheritance establishes a type relationship.
 
@@ -194,7 +194,7 @@ True
 *Important: Ideally, any code that worked with instances of the parent
 class will also work with instances of the child class.*
 
-### `object` base class
+## `object` base class
 
 If a class has no parent, you sometimes see `object` used as the base.
 
@@ -209,7 +209,7 @@ class Shape(object):
 as a hold-over from it's required use in Python 2. If omitted, the
 class still implicitly inherits from `object`.
 
-### Multiple Inheritance
+## Multiple Inheritance
 
 You can inherit from multiple classes by specifying them in the definition of the class.
 
@@ -229,7 +229,7 @@ rather tricky details. Don't do it unless you know what you are doing.
 Some further information will be given in the next section, but we're not
 going to utilize multiple inheritance further in this course.
 
-## Exercises
+## **Exercises**
 
 A major use of inheritance is in writing code that's meant to be
 extended or customized in various ways--especially in libraries or
@@ -264,7 +264,7 @@ When you run your report program, you should be getting output like this:
        IBM        100     106.28      35.84
 ```
 
-### Exercise 4.5: An Extensibility Problem
+### **Exercise 4.5: An Extensibility Problem**
 
 Suppose that you wanted to modify the `print_report()` function to
 support a variety of different output formats such as plain-text,
@@ -356,7 +356,7 @@ Run this new code:
 It should immediately crash with a `NotImplementedError` exception.  That's not
 too exciting, but it's exactly what we expected.  Continue to the next part.
 
-### Exercise 4.6: Using Inheritance to Produce Different Output
+### **Exercise 4.6: Using Inheritance to Produce Different Output**
 
 The `TableFormatter` class you defined in part (a) is meant to be
 extended via inheritance.  In fact, that's the whole idea.  To
@@ -490,7 +490,7 @@ Test your code by modifying the main program to create a
 `HTMLTableFormatter` object instead of a
 `CSVTableFormatter` object.
 
-### Exercise 4.7: Polymorphism in Action
+### **Exercise 4.7: Polymorphism in Action**
 
 A major feature of object-oriented programming is that you can
 plug an object into a program and it will work without having to
@@ -559,7 +559,7 @@ def portfolio_report(portfoliofile, pricefile, fmt='txt'):
 
 Try calling the function with different formats to make sure it's working.
 
-### Exercise 4.8: Putting it all together
+### **Exercise 4.8: Putting it all together**
 
 Modify the `report.py` program so that the `portfolio_report()` function takes
 an optional argument specifying the output format. For example:

@@ -1,6 +1,6 @@
 # 8.3 Debugging
 
-### Debugging Tips
+## Debugging Tips
 
 So, your program has crashed...
 
@@ -20,7 +20,7 @@ AttributeError: 'int' object has no attribute 'append'
 
 Now what?!
 
-### Reading Tracebacks
+## Reading Tracebacks
 
 The last line is the specific cause of the crash.
 
@@ -43,7 +43,7 @@ However, it's not always easy to read or understand.
 
 *PRO TIP: Paste the whole traceback into Google.*
 
-### Using the REPL
+## Using the REPL
 
 Use the option `-i` to keep Python alive when executing a script.
 
@@ -65,7 +65,7 @@ AttributeError: 'int' object has no attribute 'append'
 It preserves the interpreter state. That means that you can go poking
 around after the crash. Checking variable values and other state.
 
-### Debugging with Print
+## Debugging with Print
 
 `print()` debugging is quite common.
 
@@ -91,7 +91,7 @@ Decimal('3.4')
 >>>
 ```
 
-### The Python Debugger
+## The Python Debugger
 
 You can manually launch the debugger inside a program.
 
@@ -114,7 +114,7 @@ pdb.set_trace()       # Instead of `breakpoint()`
 ...
 ```
 
-### Run under debugger
+## Run under debugger
 
 You can also run an entire program under debugger.
 
@@ -150,8 +150,8 @@ For breakpoints location is one of the following.
 (Pdb) b module.foo    # Function foo() in a module
 ```
 
-## Exercises
+## **Exercises**
 
-### Exercise 8.4:  Bugs? What Bugs?
+### **Exercise 8.4:  Bugs? What Bugs?**
 
 It runs. Ship it!

@@ -4,7 +4,7 @@ When writing classes, it is common to try and encapsulate internal details.
 This section introduces a few Python programming idioms for this including
 private variables and properties.
 
-### Public vs Private.
+## Public vs Private.
 
 One of the primary roles of a class is to encapsulate data and internal
 implementation details of an object.  However, a class also defines a
@@ -12,7 +12,7 @@ implementation details of an object.  However, a class also defines a
 manipulate the object.  This distinction between implementation
 details and the public interface is important.
 
-### A Problem
+## A Problem
 
 In Python, almost everything about classes and objects is *open*.
 
@@ -22,14 +22,14 @@ In Python, almost everything about classes and objects is *open*.
 
 That is an issue when you are trying to isolate details of the *internal implementation*.
 
-### Python Encapsulation
+## Python Encapsulation
 
 Python relies on programming conventions to indicate the intended use
 of something.  These conventions are based on naming.  There is a
 general attitude that it is up to the programmer to observe the rules
 as opposed to having the language enforce them.
 
-### Private Attributes
+## Private Attributes
 
 Any attribute name with leading `_` is considered to be *private*.
 
@@ -54,7 +54,7 @@ As a general rule, any name with a leading `_` is considered internal implementa
 whether it's a variable, a function, or a module name.  If you find yourself using such
 names directly, you're probably doing something wrong. Look for higher level functionality.
 
-### Simple Attributes
+## Simple Attributes
 
 Consider the following class.
 
@@ -85,7 +85,7 @@ s.shares = '50'     # Raise a TypeError, this is a string
 
 How would you do it?
 
-### Managed Attributes
+## Managed Attributes
 
 One approach: introduce accessor methods.
 
@@ -110,7 +110,7 @@ class Stock:
 Too bad that this breaks all of our existing code. `s.shares = 50`
 becomes `s.set_shares(50)`
 
-### Properties
+## Properties
 
 There is an alternative approach to the previous pattern.
 
@@ -193,7 +193,7 @@ This allows you to drop the extra parentheses, hiding the fact that it's actuall
 >>>
 ```
 
-### Uniform access
+## Uniform access
 
 The last example shows how to put a more uniform interface on an object.
 If you don't do this, an object might be confusing to use:
@@ -210,7 +210,7 @@ If you don't do this, an object might be confusing to use:
 Why is the `()` required for the cost, but not for the shares?  A property
 can fix this.
 
-### Decorator Syntax
+## Decorator Syntax
 
 The `@` syntax is known as "decoration".  It specifies a modifier
 that's applied to the function definition that immediately follows.
@@ -224,7 +224,7 @@ def cost(self):
 
 More details are given in [Section 7](../07_Advanced_Topics/00_Overview).
 
-### `__slots__` Attribute
+## `__slots__` Attribute
 
 You can restrict the set of attributes names.
 
@@ -249,16 +249,16 @@ AttributeError: 'Stock' object has no attribute 'prices'
 Although this prevents errors and restricts usage of objects, it's actually used for performance and
 makes Python use memory more efficiently.
 
-### Final Comments on Encapsulation
+## Final Comments on Encapsulation
 
 Don't go overboard with private attributes, properties, slots,
 etc. They serve a specific purpose and you may see them when reading
 other Python code.  However, they are not necessary for most
 day-to-day coding.
 
-## Exercises
+## **Exercises**
 
-### Exercise 5.6: Simple Properties
+### **Exercise 5.6: Simple Properties**
 
 Properties are a useful way to add "computed attributes" to an object.
 In `stock.py`, you created an object `Stock`.  Notice that on your
@@ -303,7 +303,7 @@ doesn't work now that `cost` has been defined as a property.
 Making this change will likely break your earlier `pcost.py` program.
 You might need to go back and get rid of the `()` on the `cost()` method.
 
-### Exercise 5.7: Properties and Setters
+### **Exercise 5.7: Properties and Setters**
 
 Modify the `shares` attribute so that the value is stored in a
 private attribute and that a pair of property functions are used to ensure
@@ -322,7 +322,7 @@ TypeError: expected an integer
 >>>
 ```
 
-### Exercise 5.8: Adding slots
+### **Exercise 5.8: Adding slots**
 
 Modify the `Stock` class so that it has a `__slots__` attribute.  Then,
 verify that new attributes can't be added:

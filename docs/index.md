@@ -11,9 +11,7 @@ hide:
   <div class="hero-content">
     <img src="assets/images/white-bg-3.png" alt="Road to AI Logo" class="hero-logo light-logo">
     <img src="assets/images/dark-bg-3.png" alt="Road to AI Logo" class="hero-logo dark-logo">
-    <!-- <h1>Road to AI</h1> -->
     <p>Documenting My Journey in Artificial Intelligence.</p>
-    <!-- <a href="/ZeroToHero/" class="hero-button">Start Learning</a> -->
   </div>
 </div>
 

@@ -2,7 +2,7 @@
 
 This section introduces the concept of a main program or main module.
 
-### Main Functions
+## Main Functions
 
 In many programming languages, there is a concept of a *main* function or method.
 
@@ -24,7 +24,7 @@ class myprog {
 
 This is the first function that executes when an application is launched.
 
-### Python Main Module
+## Python Main Module
 
 Python has no *main* function or method.  Instead, there is a *main*
 module. The *main module* is the source file that runs first.
@@ -36,7 +36,7 @@ bash % python3 prog.py
 
 Whatever file you give to the interpreter at startup becomes *main*. It doesn't matter the name.
 
-### `__main__` check
+## `__main__` check
 
 It is standard practice for modules that run as a main script to use this convention:
 
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
 Statements enclosed inside the `if` statement become the *main* program.
 
-### Main programs vs. library imports
+## Main programs vs. library imports
 
 Any Python file can either run as main or as a library import:
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     # Does not execute if loaded with import ...
 ```
 
-### Program Template
+## Program Template
 
 Here is a common program template for writing a Python program:
 
@@ -99,7 +99,7 @@ if __name__ == '__main__':
     main()
 ```
 
-### Command Line Tools
+## Command Line Tools
 
 Python is often used for command-line tools
 
@@ -110,7 +110,7 @@ bash % python3 report.py portfolio.csv prices.csv
 It means that the scripts are executed from the shell /
 terminal. Common use cases are for automation, background tasks, etc.
 
-### Command Line Args
+## Command Line Args
 
 The command line is a list of text strings.
 
@@ -137,7 +137,7 @@ pricefile = sys.argv[2]
 ...
 ```
 
-### Standard I/O
+## Standard I/O
 
 Standard Input / Output (or stdio) are files that work the same as normal files.
 
@@ -158,7 +158,7 @@ bash % python3 prog.py > results.txt
 bash % cmd1 | python3 prog.py | cmd2
 ```
 
-### Environment Variables
+## Environment Variables
 
 Environment variables are set in the shell.
 
@@ -178,7 +178,7 @@ name = os.environ['NAME'] # 'dave'
 
 Changes are reflected in any subprocesses later launched by the program.
 
-### Program Exit
+## Program Exit
 
 Program exit is handled through exceptions.
 
@@ -197,7 +197,7 @@ sys.exit(exitcode)
 
 A non-zero exit code indicates an error.
 
-### The `#!` line
+## The `#!` line
 
 On Unix, the `#!` line can launch a script as Python.
 Add the following to the first line of your script file.
@@ -219,7 +219,7 @@ bash % prog.py
 
 *Note: The Python Launcher on Windows also looks for the `#!` line to indicate language version.*
 
-### Script Template
+## Script Template
 
 Finally, here is a common code template for Python programs that run
 as command-line scripts:
@@ -248,9 +248,9 @@ if __name__ == '__main__':
     main(sys.argv)
 ```
 
-## Exercises
+## **Exercises**
 
-### Exercise 3.15: `main()` functions
+### **Exercise 3.15: `main()` functions**
 
 In the file `report.py` add a `main()` function that accepts a list of
 command line options and produces the same output as before.  You
@@ -280,7 +280,7 @@ Total cost: 44671.15
 >>>
 ```
 
-### Exercise 3.16: Making Scripts
+### **Exercise 3.16: Making Scripts**
 
 Modify the `report.py` and `pcost.py` programs so that they can
 execute as a script on the command line:

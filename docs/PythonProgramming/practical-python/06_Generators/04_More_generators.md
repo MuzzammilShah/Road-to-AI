@@ -3,7 +3,7 @@
 This section introduces a few additional generator related topics
 including generator expressions and the itertools module.
 
-### Generator Expressions
+## Generator Expressions
 
 A generator version of a list comprehension.
 
@@ -65,7 +65,7 @@ f.close()
 With generators, the code runs faster and uses little memory. It's
 like a filter applied to a stream.
 
-### Why Generators
+## Why Generators
 
 * Many problems are much more clearly expressed in terms of iteration.
   * Looping over a collection of items and performing some kind of operation (searching, replacing, modifying, etc.).
@@ -78,7 +78,7 @@ like a filter applied to a stream.
   * Separates the *iteration* from code that uses the iteration
   * You can build a toolbox of interesting iteration functions and *mix-n-match*.
 
-### `itertools` module
+## `itertools` module
 
 The `itertools` is a library module with various functions designed to help with iterators/generators.
 
@@ -100,12 +100,12 @@ They implement various kinds of iteration patterns.
 
 More information at [Generator Tricks for Systems Programmers](http://www.dabeaz.com/generators/) tutorial from PyCon '08.
 
-## Exercises
+## **Exercises**
 
 In the previous exercises, you wrote some code that followed lines being written to a log file and parsed them into a sequence of rows.
 This exercise continues to build upon that.  Make sure the `Data/stocksim.py` is still running.
 
-### Exercise 6.13: Generator Expressions
+### **Exercise 6.13: Generator Expressions**
 
 Generator expressions are a generator version of a list comprehension.
 For example:
@@ -135,7 +135,7 @@ Thus, if you try another for-loop, you get nothing:
 >>>
 ```
 
-### Exercise 6.14: Generator Expressions in Function Arguments
+### **Exercise 6.14: Generator Expressions in Function Arguments**
 
 Generator expressions are sometimes placed into function arguments.
 It looks a little weird at first, but try this experiment:
@@ -155,7 +155,7 @@ In your `portfolio.py` file, you performed a few calculations
 involving list comprehensions.  Try replacing these with
 generator expressions.
 
-### Exercise 6.15: Code simplification
+### **Exercise 6.15: Code simplification**
 
 Generators expressions are often a useful replacement for
 small generator functions.  For example, instead of writing a

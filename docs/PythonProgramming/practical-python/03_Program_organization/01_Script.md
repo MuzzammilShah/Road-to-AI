@@ -3,7 +3,7 @@
 In this part we look more closely at the practice of writing Python
 scripts.
 
-### What is a Script?
+## What is a Script?
 
 A *script* is a program that runs a series of statements and stops.
 
@@ -18,7 +18,7 @@ statement3
 
 We have mostly been writing scripts to this point.
 
-### A Problem
+## A Problem
 
 If you write a useful script, it will grow in features and
 functionality.  You may want to apply it to other related problems.
@@ -26,7 +26,7 @@ Over time, it might become a critical application.  And if you don't
 take care, it might turn into a huge tangled mess.  So, let's get
 organized.
 
-### Defining Things
+## Defining Things
 
 Names must always be defined before they get used later.
 
@@ -43,7 +43,7 @@ z = square(b) # Requires `square` and `b` to be defined
 **The order is important.**
 You almost always put the definitions of variables and functions near the top.
 
-### Defining Functions
+## Defining Functions
 
 It is a good idea to put all of the code related to a single *task* all in one place.
 Use a function.
@@ -65,7 +65,7 @@ oldprices = read_prices('oldprices.csv')
 newprices = read_prices('newprices.csv')
 ```
 
-### What is a Function?
+## What is a Function?
 
 A function is a named sequence of statements.
 
@@ -88,7 +88,7 @@ def foo():
 
 There are no *special* statements in Python (which makes it easy to remember).
 
-### Function Definition
+## Function Definition
 
 Functions can be *defined* in any order.
 
@@ -116,7 +116,7 @@ foo(3)        # foo must be defined already
 Stylistically, it is probably more common to see functions defined in
 a *bottom-up* fashion.
 
-### Bottom-up Style
+## Bottom-up Style
 
 Functions are treated as building blocks.
 The smaller/simpler blocks go first.
@@ -143,13 +143,13 @@ Later functions build upon earlier functions.  Again, this is only
 a point of style.  The only thing that matters in the above program
 is that the call to `spam(42)` go last.
 
-### Function Design
+## Function Design
 
 Ideally, functions should be a *black box*.
 They should only operate on passed inputs and avoid global variables
 and mysterious side-effects.  Your main goals: *Modularity* and *Predictability*.
 
-### Doc Strings
+## Doc Strings
 
 It's good practice to include documentation in the form of a
 doc-string.  Doc-strings are strings written immediately after the
@@ -173,7 +173,7 @@ summary of what the function does.  If more information is needed,
 include a short example of usage along with a more detailed
 description of the arguments.
 
-### Type Annotations
+## Type Annotations
 
 You can also add optional type hints to function definitions.
 
@@ -194,7 +194,7 @@ The hints do nothing operationally. They are purely informational.
 However, they may be used by IDEs, code checkers, and other tools
 to do more.
 
-## Exercises
+## **Exercises**
 
 In section 2, you wrote a program called `report.py` that printed out
 a report showing the performance of a stock portfolio.  This program
@@ -246,7 +246,7 @@ for row in report:
 In this exercise, we’re going take this program and organize it a
 little more strongly around the use of functions.
 
-### Exercise 3.1: Structuring a program as a collection of functions
+### **Exercise 3.1: Structuring a program as a collection of functions**
 
 Modify your `report.py` program so that all major operations,
 including calculations and output, are carried out by a collection of
@@ -255,7 +255,7 @@ functions. Specifically:
 * Create a function `print_report(report)` that prints out the report.
 * Change the last part of the program so that it is nothing more than a series of function calls and no other computation.
 
-### Exercise 3.2: Creating a top-level function for program execution
+### **Exercise 3.2: Creating a top-level function for program execution**
 
 Take the last part of your program and package it into a single
 function `portfolio_report(portfolio_filename, prices_filename)`.

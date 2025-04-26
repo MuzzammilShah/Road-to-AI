@@ -21,9 +21,9 @@ class ProtocolError(NetworkError):
     pass
 ```
 
-## Exercises
+## **Exercises**
 
-### Exercise 4.11: Defining a custom exception
+### **Exercise 4.11: Defining a custom exception**
 
 It is often good practice for libraries to define their own exceptions.
 

@@ -2,7 +2,7 @@
 
 This section introduces the class statement and the idea of creating new objects.
 
-### Object Oriented (OO) programming
+## Object Oriented (OO) programming
 
 A Programming technique where code is organized as a collection of
 *objects*.
@@ -29,7 +29,7 @@ For example, manipulating a list.
 
 Methods (`append()` and `insert()`) are attached to the instance (`nums`).
 
-### The `class` statement
+## The `class` statement
 
 Use the `class` statement to define a new object.
 
@@ -50,7 +50,7 @@ class Player:
 
 In a nutshell, a class is a set of functions that carry out various operations on so-called *instances*.
 
-### Instances
+## Instances
 
 Instances are the actual *objects* that you manipulate in your program.
 
@@ -67,7 +67,7 @@ They are created by calling the class as a function.
 *Emphasize: The class statement is just the definition (it does
  nothing by itself). Similar to a function definition.*
 
-### Instance Data
+## Instance Data
 
 Each instance has its own local data.
 
@@ -91,7 +91,7 @@ class Player:
 
 There are no restrictions on the total number or type of attributes stored.
 
-### Instance Methods
+## Instance Methods
 
 Instance methods are functions applied to instances of an object.
 
@@ -120,7 +120,7 @@ used is unimportant. The object is always passed as the first
 argument. It is merely Python programming style to call this argument
 `self`.
 
-### Class Scoping
+## Class Scoping
 
 Classes do not define a scope of names.
 
@@ -138,7 +138,7 @@ class Player:
 
 If you want to operate on an instance, you always refer to it explicitly (e.g., `self`).
 
-## Exercises
+## **Exercises**
 
 Starting with this set of exercises, we start to make a series of
 changes to existing code from previous sections.  It is critical that
@@ -146,7 +146,7 @@ you have a working version of Exercise 3.18 to start.  If you don't
 have that, please work from the solution code found in the
 `Solutions/3_18` directory.  It's fine to copy it.
 
-### Exercise 4.1: Objects as Data Structures
+### **Exercise 4.1: Objects as Data Structures**
 
 In section 2 and 3, we worked with data represented as tuples and
 dictionaries.  For example, a holding of stock could be represented as
@@ -220,7 +220,7 @@ An object defined by a class is somewhat similar to a dictionary--just
 with somewhat different syntax.  For example, instead of writing
 `s['name']` or `s['price']`, you now write `s.name` and `s.price`.
 
-### Exercise 4.2: Adding some Methods
+### **Exercise 4.2: Adding some Methods**
 
 With classes, you can attach functions to your objects.  These are
 known as methods and are functions that operate on the data
@@ -242,7 +242,7 @@ stored inside an object.  Add a `cost()` and `sell()` method to your
 >>>
 ```
 
-### Exercise 4.3: Creating a list of instances
+### **Exercise 4.3: Creating a list of instances**
 
 Try these steps to make a list of Stock instances from a list of
 dictionaries. Then compute the total cost:
@@ -262,7 +262,7 @@ dictionaries. Then compute the total cost:
 >>>
 ```
 
-### Exercise 4.4: Using your class
+### **Exercise 4.4: Using your class**
 
 Modify the `read_portfolio()` function in the `report.py` program so
 that it reads a portfolio into a list of `Stock` instances as just

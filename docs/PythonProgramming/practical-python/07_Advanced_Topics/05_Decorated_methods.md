@@ -3,7 +3,7 @@
 This section discusses a few built-in decorators that are used in
 combination with method definitions.
 
-### Predefined Decorators
+## Predefined Decorators
 
 There are predefined decorators used to specify special kinds of methods in class definitions.
 
@@ -27,7 +27,7 @@ class Foo:
 
 Let's go one by one.
 
-### Static Methods
+## Static Methods
 
 `@staticmethod` is used to define a so-called *static* class methods
 (from C++/Java).  A static method is a function that is part of the
@@ -48,7 +48,7 @@ code for a class.  For example, code to help manage created instances
 (memory management, system resources, persistence, locking, etc).
 They're also used by certain design patterns (not discussed here).
 
-### Class Methods
+## Class Methods
 
 `@classmethod` is used to define class methods.  A class method is a
 method that receives the *class* object as the first parameter instead
@@ -107,9 +107,9 @@ class NewDate(Date):
 d = NewDate.today()
 ```
 
-## Exercises
+## **Exercises**
 
-### Exercise 7.11: Class Methods in Practice
+### **Exercise 7.11: Class Methods in Practice**
 
 In your `report.py` and `portfolio.py` files, the creation of a `Portfolio`
 object is a bit muddled.  For example, the `report.py` program has code like this:

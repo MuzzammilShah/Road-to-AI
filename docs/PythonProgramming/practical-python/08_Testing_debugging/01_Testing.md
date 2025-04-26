@@ -28,7 +28,7 @@ It shouldn't be used to check the user-input (i.e., data entered
 on a web form or something).  It's purpose is more for internal
 checks and invariants (conditions that should always be true).
 
-### Contract Programming
+## Contract Programming
 
 Also known as Design By Contract, liberal use of assertions is an
 approach for designing software. It prescribes that software designers
@@ -57,7 +57,7 @@ AssertionError: Expected int
 >>>
 ```
 
-### Inline Tests
+## Inline Tests
 
 Assertions can also be used for simple tests.
 
@@ -77,7 +77,7 @@ This is not recommended for exhaustive testing. It's more of a
 basic "smoke test".  Does the function work on any example at all?
 If not, then something is definitely broken.
 
-### `unittest` Module
+## `unittest` Module
 
 Suppose you have some code.
 
@@ -134,7 +134,7 @@ class TestAdd(unittest.TestCase):
 
 *Important: Each method must start with `test`.
 
-### Using `unittest`
+## Using `unittest`
 
 There are several built in assertions that come with `unittest`. Each of them asserts a different thing.
 
@@ -197,7 +197,7 @@ The `unittest` module has a huge number of options related to test
 runners, collection of results and other aspects of testing. Consult
 the documentation for details.
 
-### Third Party Test Tools
+## Third Party Test Tools
 
 The built-in `unittest` module has the advantage of being available everywhere--it's
 part of Python.  However, many programmers also find it to be quite verbose.
@@ -221,7 +221,7 @@ discover all of the tests and run them.
 There's a lot more to `pytest` than this example, but it's usually pretty easy to
 get started should you decide to try it out.
 
-## Exercises
+## **Exercises**
 
 In this exercise, you will explore the basic mechanics of using
 Python's `unittest` module.
@@ -234,7 +234,7 @@ typed-properties.  If, for some reason, that's not working, you might
 want to copy the solution from `Solutions/7_9` to your working
 directory.
 
-### Exercise 8.1: Writing Unit Tests
+### **Exercise 8.1: Writing Unit Tests**
 
 In a separate file `test_stock.py`, write a set a unit tests
 for the `Stock` class.   To get you started, here is a small

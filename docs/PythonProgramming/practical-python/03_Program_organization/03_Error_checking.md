@@ -3,7 +3,7 @@
 Although exceptions were introduced earlier, this section fills in some additional
 details about error checking and exception handling.
 
-### How programs fail
+## How programs fail
 
 Python performs no checking or validation of function argument types
 or values.  A function will work on any data that is compatible with
@@ -34,7 +34,7 @@ TypeError: unsupported operand type(s) for +:
 
 To verify code, there is a strong emphasis on testing (covered later).
 
-### Exceptions
+## Exceptions
 
 Exceptions are used to signal errors.
 To raise an exception yourself, use `raise` statement.
@@ -53,7 +53,7 @@ except RuntimeError as e:
     print(e)
 ```
 
-### Exception Handling
+## Exception Handling
 
 Exceptions propagate to the first matching `except`.
 
@@ -119,7 +119,7 @@ def bar():
 bar()
 ```
 
-### Built-in Exceptions
+## Built-in Exceptions
 
 There are about two-dozen built-in exceptions.  Usually the name of
 the exception is indicative of what's wrong (e.g., a `ValueError` is
@@ -145,7 +145,7 @@ TypeError
 ValueError
 ```
 
-### Exception Values
+## Exception Values
 
 Exceptions have an associated value. It contains more specific
 information about what's wrong.
@@ -171,7 +171,7 @@ except RuntimeError as e:
     print('Failed : Reason', e)
 ```
 
-### Catching Multiple Errors
+## Catching Multiple Errors
 
 You can catch different kinds of exceptions using multiple `except` blocks.
 
@@ -197,7 +197,7 @@ except (IOError,LookupError,RuntimeError) as e:
   ...
 ```
 
-### Catching All Errors
+## Catching All Errors
 
 To catch any exception, use `Exception` like this:
 
@@ -211,7 +211,7 @@ except Exception:       # DANGER. See below
 In general, writing code like that is a bad idea because you'll have
 no idea why it failed.
 
-### Wrong Way to Catch Errors
+## Wrong Way to Catch Errors
 
 Here is the wrong way to use exceptions.
 
@@ -226,7 +226,7 @@ This catches all possible errors and it may make it impossible to debug
 when the code is failing for some reason you didn't expect at all
 (e.g. uninstalled Python module, etc.).
 
-### Somewhat Better Approach
+## Somewhat Better Approach
 
 If you're going to catch all errors, this is a more sane approach.
 
@@ -245,7 +245,7 @@ In general though, it's better to catch the error as narrowly as is
 reasonable. Only catch the errors you can actually handle. Let
 other errors pass by--maybe some other code can handle them.
 
-### Reraising an Exception
+## Reraising an Exception
 
 Use `raise` to propagate a caught error.
 
@@ -260,14 +260,14 @@ except Exception as e:
 This allows you to take action (e.g. logging) and pass the error on to
 the caller.
 
-### Exception Best Practices
+## Exception Best Practices
 
 Don't catch exceptions. Fail fast and loud. If it's important, someone
 else will take care of the problem.  Only catch an exception if you
 are *that* someone.  That is, only catch errors where you can recover
 and sanely keep going.
 
-### `finally` statement
+## `finally` statement
 
 It specifies code that must run regardless of whether or not an
 exception occurs.
@@ -284,7 +284,7 @@ finally:
 
 Commonly used to safely manage resources (especially locks, files, etc.).
 
-### `with` statement
+## `with` statement
 
 In modern code, `try-finally` is often replaced with the `with` statement.
 
@@ -309,9 +309,9 @@ with open(filename) as f:
 leaves that context, resources are released. `with` only works with
 certain objects that have been specifically programmed to support it.
 
-## Exercises
+## **Exercises**
 
-### Exercise 3.8: Raising exceptions
+### **Exercise 3.8: Raising exceptions**
 
 The `parse_csv()` function you wrote in the last section allows
 user-specified columns to be selected, but that only works if the
@@ -346,7 +346,7 @@ headers, but simultaneously specifying that there are no headers).
 This indicates a programming error on the part of the calling code.
 Checking for cases that "aren't supposed to happen" is often a good idea.
 
-### Exercise 3.9: Catching exceptions
+### **Exercise 3.9: Catching exceptions**
 
 The `parse_csv()` function you wrote is used to process the entire
 contents of a file.  However, in the real-world, it’s possible that
@@ -383,7 +383,7 @@ Row 7: Reason invalid literal for int() with base 10: ''
 >>>
 ```
 
-### Exercise 3.10: Silencing Errors
+### **Exercise 3.10: Silencing Errors**
 
 Modify the `parse_csv()` function so that parsing error messages can
 be silenced if explicitly desired by the user.  For example:

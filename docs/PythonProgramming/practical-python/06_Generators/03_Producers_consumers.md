@@ -4,7 +4,7 @@ Generators are a useful tool for setting various kinds of
 producer/consumer problems and dataflow pipelines.  This section
 discusses that.
 
-### Producer-Consumer Problems
+## Producer-Consumer Problems
 
 Generators are closely related to various forms of *producer-consumer* problems.
 
@@ -24,7 +24,7 @@ for line in follow(f):    # Consumes value from `yield` above
 
 `yield` produces values that `for` consumes.
 
-### Generator Pipelines
+## Generator Pipelines
 
 You can use this aspect of generators to set up processing pipelines (like Unix pipes).
 
@@ -97,12 +97,12 @@ c = consumer(b)
 
 You will notice that data incrementally flows through the different functions.
 
-## Exercises
+## **Exercises**
 
 For this exercise the `stocksim.py` program should still be running in the background.
 You’re going to use the `follow()` function you wrote in the previous exercise.
 
-### Exercise 6.8: Setting up a simple pipeline
+### **Exercise 6.8: Setting up a simple pipeline**
 
 Let's see the pipelining idea in action.  Write the following
 function:
@@ -134,7 +134,7 @@ to it as an argument.  Now, try this:
 It might take awhile for output to appear, but eventually you
 should see some lines containing data for IBM.
 
-### Exercise 6.9: Setting up a more complex pipeline
+### **Exercise 6.9: Setting up a more complex pipeline**
 
 Take the pipelining idea a few steps further by performing
 more actions.
@@ -158,7 +158,7 @@ Well, that's interesting.  What you're seeing here is that the output of the
 `follow()` function has been piped into the `csv.reader()` function and we're
 now getting a sequence of split rows.
 
-### Exercise 6.10: Making more pipeline components
+### **Exercise 6.10: Making more pipeline components**
 
 Let's extend the whole idea into a larger pipeline.  In a separate file `ticker.py`,
 start by creating a function that reads a CSV file as you did above:
@@ -239,7 +239,7 @@ Run your program again.  You should now a stream of dictionaries like this:
 ...
 ```
 
-### Exercise 6.11: Filtering data
+### **Exercise 6.11: Filtering data**
 
 Write a function that filters data.  For example:
 
@@ -264,7 +264,7 @@ for row in rows:
     print(row)
 ```
 
-### Exercise 6.12: Putting it all together
+### **Exercise 6.12: Putting it all together**
 
 In the `ticker.py` program, write a function `ticker(portfile, logfile, fmt)`
 that creates a real-time stock ticker from a given portfolio, logfile,

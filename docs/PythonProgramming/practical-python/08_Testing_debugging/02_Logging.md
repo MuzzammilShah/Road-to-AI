@@ -2,14 +2,14 @@
 
 This section briefly introduces the logging module.
 
-### logging Module
+## logging Module
 
 The `logging` module is a standard library module for recording
 diagnostic information.  It's also a very large module with a lot of
 sophisticated functionality.  We will show a simple example to
 illustrate its usefulness.
 
-### Exceptions Revisited
+## Exceptions Revisited
 
 In the exercises, we wrote a function `parse()` that looked something
 like this:
@@ -52,7 +52,7 @@ except ValueError as e:
 
 Neither solution is satisfactory because you often want *both* behaviors (user selectable).
 
-### Using logging
+## Using logging
 
 The `logging` module can address this.
 
@@ -73,7 +73,7 @@ def parse(f,types=None,names=None,delimiter=None):
 The code is modified to issue warning messages or a special `Logger`
 object. The one created with `logging.getLogger(__name__)`.
 
-### Logging Basics
+## Logging Basics
 
 Create a logger object.
 
@@ -99,7 +99,7 @@ All of them create a formatted log message. `args` is used with the `%` operator
 logmsg = message % args # Written to the log
 ```
 
-### Logging Configuration
+## Logging Configuration
 
 The logging behavior is configured separately.
 
@@ -125,9 +125,9 @@ Logging is highly configurable.  You can adjust every aspect of it:
 output files, levels, message formats, etc.  However, the code that
 uses logging doesn't have to worry about that.
 
-## Exercises
+## **Exercises**
 
-### Exercise 8.2: Adding logging to a module
+### **Exercise 8.2: Adding logging to a module**
 
 In `fileparse.py`, there is some error handling related to
 exceptions caused by bad input. It looks like this:
@@ -284,7 +284,7 @@ Turn off all, but the most critical logging messages:
 >>>
 ```
 
-### Exercise 8.3: Adding Logging to a Program
+### **Exercise 8.3: Adding Logging to a Program**
 
 To add logging to an application, you need to have some mechanism to
 initialize the logging module in the main module.  One way to

@@ -4,7 +4,7 @@ Various parts of Python's behavior can be customized via special or so-called "m
 This section introduces that idea.  In addition dynamic attribute access and bound methods
 are discussed.
 
-### Introduction
+## Introduction
 
 Classes may define special methods. These have special meaning to the
 Python interpreter.  They are always preceded and followed by
@@ -20,7 +20,7 @@ class Stock(object):
 
 There are dozens of special methods, but we will only look at a few specific examples.
 
-### Special methods for String Conversions
+## Special methods for String Conversions
 
 Objects have two string representations.
 
@@ -75,7 +75,7 @@ class Date(object):
  is not possible, some kind of easily readable representation is used
  instead.*
 
-### Special Methods for Mathematics
+## Special Methods for Mathematics
 
 Mathematical operators involve calls to the following methods.
 
@@ -97,7 +97,7 @@ a ** b      a.__pow__(b)
 abs(a)      a.__abs__()
 ```
 
-### Special Methods for Item Access
+## Special Methods for Item Access
 
 These are the methods to implement containers.
 
@@ -122,7 +122,7 @@ class Sequence:
         ...
 ```
 
-### Method Invocation
+## Method Invocation
 
 Invoking a method is a two-step process.
 
@@ -139,7 +139,7 @@ Invoking a method is a two-step process.
 >>>
 ```
 
-### Bound Methods
+## Bound Methods
 
 A method that has not yet been invoked by the function call operator `()` is known as a *bound method*.
 It operates on the instance where it originated.
@@ -178,7 +178,7 @@ f.close     # Oops, Didn't do anything at all. `f` still open.
 In both of these cases, the error is cause by forgetting to include the
 trailing parentheses.  For example, `s.cost()` or `f.close()`.
 
-### Attribute Access
+## Attribute Access
 
 There is an alternative way to access, manipulate and manage attributes.
 
@@ -204,9 +204,9 @@ else:
 x = getattr(obj, 'x', None)
 ```
 
-## Exercises
+## **Exercises**
 
-### Exercise 4.9: Better output for printing objects
+### **Exercise 4.9: Better output for printing objects**
 
 Modify the `Stock` object that you defined in `stock.py`
 so that the `__repr__()` method produces more useful output.  For
@@ -230,7 +230,7 @@ resulting list after you have made these changes.  For example:
 >>>
 ```
 
-### Exercise 4.10: An example of using getattr()
+### **Exercise 4.10: An example of using getattr()**
 
 `getattr()` is an alternative mechanism for reading attributes.  It can be used to
 write extremely flexible code.  To begin, try this example:

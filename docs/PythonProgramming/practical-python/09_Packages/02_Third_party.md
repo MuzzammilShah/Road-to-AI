@@ -9,7 +9,7 @@ How to handle third-party dependencies is an ever-evolving topic with
 Python.  This section merely covers the basics to help you wrap
 your brain around how it works.
 
-### The Module Search Path
+## The Module Search Path
 
 `sys.path` is a directory that contains the list of all directories
 checked by the `import` statement. Look at it:
@@ -24,7 +24,7 @@ checked by the `import` statement. Look at it:
 If you import something and it's not located in one of those
 directories, you will get an `ImportError` exception.
 
-### Standard Library Modules
+## Standard Library Modules
 
 Modules from Python's standard library usually come from a location
 such as `/usr/local/lib/python3.6'.  You can find out for certain
@@ -40,7 +40,7 @@ by trying a short test:
 Simply looking at a module in the REPL is a good debugging tip
 to know about.  It will show you the location of the file.
 
-### Third-party Modules
+## Third-party Modules
 
 Third party modules are usually located in a dedicated
 `site-packages` directory.   You'll see it if you perform
@@ -57,7 +57,7 @@ Again, looking at a module is a good debugging tip if you're
 trying to figure out why something related to `import` isn't working
 as expected.
 
-### Installing Modules
+## Installing Modules
 
 The most common technique for installing a third-party module is to use
 `pip`.  For example:
@@ -69,7 +69,7 @@ bash % python3 -m pip install packagename
 This command will download the package and install it in the `site-packages`
 directory.
 
-### Problems
+## Problems
 
 * You may be using an installation of Python that you don't directly control.
   * A corporate approved installation
@@ -77,7 +77,7 @@ directory.
 * You might not have permission to install global packages in the computer.
 * There might be other dependencies.
 
-### Virtual Environments
+## Virtual Environments
 
 A common solution to package installation issues is to create a
 so-called "virtual environment" for yourself.  Naturally, there is no
@@ -116,7 +116,7 @@ on the other hand, you're creating an application and it
 has specific package dependencies, that is a slightly
 different problem.
 
-### Handling Third-Party Dependencies in Your Application
+## Handling Third-Party Dependencies in Your Application
 
 If you have written an application and it has specific third-party
 dependencies, one challenge concerns the creation and preservation of
@@ -127,9 +127,9 @@ Python's lifetime.  It continues to evolve even now.
 Rather than provide information that's bound to be out of date soon,
 I refer you to the [Python Packaging User Guide](https://packaging.python.org).
 
-## Exercises
+## **Exercises**
 
-### Exercise 9.4 : Creating a Virtual Environment
+### **Exercise 9.4 : Creating a Virtual Environment**
 
 See if you can recreate the steps of making a virtual environment and installing
 pandas into it as shown above.

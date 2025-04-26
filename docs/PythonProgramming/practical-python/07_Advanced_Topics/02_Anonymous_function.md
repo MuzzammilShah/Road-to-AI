@@ -1,6 +1,6 @@
 # 7.2 Anonymous Functions and Lambda
 
-### List Sorting Revisited
+## List Sorting Revisited
 
 Lists can be sorted *in-place*. Using the `sort` method.
 
@@ -56,7 +56,7 @@ Here's the result.
 ]
 ```
 
-### Callback Functions
+## Callback Functions
 
 In the above example, the key function is an example of a callback
 function. The `sort()` method "calls back" to a function you supply.
@@ -64,7 +64,7 @@ Callback functions are often short one-line functions that are only
 used for that one operation.  Programmers often ask for a short-cut
 for specifying this extra processing.
 
-### Lambda: Anonymous Functions
+## Lambda: Anonymous Functions
 
 Use a lambda instead of creating the function.  In our previous
 sorting example.
@@ -86,14 +86,14 @@ portfolio.sort(key=stock_name)
 portfolio.sort(key=lambda s: s['name'])
 ```
 
-### Using lambda
+## Using lambda
 
 * lambda is highly restricted.
 * Only a single expression is allowed.
 * No statements like `if`, `while`, etc.
 * Most common use is with functions like `sort()`.
 
-## Exercises
+## **Exercises**
 
 Read some stock portfolio data and convert it into a list:
 
@@ -113,7 +113,7 @@ Stock('IBM', 100, 70.44)
 >>>
 ```
 
-### Exercise 7.5: Sorting on a field
+### **Exercise 7.5: Sorting on a field**
 
 Try the following statements which sort the portfolio data
 alphabetically by stock name.
@@ -134,7 +134,7 @@ In this part, the `stock_name()` function extracts the name of a stock from
 a single entry in the `portfolio` list.   `sort()` uses the result of
 this function to do the comparison.
 
-### Exercise 7.6: Sorting on a field with lambda
+### **Exercise 7.6: Sorting on a field with lambda**
 
 Try sorting the portfolio according the number of shares using a
 `lambda` expression:

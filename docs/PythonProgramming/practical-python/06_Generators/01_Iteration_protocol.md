@@ -2,7 +2,7 @@
 
 This section looks at the underlying process of iteration.
 
-### Iteration Everywhere
+## Iteration Everywhere
 
 Many different objects support iteration.
 
@@ -24,7 +24,7 @@ for x in f: # Loop over lines in a file
     ...
 ```
 
-### Iteration: Protocol
+## Iteration: Protocol
 
 Consider the `for`-statement.
 
@@ -67,7 +67,7 @@ File "<stdin>", line 1, in ? StopIteration
 >>>
 ```
 
-### Supporting Iteration
+## Supporting Iteration
 
 Knowing about iteration is useful if you want to add it to your own objects.
 For example, making a custom container.
@@ -86,9 +86,9 @@ for s in port:
     ...
 ```
 
-## Exercises
+## **Exercises**
 
-### Exercise 6.1: Iteration Illustrated
+### **Exercise 6.1: Iteration Illustrated**
 
 Create the following list:
 
@@ -139,7 +139,7 @@ the `__next__()` method of an iterator. Try using it on a file:
 Keep calling `next(f)` until you reach the end of the
 file. Watch what happens.
 
-### Exercise 6.2: Supporting Iteration
+### **Exercise 6.2: Supporting Iteration**
 
 On occasion, you might want to make one of your own objects support
 iteration--especially if your object wraps around an existing
@@ -251,7 +251,7 @@ Test it to make sure it works:
 >>>
 ```
 
-### Exercise 6.3: Making a more proper container
+### **Exercise 6.3: Making a more proper container**
 
 If making a container class, you often want to do more than just
 iteration. Modify the `Portfolio` class so that it has some other

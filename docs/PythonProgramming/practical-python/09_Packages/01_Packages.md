@@ -4,7 +4,7 @@ If writing a larger program, you don't really want to organize it as a
 large of collection of standalone files at the top level.  This
 section introduces the concept of a package.
 
-### Modules
+## Modules
 
 Any Python source file is a module.
 
@@ -27,7 +27,7 @@ b = foo.spam('Hello')
 ...
 ```
 
-### Packages vs Modules
+## Packages vs Modules
 
 For larger collections of code, it is common to organize modules into
 a package.
@@ -53,7 +53,7 @@ Add an `__init__.py` file to the directory. It may be empty.
 
 Put your source files into the directory.
 
-### Using a Package
+## Using a Package
 
 A package serves as a namespace for imports.
 
@@ -74,7 +74,7 @@ from porty.report import read_portfolio
 port = read_portfolio('portfolio.csv')
 ```
 
-### Two problems
+## Two problems
 
 There are two main problems with this approach.
 
@@ -83,7 +83,7 @@ There are two main problems with this approach.
 
 So, basically everything breaks. But, other than that, it works.
 
-### Problem: Imports
+## Problem: Imports
 
 Imports between files in the same package *must now include the
 package name in the import*.  Remember the structure.
@@ -115,7 +115,7 @@ import fileparse    # BREAKS. fileparse not found
 ...
 ```
 
-### Relative Imports
+## Relative Imports
 
 Instead of directly using the package name,
 you can use `.` to refer to the current package.
@@ -136,7 +136,7 @@ from . import modname
 
 This makes it easy to rename the package.
 
-### Problem: Main Scripts
+## Problem: Main Scripts
 
 Running a package submodule as a main script breaks.
 
@@ -157,7 +157,7 @@ bash $ python -m porty.pcost # WORKS
 ...
 ```
 
-### `__init__.py` files
+## `__init__.py` files
 
 The primary purpose of these files is to stitch modules together.
 
@@ -183,7 +183,7 @@ from porty import pcost
 pcost.portfolio_cost('portfolio.csv')
 ```
 
-### Another solution for scripts
+## Another solution for scripts
 
 As noted, you now need to use `-m package.module` to
 run scripts within your package.
@@ -213,7 +213,7 @@ porty/         # package directory
     ...
 ```
 
-### Application Structure
+## Application Structure
 
 Code organization and file structure is key to the maintainability of
 an application.
@@ -248,7 +248,7 @@ import porty
 porty.report.main(sys.argv)
 ```
 
-## Exercises
+## **Exercises**
 
 At this point, you have a directory with several programs:
 
@@ -272,7 +272,7 @@ typedproperty.py  # Typed class properties
 In this exercise, we're going to clean up the code and put it into
 a common package.
 
-### Exercise 9.1: Making a simple package
+### **Exercise 9.1: Making a simple package**
 
 Make a directory called `porty/` and put all of the above Python
 files into it.  Additionally create an empty `__init__.py` file and
@@ -325,7 +325,7 @@ from .fileparse import parse_csv
 ...
 ```
 
-### Exercise 9.2: Making an application directory
+### **Exercise 9.2: Making an application directory**
 
 Putting all of your code into a "package" isn't often enough for an
 application. Sometimes there are supporting files, documentation,
@@ -385,7 +385,7 @@ shell % python3 -m porty.report portfolio.csv prices.csv txt
 shell %
 ```
 
-### Exercise 9.3: Top-level Scripts
+### **Exercise 9.3: Top-level Scripts**
 
 Using the `python -m` command is often a bit weird.  You may want to
 write a top level script that simply deals with the oddities of packages.

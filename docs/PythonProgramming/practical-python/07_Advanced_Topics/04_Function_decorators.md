@@ -3,7 +3,7 @@
 This section introduces the concept of a decorator.  This is an advanced
 topic for which we only scratch the surface.
 
-### Logging Example
+## Logging Example
 
 Consider a function.
 
@@ -28,7 +28,7 @@ def sub(x, y):
     return x - y
 ```
 
-### Observation
+## Observation
 
 *Observation: It's kind of repetitive.*
 
@@ -37,7 +37,7 @@ really annoying.  They are tedious to write and hard to maintain.
 Especially if you decide that you want to change how it works (i.e., a
 different kind of logging perhaps).
 
-### Code that makes logging
+## Code that makes logging
 
 Perhaps you can make a function that makes functions with logging
 added to them. A wrapper.
@@ -107,9 +107,9 @@ However, the previous example is a good illustration of how their use tends to a
 Usually, it's in response to repetitive code appearing across a wide range of
 function definitions.  A decorator can move that code to a central definition.
 
-## Exercises
+## **Exercises**
 
-### Exercise 7.10: A decorator for timing
+### **Exercise 7.10: A decorator for timing**
 
 If you define a function, its name and module are stored in the
 `__name__` and `__module__` attributes. For example:

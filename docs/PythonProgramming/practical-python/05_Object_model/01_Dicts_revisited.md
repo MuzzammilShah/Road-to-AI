@@ -3,7 +3,7 @@
 The Python object system is largely based on an implementation
 involving dictionaries.  This section discusses that.
 
-### Dictionaries, Revisited
+## Dictionaries, Revisited
 
 Remember that a dictionary is a collection of named values.
 
@@ -19,7 +19,7 @@ Dictionaries are commonly used for simple data structures.  However,
 they are used for critical parts of the interpreter and may be the
 *most important type of data in Python*.
 
-### Dicts and Modules
+## Dicts and Modules
 
 Within a module, a dictionary holds all of the global variables and
 functions.
@@ -45,7 +45,7 @@ If you inspect `foo.__dict__` or `globals()`, you'll see the dictionary.
 }
 ```
 
-### Dicts and Objects
+## Dicts and Objects
 
 User defined objects also use dictionaries for both instance data and
 classes.  In fact, the entire object system is mostly an extra layer
@@ -89,7 +89,7 @@ t = Stock('AAPL', 50, 123.45)     # {'name' : 'AAPL','shares' : 50, 'price': 123
 If you created 100 instances of some class, there are 100 dictionaries
 sitting around holding data.
 
-### Class Members
+## Class Members
 
 A separate dictionary also holds the methods.
 
@@ -117,7 +117,7 @@ The dictionary is in `Stock.__dict__`.
 }
 ```
 
-### Instances and Classes
+## Instances and Classes
 
 Instances and classes are linked together.  The `__class__` attribute
 refers back to the class.
@@ -135,7 +135,7 @@ The instance dictionary holds data unique to each instance, whereas
 the class dictionary holds data collectively shared by *all*
 instances.
 
-### Attribute Access
+## Attribute Access
 
 When you work with objects, you access data and methods using the `.` operator.
 
@@ -147,7 +147,7 @@ del obj.name          # Deleting
 
 These operations are directly tied to the dictionaries sitting underneath the covers.
 
-### Modifying Instances
+## Modifying Instances
 
 Operations that modify an object update the underlying dictionary.
 
@@ -165,7 +165,7 @@ Operations that modify an object update the underlying dictionary.
 >>>
 ```
 
-### Reading Attributes
+## Reading Attributes
 
 Suppose you read an attribute on an instance.
 
@@ -192,7 +192,7 @@ If not found, look in `__dict__` of class through `__class__`.
 
 This lookup scheme is how the members of a *class* get shared by all instances.
 
-### How inheritance works
+## How inheritance works
 
 Classes may inherit from other classes.
 
@@ -211,14 +211,14 @@ The base classes are stored in a tuple in each class.
 
 This provides a link to parent classes.
 
-### Reading Attributes with Inheritance
+## Reading Attributes with Inheritance
 
 Logically, the process of finding an attribute is as follows. First,
 check in local `__dict__`.  If not found, look in `__dict__` of the
 class.  If not found in class, look in the base classes through
 `__bases__`.   However, there are some subtle aspects of this discussed next.
 
-### Reading Attributes with Single Inheritance
+## Reading Attributes with Single Inheritance
 
 In inheritance hierarchies, attributes are found by walking up the
 inheritance tree in order.
@@ -233,7 +233,7 @@ class E(D): pass
 With single inheritance, there is single path to the top.
 You stop with the first match.
 
-### Method Resolution Order or MRO
+## Method Resolution Order or MRO
 
 Python precomputes an inheritance chain and stores it in the *MRO* attribute on the class.
 You can view it.
@@ -249,7 +249,7 @@ You can view it.
 This chain is called the **Method Resolution Order**.  To find an
 attribute, Python walks the MRO in order. The first match wins.
 
-### MRO in Multiple Inheritance
+## MRO in Multiple Inheritance
 
 With multiple inheritance, there is no single path to the top.
 Let's take a look at an example.
@@ -298,7 +298,7 @@ class hierarchy obeys the same ordering rules you might follow if your
 house was on fire and you had to evacuate--children first, followed by
 parents.
 
-### An Odd Code Reuse (Involving Multiple Inheritance)
+## An Odd Code Reuse (Involving Multiple Inheritance)
 
 Consider two completely unrelated objects:
 
@@ -336,7 +336,7 @@ There is a code commonality in the implementation of `LoudDog.noise()` and
 `LoudBike.noise()`.  In fact, the code is exactly the same.  Naturally,
 code like that is bound to attract software engineers.
 
-### The "Mixin" Pattern
+## The "Mixin" Pattern
 
 The *Mixin* pattern is a class with a fragment of code.
 
@@ -361,7 +361,7 @@ Miraculously, loudness was now implemented just once and reused
 in two completely unrelated classes.  This sort of trick is one
 of the primary uses of multiple inheritance in Python.
 
-### Why `super()`
+## Why `super()`
 
 Always use `super()` when overriding methods.
 
@@ -376,14 +376,14 @@ class Loud:
 The tricky bit is that you don't know what it is.  You especially don't
 know what it is if multiple inheritance is being used.
 
-### Some Cautions
+## Some Cautions
 
 Multiple inheritance is a powerful tool. Remember that with power
 comes responsibility.  Frameworks / libraries sometimes use it for
 advanced features involving composition of components.  Now, forget
 that you saw that.
 
-## Exercises
+## **Exercises**
 
 In Section 4, you defined a class `Stock` that represented a holding of stock.
 In this exercise, we will use that class.  Restart the interpreter and make a
@@ -397,7 +397,7 @@ few instances:
 >>>
 ```
 
-### Exercise 5.1: Representation of Instances
+### **Exercise 5.1: Representation of Instances**
 
 At the interactive shell, inspect the underlying dictionaries of the
 two instances you created:
@@ -410,7 +410,7 @@ two instances you created:
 >>>
 ```
 
-### Exercise 5.2: Modification of Instance Data
+### **Exercise 5.2: Modification of Instance Data**
 
 Try setting a new attribute on one of the above instances:
 
@@ -444,7 +444,7 @@ top of a dictionary.  Note: it should be emphasized that direct
 manipulation of the dictionary is uncommon--you should always write
 your code to use the (.) syntax.
 
-### Exercise 5.3: The role of classes
+### **Exercise 5.3: The role of classes**
 
 The definitions that make up a class definition are shared by all
 instances of that class.  Notice, that all instances have a link back
@@ -553,7 +553,7 @@ instances that get created.  For example:
 >>>
 ```
 
-### Exercise 5.4: Bound methods
+### **Exercise 5.4: Bound methods**
 
 A subtle feature of Python is that invoking a method actually involves
 two steps and something known as a bound method.   For example:
@@ -605,7 +605,7 @@ together.  For example, calling `s(25)` actually does this:
 >>>
 ```
 
-### Exercise 5.5: Inheritance
+### **Exercise 5.5: Inheritance**
 
 Make a new class that inherits from `Stock`.
 

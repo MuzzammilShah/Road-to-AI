@@ -2,7 +2,7 @@
 
 In this section we reconsider a design decision made earlier.
 
-### Filenames versus Iterables
+## Filenames versus Iterables
 
 Compare these two programs that return the same output.
 
@@ -35,7 +35,7 @@ with open('file.csv') as f:
 * Which of these functions do you prefer? Why?
 * Which of these functions is more flexible?
 
-### Deep Idea: "Duck Typing"
+## Deep Idea: "Duck Typing"
 
 [Duck Typing](https://en.wikipedia.org/wiki/Duck_typing) is a computer
 programming concept to determine whether an object can be used for a
@@ -80,14 +80,14 @@ There is considerable flexibility with this design.
 
 *Question: Should we embrace or fight this flexibility?*
 
-### Library Design Best Practices
+## Library Design Best Practices
 
 Code libraries are often better served by embracing flexibility.
 Don't restrict your options.  With great flexibility comes great power.
 
-## Exercise
+## **Exercise**
 
-### Exercise 3.17: From filenames to file-like objects
+### **Exercise 3.17: From filenames to file-like objects**
 
 You've now created a file `fileparse.py` that contained a
 function `parse_csv()`.  The function worked like this:
@@ -124,7 +124,7 @@ In this new code, what happens if you pass a filename as before?
 
 Yes, you'll need to be careful.   Could you add a safety check to avoid this?
 
-### Exercise 3.18: Fixing existing functions
+### **Exercise 3.18: Fixing existing functions**
 
 Fix the `read_portfolio()` and `read_prices()` functions in the
 `report.py` file so that they work with the modified version of

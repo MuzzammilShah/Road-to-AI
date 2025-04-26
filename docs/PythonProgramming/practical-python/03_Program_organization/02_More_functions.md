@@ -4,7 +4,7 @@ Although functions were introduced earlier, very few details were provided on ho
 they actually work at a deeper level.  This section aims to fill in some gaps
 and discuss matters such as calling conventions, scoping rules, and more.
 
-### Calling a Function
+## Calling a Function
 
 Consider this function:
 
@@ -25,7 +25,7 @@ Or you can call the function with keyword arguments:
 prices = read_prices(filename='prices.csv', debug=True)
 ```
 
-### Default Arguments
+## Default Arguments
 
 Sometimes you want an argument to be optional.  If so, assign a default value
 in the function definition.
@@ -44,7 +44,7 @@ e = read_prices('prices.dat', True)
 
 *Note: Arguments with defaults must appear at the end of the arguments list (all non-optional arguments go first).*
 
-### Prefer keyword arguments for optional arguments
+## Prefer keyword arguments for optional arguments
 
 Compare and contrast these two different calling styles:
 
@@ -59,7 +59,7 @@ parse_data(data, debug=True, ignore_errors=True)
 In most cases, keyword arguments improve code clarity--especially for arguments that
 serve as flags or which are related to optional features.
 
-### Design Best Practices
+## Design Best Practices
 
 Always give short, but meaningful names to functions arguments.
 
@@ -71,7 +71,7 @@ d = read_prices('prices.csv', debug=True)
 
 Python development tools will show the names in help features and documentation.
 
-### Returning Values
+## Returning Values
 
 The `return` statement returns a value
 
@@ -96,7 +96,7 @@ def foo(x):
 b = foo(4)      # b = None
 ```
 
-### Multiple Return Values
+## Multiple Return Values
 
 Functions can only return one value.  However, a function may return
 multiple values by returning them in a tuple.
@@ -116,7 +116,7 @@ x, y = divide(37,5) # x = 7, y = 2
 x = divide(37, 5)   # x = (7, 2)
 ```
 
-### Variable Scope
+## Variable Scope
 
 Programs assign values to variables.
 
@@ -131,7 +131,7 @@ Variables assignments occur outside and inside function definitions.
 Variables defined outside are "global". Variables inside a function
 are "local".
 
-### Local Variables
+## Local Variables
 
 Variables assigned inside functions are private.
 
@@ -159,7 +159,7 @@ NameError: name 'fields' is not defined
 
 Locals also can't conflict with variables found elsewhere.
 
-### Global Variables
+## Global Variables
 
 Functions can freely access the values of globals defined in the same
 file.
@@ -185,7 +185,7 @@ print(name) # prints 'Dave'
 
 **Remember: All assignments in functions are local.**
 
-### Modifying Globals
+## Modifying Globals
 
 If you must modify a global variable you must declare it as such.
 
@@ -203,7 +203,7 @@ know that it is considered poor form.  In fact, try to avoid `global` entirely
 if you can.  If you need a function to modify some kind of state outside
 of the function, it's better to use a class instead (more on this later).
 
-### Argument Passing
+## Argument Passing
 
 When you call a function, the argument variables are names that refer
 to the passed values. These values are NOT copies (see [section
@@ -221,7 +221,7 @@ print(a)                # [1, 2, 3, 42]
 
 **Key point: Functions don't receive a copy of the input arguments.**
 
-### Reassignment vs Modifying
+## Reassignment vs Modifying
 
 Make sure you understand the subtle difference between modifying a
 value and reassigning a variable name.
@@ -245,7 +245,7 @@ print(b)                # [1, 2, 3]
 
 *Reminder: Variable assignment never overwrites memory. The name is merely bound to a new value.*
 
-## Exercises
+## **Exercises**
 
 This set of exercises have you implement what is, perhaps, the most
 powerful and difficult part of the course.  There are a lot of steps
@@ -268,7 +268,7 @@ our goal.
 Start this exercise by opening the file called
 `Work/fileparse.py`. This is where we will be doing our work.
 
-### Exercise 3.3: Reading CSV Files
+### **Exercise 3.3: Reading CSV Files**
 
 To start, let’s just focus on the problem of reading a CSV file into a
 list of dictionaries.  In the file `fileparse.py`, define a
@@ -316,7 +316,7 @@ This is good except that you can’t do any kind of useful calculation
 with the data because everything is represented as a string.  We’ll
 fix this shortly, but let’s keep building on it.
 
-### Exercise 3.4: Building a Column Selector
+### **Exercise 3.4: Building a Column Selector**
 
 In many cases, you’re only interested in selected columns from a CSV
 file, not all of the data.  Modify the `parse_csv()` function so that
@@ -413,7 +413,7 @@ When you read a row of data from the file, the indices are used to filter it:
 >>>
 ```
 
-### Exercise 3.5: Performing Type Conversion
+### **Exercise 3.5: Performing Type Conversion**
 
 Modify the `parse_csv()` function so that it optionally allows
 type-conversions to be applied to the returned data.  For example:
@@ -439,7 +439,7 @@ if types:
 ...
 ```
 
-### Exercise 3.6: Working without Headers
+### **Exercise 3.6: Working without Headers**
 
 Some CSV files don’t include any header information.
 For example, the file `prices.csv` looks like this:
@@ -467,7 +467,7 @@ line of data isn’t interpreted as a header line.  Also, you’ll need to
 make sure you don’t create dictionaries as there are no longer any
 column names to use for keys.
 
-### Exercise 3.7: Picking a different column delimiter
+### **Exercise 3.7: Picking a different column delimiter**
 
 Although CSV files are pretty common, it’s also possible that you
 could encounter a file that uses a different column separator such as

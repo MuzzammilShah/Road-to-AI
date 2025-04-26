@@ -3,7 +3,7 @@
 This section covers variadic function arguments, sometimes described as
 `*args` and `**kwargs`.
 
-### Positional variable arguments (*args)
+## Positional variable arguments (*args)
 
 A function that accepts *any number* of arguments is said to use variable arguments.
 For example:
@@ -27,7 +27,7 @@ def f(x, *args):
     # args -> (2,3,4,5)
 ```
 
-### Keyword variable arguments (**kwargs)
+## Keyword variable arguments (**kwargs)
 
 A function can also accept any number of keyword arguments.
 For example:
@@ -52,7 +52,7 @@ def f(x, y, **kwargs):
     # kwargs -> { 'flag': True, 'mode': 'fast', 'header': 'debug' }
 ```
 
-### Combining both
+## Combining both
 
 A function can also accept any number of variable keyword and non-keyword arguments.
 
@@ -80,7 +80,7 @@ This function takes any combination of positional or keyword
 arguments.  It is sometimes used when writing wrappers or when you
 want to pass arguments through to another function.
 
-### Passing Tuples and Dicts
+## Passing Tuples and Dicts
 
 Tuples can be expanded into variable arguments.
 
@@ -101,9 +101,9 @@ f(data, **options)
 # Same as f(data, color='red', delimiter=',', width=400)
 ```
 
-## Exercises
+## **Exercises**
 
-### Exercise 7.1: A simple example of variable arguments
+### **Exercise 7.1: A simple example of variable arguments**
 
 Try defining the following function:
 
@@ -122,7 +122,7 @@ Try defining the following function:
 
 Notice how the parameter `*more` collects all of the extra arguments.
 
-### Exercise 7.2: Passing tuple and dicts as arguments
+### **Exercise 7.2: Passing tuple and dicts as arguments**
 
 Suppose you read some data from a file and obtained a tuple such as
 this:
@@ -162,7 +162,7 @@ Stock('GOOG', 100, 490.1)
 >>>
 ```
 
-### Exercise 7.3: Creating a list of instances
+### **Exercise 7.3: Creating a list of instances**
 
 In your `report.py` program, you created a list of instances
 using code like this:
@@ -185,7 +185,7 @@ def read_portfolio(filename):
 
 You can simplify that code using `Stock(**d)` instead.  Make that change.
 
-### Exercise 7.4: Argument pass-through
+### **Exercise 7.4: Argument pass-through**
 
 The `fileparse.parse_csv()` function has some options for changing the
 file delimiter and for error reporting.  Maybe you'd like to expose those

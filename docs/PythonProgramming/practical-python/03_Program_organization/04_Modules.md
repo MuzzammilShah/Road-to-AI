@@ -3,7 +3,7 @@
 This section introduces the concept of modules and working with functions that span
 multiple files.
 
-### Modules and import
+## Modules and import
 
 Any Python source file is a module.
 
@@ -26,7 +26,7 @@ b = foo.spam('Hello')
 ...
 ```
 
-### Namespaces
+## Namespaces
 
 A module is a collection of named values and is sometimes said to be a
 *namespace*.  The names are all of the global variables and functions
@@ -43,7 +43,7 @@ b = foo.spam('Hello')
 
 The module name is directly tied to the file name (foo -> foo.py).
 
-### Global Definitions
+## Global Definitions
 
 Everything defined in the *global* scope is what populates the module
 namespace. Consider two modules
@@ -69,7 +69,7 @@ same names and those names won't conflict with each other.
 
 **Modules are isolated.**
 
-### Modules as Environments
+## Modules as Environments
 
 Modules form an enclosing environment for all of the code defined inside.
 
@@ -84,7 +84,7 @@ def grok(a):
 *Global* variables are always bound to the enclosing module (same file).
 Each source file is its own little universe.
 
-### Module Execution
+## Module Execution
 
 When a module is imported, *all of the statements in the module
 execute* one after another until the end of the file is reached.  The
@@ -93,7 +93,7 @@ are still defined at the end of the execution process.  If there are
 scripting statements that carry out tasks in the global scope
 (printing, creating files, etc.) you will see them run on import.
 
-### `import as` statement
+## `import as` statement
 
 You can change the name of a module as you import it:
 
@@ -107,7 +107,7 @@ def rectangular(r, theta):
 
 It works the same as a normal import. It just renames the module in that one file.
 
-### `from` module import
+## `from` module import
 
 This picks selected symbols out of a module and makes them available locally.
 
@@ -123,7 +123,7 @@ def rectangular(r, theta):
 This allows parts of a module to be used without having to type the module prefix.
 It's useful for frequently used names.
 
-### Comments on importing
+## Comments on importing
 
 Variations on import do *not* change the way that modules work.
 
@@ -144,7 +144,7 @@ The `from math import cos, sin` statement still loads the entire
 math module behind the scenes. It's merely copying the `cos` and `sin`
 names from the module into the local space after it's done.
 
-### Module Loading
+## Module Loading
 
 Each module loads and executes only *once*.
 *Note: Repeated imports just return a reference to the previously loaded module.*
@@ -164,7 +164,7 @@ repeated imports always return the previously loaded module--even if a change
 was made.  The safest way to load modified code into Python is to quit and restart
 the interpreter.
 
-### Locating Modules
+## Locating Modules
 
 Python consults a path list (sys.path) when looking for modules.
 
@@ -181,7 +181,7 @@ Python consults a path list (sys.path) when looking for modules.
 
 The current working directory is usually first.
 
-### Module Search Path
+## Module Search Path
 
 As noted, `sys.path` contains the search paths.
 You can manually adjust if you need to.
@@ -207,7 +207,7 @@ the module search path.  However, it sometimes arises if you're
 trying to import Python code that's in an unusual location or
 not readily accessible from the current working directory.
 
-## Exercises
+## **Exercises**
 
 For this exercise involving modules, it is critically important to
 make sure you are running Python in a proper environment.  Modules 
@@ -218,7 +218,7 @@ For best results, you should make sure you're also in that directory
 when you launch the interpreter.  If not, you need to make sure
 `practical-python/Work` is added to `sys.path`.
 
-### Exercise 3.11: Module imports
+### **Exercise 3.11: Module imports**
 
 In section 3, we created a general purpose function `parse_csv()` for
 parsing the contents of CSV datafiles.
@@ -290,7 +290,7 @@ Try importing a function so that you don’t need to include the module name:
 >>>
 ```
 
-### Exercise 3.12: Using your library module
+### **Exercise 3.12: Using your library module**
 
 In section 2, you wrote a program `report.py` that produced a stock report like this:
 
@@ -314,9 +314,7 @@ and `read_prices()` functions to use the `parse_csv()` function.
 Use the interactive example at the start of this exercise as a guide.
 Afterwards, you should get exactly the same output as before.
 
-### Exercise 3.13: Intentionally left blank (skip)
-
-### Exercise 3.14: Using more library imports
+### **Exercise 3.14: Using more library imports**
 
 In section 1, you wrote a program `pcost.py` that read a portfolio and computed its cost.
 

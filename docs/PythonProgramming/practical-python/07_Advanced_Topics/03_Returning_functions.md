@@ -2,7 +2,7 @@
 
 This section introduces the idea of using functions to create other functions.
 
-### Introduction
+## Introduction
 
 Consider the following function.
 
@@ -25,7 +25,7 @@ Adding 3 4
 7
 ```
 
-### Local Variables
+## Local Variables
 
 Observe how the inner function refers to variables defined by the outer
 function.
@@ -51,7 +51,7 @@ Adding 3 4      # Where are these values coming from?
 7
 ```
 
-### Closures
+## Closures
 
 When an inner function is returned as a result, that inner function is known as a *closure*.
 
@@ -69,7 +69,7 @@ def add(x, y):
 closure as a function plus an extra environment that holds the values
 of variables that it depends on.
 
-### Using Closures
+## Using Closures
 
 Closure are an essential feature of Python. However, their use if often subtle.
 Common applications:
@@ -78,7 +78,7 @@ Common applications:
 * Delayed evaluation.
 * Decorator functions (later).
 
-### Delayed Evaluation
+## Delayed Evaluation
 
 Consider a function like this:
 
@@ -117,14 +117,14 @@ after(30, add(2, 3))
 # `do_add` has the references x -> 2 and y -> 3
 ```
 
-### Code Repetition
+## Code Repetition
 
 Closures can also be used as technique for avoiding excessive code repetition.
 You can write functions that make code.
 
-## Exercises
+## **Exercises**
 
-### Exercise 7.7: Using Closures to Avoid Repetition
+### **Exercise 7.7: Using Closures to Avoid Repetition**
 
 One of the more powerful features of closures is their use in
 generating repetitive code.  If you refer back to [Exercise
@@ -201,7 +201,7 @@ Try creating an instance and verifying that type-checking works.
 >>>
 ```
 
-### Exercise 7.8: Simplifying Function Calls
+### **Exercise 7.8: Simplifying Function Calls**
 
 In the above example, users might find calls such as
 `typedproperty('shares', int)` a bit verbose to type--especially if
@@ -232,7 +232,7 @@ Ah, that's a bit better.   The main takeaway here is that closures and `lambda`
 can often be used to simplify code and eliminate annoying repetition.  This
 is often good.
 
-### Exercise 7.9: Putting it into practice
+### **Exercise 7.9: Putting it into practice**
 
 Rewrite the `Stock` class in the file `stock.py` so that it uses typed properties
 as shown.

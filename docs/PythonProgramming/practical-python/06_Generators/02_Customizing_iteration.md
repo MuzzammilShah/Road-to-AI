@@ -2,7 +2,7 @@
 
 This section looks at how you can customize iteration using a generator function.
 
-### A problem
+## A problem
 
 Suppose you wanted to create your own custom iteration pattern.
 
@@ -18,7 +18,7 @@ For example, a countdown.
 
 There is an easy way to do this.
 
-### Generators
+## Generators
 
 A generator is a function that defines iteration.
 
@@ -100,9 +100,9 @@ File "<stdin>", line 1, in ? StopIteration
  protocol that the for statements uses on lists, tuples, dicts, files,
  etc.*
 
-## Exercises
+## **Exercises**
 
-### Exercise 6.4: A Simple Generator
+### **Exercise 6.4: A Simple Generator**
 
 If you ever find yourself wanting to customize iteration, you should
 always think generator functions.  They're easy to write---make
@@ -142,7 +142,7 @@ This is kind of interesting--the idea that you can hide a bunch of
 custom processing in a function and use it to feed a for-loop.
 The next example looks at a more unusual case.
 
-### Exercise 6.5: Monitoring a streaming data source
+### **Exercise 6.5: Monitoring a streaming data source**
 
 Generators can be an interesting way to monitor real-time data sources
 such as log files or stock market feeds.  In this part, we'll
@@ -200,7 +200,7 @@ this case, we are using it to repeatedly probe the end of the file to
 see if more data has been added (`readline()` will either
 return new data or an empty string).
 
-### Exercise 6.6: Using a generator to produce data
+### **Exercise 6.6: Using a generator to produce data**
 
 If you look at the code in Exercise 6.5, the first part of the code is producing
 lines of data whereas the statements at the end of the `while` loop are consuming
@@ -232,7 +232,7 @@ if __name__ == '__main__':
             print(f'{name:>10s} {price:>10.2f} {change:>10.2f}')
 ```
 
-### Exercise 6.7: Watching your portfolio
+### **Exercise 6.7: Watching your portfolio**
 
 Modify the `follow.py` program so that it watches the stream of stock
 data and prints a ticker showing information for only those stocks
