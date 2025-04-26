@@ -1,4 +1,4 @@
-# 🚀 Python Programming
+# :simple-pythonanywhere: Python Programming
 
 Welcome to the **Python Programming** section of my documentation. This area is dedicated to my personal journey through David Beazley’s incredible Python course materials, available publicly on GitHub. From beginner concepts to advanced programming techniques, this section serves as both a learning companion and a quick reference guide as I solidify my Python foundations.
 

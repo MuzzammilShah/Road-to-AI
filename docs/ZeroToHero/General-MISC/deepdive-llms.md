@@ -1,4 +1,4 @@
-# **DEEP DIVE INTO LLMs**
+# **:material-brain: DEEP DIVE INTO LLMs**
 
 **Timeline: 19th - 23rd March, 2025**
 

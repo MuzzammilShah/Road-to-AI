@@ -3,7 +3,7 @@ hide:
   - navigation
 --- -->
 
-# **LANGUAGE MODEL - 2**
+# **:material-graph-outline: LANGUAGE MODEL - 2**
 
 **Timeline: 26th November - 11th December, 2024**
 

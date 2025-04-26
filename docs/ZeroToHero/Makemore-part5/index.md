@@ -3,7 +3,7 @@ hide:
   - navigation
 --- -->
 
-# **LANGUAGE MODEL - 5**
+# **:material-graph-outline: LANGUAGE MODEL - 5**
 
 **Timeline: 8th - 9th February, 2025**
 

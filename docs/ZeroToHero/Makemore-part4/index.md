@@ -3,7 +3,7 @@ hide:
   - navigation
 --- -->
 
-# **LANGUAGE MODEL - 4 (BACKPROPAGATION II)**
+# **:material-chart-timeline-variant-shimmer: LANGUAGE MODEL - 4 (BACKPROPAGATION II)**
 
 **Timeline: 15th January - 6th February, 2025**
 
