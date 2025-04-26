@@ -10,6 +10,8 @@ focus of this section is on some general code organization principles
 that will prove useful no matter what tools you later use to give code
 away or manage dependencies.
 
-* [9.1 Packages](01_Packages.md)
-* [9.2 Third Party Modules](02_Third_party.md)
-* [9.3 Giving your code to others](03_Distribution.md)
+| Section | Lecture |
+|-----|-----|
+| 9.1 | [Packages](01_Packages.md) |
+| 9.2 | [Third Party Modules](02_Third_party.md) |
+| 9.3 | [Giving your code to others](03_Distribution.md) |
