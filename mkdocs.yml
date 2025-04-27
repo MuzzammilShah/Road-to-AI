@@ -121,6 +121,9 @@ nav:
         - Bigram Script Breakdown: ZeroToHero/GPT-1/bigram.md
     - GPT-2:
       - Transformer Model-2: ZeroToHero/GPT-2/index.md
+      - Implementation Notebooks:
+        - Section 0: ZeroToHero/GPT-2/section-0.ipynb
+        - Section 1(a): ZeroToHero/GPT-2/section-1a.ipynb
     - GPT-Tokenizer:
       - Tokenizer: ZeroToHero/GPT-Tokenizer/index.md
     - General MISC:
