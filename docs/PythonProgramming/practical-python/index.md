@@ -29,7 +29,7 @@ Note: The status of each module will only be marked as :material-progress-check:
 
     ---
 
-    :material-progress-clock: Ongoing
+    :material-progress-check: Done
 
 
 -   :material-language-python:{ .lg .middle } __Program Organization__
@@ -38,7 +38,7 @@ Note: The status of each module will only be marked as :material-progress-check:
 
     ---
 
-    :material-progress-clock: Ongoing
+    :material-progress-check: Done
 
 
 -   :material-language-python:{ .lg .middle } __Classes and Objects__
