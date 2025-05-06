@@ -47,7 +47,7 @@ Note: The status of each module will only be marked as :material-progress-check:
 
     ---
 
-    :material-progress-clock: Ongoing
+    :material-progress-check: Done
 
 
 -   :material-language-python:{ .lg .middle } __The Inner Workings of Py Objects__
@@ -56,7 +56,7 @@ Note: The status of each module will only be marked as :material-progress-check:
 
     ---
 
-    :material-progress-alert: -
+    :material-progress-check: Done
 
 -   :material-language-python:{ .lg .middle } __Generators__
 
@@ -64,7 +64,7 @@ Note: The status of each module will only be marked as :material-progress-check:
 
     ---
 
-    :material-progress-alert: -
+    :material-progress-clock: Ongoing
 
 -   :material-language-python:{ .lg .middle } __A Few Advanced Topics__
 
