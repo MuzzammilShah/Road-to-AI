@@ -125,6 +125,7 @@ nav:
         - Section 0: ZeroToHero/GPT-2/section-0.ipynb
         - Section 1(a): ZeroToHero/GPT-2/section-1a.ipynb
         - Section 1(b): ZeroToHero/GPT-2/section-1b.ipynb
+        - Section 2(a): ZeroToHero/GPT-2/section-2a.ipynb
     - GPT-Tokenizer:
       - Tokenizer: ZeroToHero/GPT-Tokenizer/index.md
     - General MISC:
