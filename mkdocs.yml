@@ -131,6 +131,8 @@ nav:
     - General MISC:
       - Intro to LLMs: ZeroToHero/General-MISC/intro-llms.md
       - Deep Dive into LLMs: ZeroToHero/General-MISC/deepdive-llms.md
+  - Books:
+    - AI Engineering: Books/ai-engineering.md
 
 markdown_extensions:
   - toc:
@@ -144,6 +146,8 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
 
 extra_css:
   - stylesheets/custom.css
