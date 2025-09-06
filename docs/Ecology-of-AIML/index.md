@@ -9,9 +9,11 @@
 
 -   :material-robot-happy: **AI Agents**  
 
--   :material-tools: **Fine-tuning LLMs**  
+-   :material-cloud-check-outline: **AI in Cloud**
 
 -   :octicons-rocket-24: **Deployment & Scaling**
+
+-   :material-tools: **Fine-tuning LLMs** 
 
 </div>
 
