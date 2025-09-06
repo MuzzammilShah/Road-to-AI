@@ -131,6 +131,16 @@ nav:
     - General MISC:
       - Intro to LLMs: ZeroToHero/General-MISC/intro-llms.md
       - Deep Dive into LLMs: ZeroToHero/General-MISC/deepdive-llms.md
+  - Books:
+    - Overview: Books/index.md 
+    - AI Engineering:
+      - Chapters:
+        - Introduction to AI Engineering: Books/AI-Engineering/chapter-1.md
+        - Prompt Engineering: Books/AI-Engineering/chapter-5.md
+  - Ecology:
+    - Overview: Ecology-of-AIML/index.md
+    - Model Context Protocol (MCP): 
+      - Introduction: Ecology-of-AIML/MCP/Introduction.md
 
 markdown_extensions:
   - toc:
@@ -144,6 +154,11 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.blocks.admonition
+  - pymdownx.blocks.html
+  - pymdownx.blocks.tab
 
 extra_css:
   - stylesheets/custom.css
