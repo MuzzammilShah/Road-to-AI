@@ -7,6 +7,9 @@
 -   :octicons-arrow-switch-24: **MCP**  
     [:material-subdirectory-arrow-right: Explore more](MCP/Introduction.md)
 
+-   :fontawesome-solid-chalkboard-teacher: **LLMs and GPTs**  
+    [:material-subdirectory-arrow-right: Explore more](LLM-GPT/index.md)
+
 -   :material-robot-happy: **AI Agents**  
 
 -   :material-cloud-check-outline: **AI in Cloud**
