@@ -11,6 +11,9 @@ categories:
 </div>
 
 <!-- more -->
+<div align="center" style="font-size: 0.7em; font-style: italic;">
+  Image courtesy: <a href="https://x.com/ollama/status/1932179388151255081" target="_blank" style="text-decoration: underline; color: inherit;">Ollama</a>
+</div>
 
 &nbsp;
 
@@ -124,8 +127,32 @@ Following are some visual help on which all values you are supposed to consider 
 
 ### III. **Improving Model performance**
 
+One major issue I had observed was, users had to wait for a few seconds before the model could start responding. Now that doesn't really sound like a big deal but when you are trying to push your users to use a private, secured GPT environment you also essentially have to convince them to move away from the brilliant ChatGPT platform (which is not an easy task). One major thing which makes ChatGPT very attractive is its performance. The speed of response is just ridiculously fast. We can't obviously match the infrastructure they have for the computation, but we can make our system marginally better.
 
+> While this is something I am still exploring (will update this section as I find more) here are few tweaks I did find.
+
+Keeping the Model "warm" - Now this involves choosing one model and making sure it always runs whether it's been invoked or not. So ollama remains active in the GPU resource therefore able to pull up more juice for faster response time. This way when the user does call the model for a query it responds almost immediately.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-2-assets/owu-1.png" alt="Ollama control" width="90%">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-2-assets/owu-2.png" alt="Ollama control" width="90%">
+</div>
+
+Now this obviously comes with its drawbacks. A major one was already addressed - Infrastructure. Normally we donot really have that much GPU memory to always keep that resource active, what about the other projects which are running on our server? While GPU utlization implemented in NVIDIA Drivers is pretty intelligent we need to keep an eye too. Take a look at the following image:
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-2-assets/owu-3.png" alt="Ollama control" width="90%">
+</div>
+
+So from what I have observed so far, the other parameter tweaks that you do to a model directly impacts the GPU utilization for it. In my case I have noticed a change whenever I change the context window of a model.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-2-assets/owu-4.png" alt="Ollama control" width="90%">
+</div>
+
+> I might be wrong here, maybe there is another factor causing this. But it is worth noting that you have to be very aware of the environment you are working in. While its very tempting to reach the performance capability of ChatGPT its also important to understand what the limits of your environment are as well as you cannot afford to have any downtime while you have users using your application.
 
 &nbsp;
-
-### IV. **Tool calling**

@@ -12,6 +12,9 @@ categories:
 </div>
 
 <!-- more -->
+<div align="center" style="font-size: 0.7em; font-style: italic;">
+  Image courtesy: <a href="https://www.anthropic.com/news/model-context-protocol" target="_blank" style="text-decoration: underline; color: inherit;">Anthropic</a>
+</div>
 
 &nbsp;
 

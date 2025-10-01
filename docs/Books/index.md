@@ -1,7 +1,5 @@
 # :material-bookshelf: AI/ML Books
 
-### Technical Books I’ve Finished or Am Currently Reading:
-
 <div class="grid cards" markdown>
 
 -   :material-owl: **AI Engineering**
