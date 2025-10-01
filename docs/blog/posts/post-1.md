@@ -1,3 +1,22 @@
+---
+title: Model Context Protocol
+date:
+  created: 2025-09-01 
+  updated: 2025-09-06
+categories:
+  - MCP
+---
+
+<div align="center">
+<img src="/assets/images/blog-assets/thumbnails/post-1.png" alt="Post 1 Thumbnail" width="100%">
+</div>
+
+<!-- more -->
+
+&nbsp;
+
+# Model Context Protocol (MCP) - An Introduction
+
 ## Basic Understanding
 
 **Definition:** MCP is an open protocol that standardizes how your **LLM applications** connect to and work with your **tools & data sources.**
@@ -33,11 +52,11 @@ A. MCP Servers provide tool schemas + functions already defined for you.
 MCP is essentially a Client-Server Architecture. The following two slides show this well.
 
 <div align="center">
-<img src="../static/mcp-arch-1.png" alt="Client-Server Architecture" width="90%">
+<img src="/assets/images/blog-assets/post-1-assets/mcp-arch-1.png" alt="Client-Server Architecture" width="90%">
 </div>
 
 <div align="center">
-<img src="../static/mcp-arch-2.png" alt="Working of Client-Server Architecture" width="90%">
+<img src="/assets/images/blog-assets/post-1-assets/mcp-arch-2.png" alt="Working of Client-Server Architecture" width="90%">
 </div>
 
 In the second image above, we can see three different functionalities which MCP offers: Tools, Resources and Prompt Templates. So how do we utilize them?
@@ -92,7 +111,7 @@ In the second image above, we can see three different functionalities which MCP 
     Below shows the two ways. In direct we specifically chose the file we need via `@`, but in template we simply mention it as part of the prompt and it is sent to the client. The application then decides whether it needs to take that data or not (Rather than having a tool call first to take the data, then pass to prompt and then send).
 
     <div align="center">
-    <img src="../static/mcp-resources.png" alt="Working of Client-Server Architecture" width="90%">
+    <img src="/assets/images/blog-assets/post-1-assets/mcp-resources.png" alt="Working of Client-Server Architecture" width="90%">
     </div>
 
 3. **Prompts**
@@ -116,7 +135,7 @@ In the second image above, we can see three different functionalities which MCP 
 The image below depicts the typical communication lifecycle between MCP servers and clients.
 
 <div align="center">
-<img src="../static/communication-lifecycle.png" alt="Communication Lifecycle" width="90%">
+<img src="/assets/images/blog-assets/post-1-assets/communication-lifecycle.png" alt="Communication Lifecycle" width="90%">
 </div>
 
 It is important to understand the steps here as these will be seen in code as well.
@@ -135,15 +154,15 @@ There are types for this as well depending on where the servers are running:
 - Remote servers: `HTTP+SSE (Server Sent Events)` or `Streamable HTTP`.
 
 <div align="center">
-<img src="../static/local-connection.png" alt="Local Connection" width="90%">
+<img src="/assets/images/blog-assets/post-1-assets/local-connection.png" alt="Local Connection" width="90%">
 </div>
 
 <div align="center">
-<img src="../static/remote-connections.png" alt="Remote Connection" width="90%">
+<img src="/assets/images/blog-assets/post-1-assets/remote-connections.png" alt="Remote Connection" width="90%">
 </div>
 
 <div align="center">
-<img src="../static/stateless-connection.png" alt="Stateless Connection" width="90%">
+<img src="/assets/images/blog-assets/post-1-assets/stateless-connection.png" alt="Stateless Connection" width="90%">
 </div>
 
 > Streamable HTTP will be the standard protocol which will be used going forward as stateless connection are much preferred.
