@@ -135,9 +135,9 @@ nav:
   - Library:
     - Overview: Books/index.md 
     - AI Engineering:
-      - Chapters:
-        - Introduction to AI Engineering: Books/AI-Engineering/chapter-1.md
-        - Prompt Engineering: Books/AI-Engineering/chapter-5.md
+      - Introduction to AI Engineering: Books/AI-Engineering/chapter-1.md
+      - Prompt Engineering: Books/AI-Engineering/chapter-5.md
+      - Retrieval Augmented Generation: Books/AI-Engineering/chapter-6-a.md
 
   - Blog:
     - blog/index.md
