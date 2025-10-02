@@ -4,7 +4,7 @@ hide:
 ---
 # :material-owl: **AI Engineering** by Chip Huyen
 
-## Chapter 6-A
+## **Chapter 6-A**
 
 *Topic: Retrieval Augmented Generation*
 
