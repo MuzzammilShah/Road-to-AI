@@ -138,6 +138,7 @@ nav:
       - Introduction to AI Engineering: Books/AI-Engineering/chapter-1.md
       - Prompt Engineering: Books/AI-Engineering/chapter-5.md
       - Retrieval Augmented Generation: Books/AI-Engineering/chapter-6-a.md
+      - AI Agents: Books/AI-Engineering/chapter-6-b.md
 
   - Blog:
     - blog/index.md
@@ -171,7 +172,14 @@ extra:
       link: https://linkedin.com/muhammedshah
     - icon: simple/github
       link: https://github.com/muzzammilshah
+  debug:
+    x_twitter_card: false
   # generator: false
+
+extra_javascript:
+  - javascripts/macros-utils/x-twitter-widget.js
+extra_css:
+  - stylesheets/macros-utils/x-twitter-link-card.css
 
 plugins:
   - search
@@ -184,5 +192,7 @@ plugins:
       post_excerpt_separator: "<!-- more -->"
       post_readtime: true
       pagination_per_page: 5
+  - macros:
+      modules: [mkdocs_macros_utils]
 
 copyright: Copyright &copy; 2024-2025 Muhammed Muzzammil Shah

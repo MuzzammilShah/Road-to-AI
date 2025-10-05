@@ -4,6 +4,19 @@ hide:
   - toc
 ---
 
+<script>
+(function ensureLandingStyles() {
+  var existing = document.querySelector('link[data-landing-custom-style]');
+  if (!existing) {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = new URL('stylesheets/custom.css', document.baseURI).href;
+    link.setAttribute('data-landing-custom-style', 'true');
+    document.head.appendChild(link);
+  }
+})();
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
 
