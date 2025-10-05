@@ -191,3 +191,5 @@ There are different methods like Chunking strategy, Reranking, Query rewriting a
 2. RAG with Tabular data:
 	- Having `Text-to-SQL`, SQL Execution, taking results and having final answers.
 	- But we will also have a situation where schemas of many different tables can't fit the context. Therefore we will need to have an additional step where we need to choose which tables need to get selected based on the query.
+
+&nbsp;
