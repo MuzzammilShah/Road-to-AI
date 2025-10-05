@@ -6,7 +6,7 @@ hide:
 
 ## **Chapter 6-A**
 
-*Topic: Retrieval Augmented Generation*
+*Topic: Retrieval Augmented Generation* | *Date: September, 2025*
 
 -----
 

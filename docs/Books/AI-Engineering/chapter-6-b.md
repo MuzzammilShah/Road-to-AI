@@ -6,7 +6,7 @@ hide:
 
 ## **Chapter 6-B**
 
-*Topic: Agents*
+*Topic: Agents* | *Date: October, 2025*
 
 -----
 

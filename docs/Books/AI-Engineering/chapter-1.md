@@ -6,7 +6,7 @@ hide:
 
 ## **Chapter 1**
 
-*Topic: Introduction - AI Engineering*
+*Topic: Introduction - AI Engineering* | *Date: July, 2025*
 
 -----
 

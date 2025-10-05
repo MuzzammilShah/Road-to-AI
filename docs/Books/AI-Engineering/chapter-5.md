@@ -6,7 +6,7 @@ hide:
 
 ## **Chapter 5**
 
-*Topic: Prompt Engineering*
+*Topic: Prompt Engineering* | *Date: July, 2025*
 
 -----
 
