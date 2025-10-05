@@ -41,6 +41,6 @@ jobs:
       # Install required dependencies
       - name: Install dependencies
         run: |
-          pip install mkdocs-material mkdocs-jupyter
+          pip install mkdocs-material mkdocs-jupyter mkdocs-macros-utils
 
       - run: mkdocs gh-deploy --force

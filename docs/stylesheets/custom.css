@@ -1,3 +1,5 @@
+@import url("./macros-utils/x-twitter-link-card.css");
+
 /* Light theme: Header and navbar are white */
 body[data-md-color-scheme="default"] .md-header,
 body[data-md-color-scheme="default"] .md-tabs {
@@ -124,25 +126,25 @@ body[data-md-color-scheme="slate"] .md-footer-nav__link {
 } */
 
 .hero-logo {
-  width: 80%;
-  margin-bottom: 10px;
+  width: 80% !important;
+  margin-bottom: 10px !important;
 }
 
 .hero-content h1 {
-  font-size: 0.1em;
+  font-size: 0.1em !important;
 }
 
 .hero-content p {
-  font-size: 1.2em;
+  font-size: 1.2em !important;
 }
 
 .hero-button {
-  display: inline-block;
-  padding: 8px 18px;
-  border-radius: 20px;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: background-color 0.3s, color 0.3s;
+  display: inline-block !important;
+  padding: 8px 18px !important;
+  border-radius: 20px !important;
+  text-decoration: none !important;
+  text-transform: uppercase !important;
+  transition: background-color 0.3s, color 0.3s !important;
 }
 
 /* Light Theme Styles */
@@ -201,13 +203,13 @@ body[data-md-color-scheme="slate"] .hero-logo {
 
 /* Vanta.js background container */
 #vanta-background {
-  position: fixed; /* Use fixed positioning to cover the entire viewport */
-  top: 0;
-  left: 0;
-  min-height: 100vh; /* Minimum height of the viewport */
-  width: 100vw; /* Full viewport width */
-  overflow: hidden; /* Prevents content overflow */
-  z-index: -1; /* Send to back so content stays on top */
+  position: fixed !important; /* Use fixed positioning to cover the entire viewport */
+  top: 0 !important;
+  left: 0 !important;
+  min-height: 100vh !important; /* Minimum height of the viewport */
+  width: 100vw !important; /* Full viewport width */
+  overflow: hidden !important; /* Prevents content overflow */
+  z-index: -1 !important; /* Send to back so content stays on top */
 }
 
 /* Hide secondary sidebar (Table of Contents) on landing page */
@@ -217,61 +219,61 @@ body[data-md-color-scheme="slate"] .hero-logo {
 
 /* Hero content positioning and alignment */
 .hero-content {
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  transform: translateY(-50%);
-  width: 40%; /* Default width for desktop */
+  position: absolute !important;
+  top: 50% !important;
+  left: 10% !important;
+  transform: translateY(-50%) !important;
+  width: 40% !important; /* Default width for desktop */
   /* text-align: left; */
-  padding: 20px; /* Add padding for better spacing */
-  z-index: 1; /* Ensure content stays above the background */
-  align-items: flex-start;
+  padding: 20px !important; /* Add padding for better spacing */
+  z-index: 1 !important; /* Ensure content stays above the background */
+  align-items: flex-start !important;
 }
 
 /* Logo styling and theme toggle */
 .hero-logo {
-  display: none;
-  width: 80%;
-  margin-bottom: 10px;
+  display: none !important;
+  width: 80% !important;
+  margin-bottom: 10px !important;
 }
 
 body[data-md-color-scheme="default"] .light-logo {
-  display: block;
+  display: block !important;
 }
 
 body[data-md-color-scheme="slate"] .dark-logo {
-  display: block;
+  display: block !important;
 }
 
 /* Responsive adjustments for mobile */
 @media (max-width: 768px) {
   .hero-content {
-    left: calc(10% + (100% - 40%) * (768px - 100vw) / (768px - 320px)); /* Dynamic left adjustment */
-    width: 40%; /* Maintain original width */
-    padding: 10px; /* Reduced padding for mobile */
+    left: calc(10% + (100% - 40%) * (768px - 100vw) / (768px - 320px)) !important; /* Dynamic left adjustment */
+    width: 40% !important; /* Maintain original width */
+    padding: 10px !important; /* Reduced padding for mobile */
   }
 
   .hero-logo {
-    width: 100%; /* Maintain original logo size */
+    width: 100% !important; /* Maintain original logo size */
   }
 
   .hero-content h1 {
-    font-size: inherit; /* Maintain original size */
+    font-size: inherit !important; /* Maintain original size */
   }
 
   .hero-content p {
-    font-size: 1.2em; /* Maintain original size */
+    font-size: 1.2em !important; /* Maintain original size */
   }
 
   .hero-button {
-    padding: 5px 15px; /* Maintain original padding */
-    font-size: 0.8;
+    padding: 5px 15px !important; /* Maintain original padding */
+    font-size: 0.8 !important;
   }
 }
 
 /* Ensure text remains readable over the animation */
 .hero-content h1,
 .hero-content p {
-  color: inherit; /* Inherits theme color from body */
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: Add shadow for readability */
+  color: inherit !important; /* Inherits theme color from body */
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important; /* Optional: Add shadow for readability */
 }
