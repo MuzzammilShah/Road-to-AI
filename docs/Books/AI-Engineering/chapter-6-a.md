@@ -17,7 +17,7 @@ A RAG system has two components:
 - A *retriever* that retrieves information from an external memory storage.
 - A *generator* that generates a response based on the retrieved info.
 
-Rather than using off the shelf retrievers and models, fine tuning the entire RAG system end-to-end can improve it's performance significantly.
+Rather than using off the shelf retrievers and models, fine tuning the entire RAG system end-to-end can improve its performance significantly.
 
 **Important:** Success of RAG depends on the quality of its retriever.
 
@@ -50,7 +50,7 @@ Common retrieval based mechanisms are **Text based** and **Embedding based**.
 
 #### **Term based retrieval:**
 
-Now, the most straight forward way of finding relevant documents to a query is by matching its keywords.
+Now, the most straightforward way of finding relevant documents to a query is by matching its keywords.
 
 Here are two metrics to measure this:
 
@@ -172,7 +172,7 @@ There are different methods like Chunking strategy, Reranking, Query rewriting a
 
 2. Reranking:
 	- Having different algorithms used in sequence.
-	- First having a cheaper, less precise algo to retrieve the docs. Next having a more advance/precise/expensive algo to take the best candidates from the docs.
+	- First having a cheaper, less precise algo to retrieve the docs. Next having a more advanced/precise/expensive algo to take the best candidates from the docs.
 
 3. Query Rewriting:
 	- Keeping another model to reframe the user query, therefore able to have more context.
@@ -187,7 +187,7 @@ There are different methods like Chunking strategy, Reranking, Query rewriting a
 
 ### :material-progress-star-four-points: **RAG Beyond Text**
 
-1. Multimodal RAG: For images, videos and audio. Mainly involves having contextual retrieval - Like each of those will have metadata like captions or short descriptions which will help the model understand (So not necessarily processing an image itself but the meta data that comes with it. But now we have some pretty good multimodels.)
+1. Multimodal RAG: For images, videos and audio. Mainly involves having contextual retrieval - Like each of those will have metadata like captions or short descriptions which will help the model understand (So not necessarily processing an image itself but the metadata that comes with it. But now we have some pretty good multimodal models.)
 2. RAG with Tabular data:
 	- Having `Text-to-SQL`, SQL Execution, taking results and having final answers.
 	- But we will also have a situation where schemas of many different tables can't fit the context. Therefore we will need to have an additional step where we need to choose which tables need to get selected based on the query.

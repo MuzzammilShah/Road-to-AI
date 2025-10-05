@@ -19,7 +19,7 @@ hide:
 - The basic unit of a language model is called **Token**.
 
 	- A token can be a character, a word or even a part of a word (like *-tion*) depending on the model.
-	- But in the same way, for non-english languages, a single unicode character can be represented in multiple tokens.
+	- But in the same way, for non-English languages, a single unicode character can be represented in multiple tokens.
 
 - The process of breaking down the original text into tokens is called **Tokenization**. (*Note: For GPT-4 an average token is 3/4 of length of the word. So 100 tokens are approx 75 words*).
 
@@ -91,7 +91,7 @@ Therefore we can say - more the parameters, greater is its capacity to learn des
 > - A large model would require more training data to maximize their compute (seems counter intuitive right? think through it)
 > - Large model have more capacity to learn, therefore more data.
 >
-> You can train a large model with small dataset, but thats a waste of compute. You can instead achieve similar results with smaller LM.
+> You can train a large model with small dataset, but that's a waste of compute. You can instead achieve similar results with smaller LM.
 
 &nbsp;
 

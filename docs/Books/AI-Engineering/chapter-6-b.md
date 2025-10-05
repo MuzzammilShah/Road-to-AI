@@ -16,9 +16,9 @@ Intelligent agents are considered by many to be the ultimate goal of AI. The ext
 
 ### :material-progress-star-four-points: **Agents Overview**
 
-An agent is anything that can perceive it's environment and act upon that environment. This means that an agent is characterized by the *environment* it operates in and the *set of actions* it can perform.
+An agent is anything that can perceive its environment and act upon that environment. This means that an agent is characterized by the *environment* it operates in and the *set of actions* it can perform.
 
-- The *environment* an agent can operate in is defined by it's usecase.
+- The *environment* an agent can operate in is defined by its use case.
 - The *set of actions* an AI agent can perform is augmented by the tools it has access to.
 
 Therefore there is a strong dependency on the environment and tools, as the environment decides what tools the agent can particularly use. This is also the case in vice-versa where the set of tools can also restrict what the agent can do within that environment (But I think it's better if there is a controlled environment).
@@ -30,7 +30,7 @@ Some examples of environments:
 | Playing a game                  | Game                            |
 | Scraping docs from the internet | Internet                        |
 | Cooking robot                   | Kitchen                         |
-| Self-driving car                | Road and it's surrounding areas |
+| Self-driving car                | Road and its surrounding areas |
 
 Example of agent and tools:
 
@@ -59,11 +59,11 @@ There are generally 3 categories of tools which can be considered:
 
 1. Knowledge augmentation (Context construction)
 2. Capability Extension
-3. Tools that let your agent act upon it's environment
+3. Tools that let your agent act upon its environment
 
 **1. Knowledge augmentation**
 
-I think we've seen this multiple times already- How context to your model is absolutely essential and directly proportional to it's performance. Again this is due to the classic knowledge cutoff scenerio for LLMs.
+I think we've seen this multiple times already- How context to your model is absolutely essential and directly proportional to its performance. Again this is due to the classic knowledge cutoff scenario for LLMs.
 
 This is where Web Search capabilities come in. Another thing that needs to be added here is that, the Internet API is very vast and it includes many APIs within it like Search API, News API, Social Media API etc. Therefore choose your Internet API with care.
 
@@ -78,7 +78,7 @@ Again, a repeated case. But there are different examples like giving a model:
 
 More complex capabilities can be: Code Interpreter where we can let it run, execute and the LLM can analyze the output (either the result or any errors).
 
-Same use case comes in where ChatGPT can also generate images and execute codes along with it's text generation capability.
+Same use case comes in where ChatGPT can also generate images and execute codes along with its text generation capability.
 
 **3. Write actions**
 
@@ -106,7 +106,7 @@ While this also comes with potential risks (like the case we saw with [replit wh
 
 Here comes the important question- How can these tools actually be used?
 
-When we think of a task, it is defined by it's goal and constraints. Example: *Booking a flight (goal)* with a certain *budget (constraint)*. But a complex task requires planning. The output of a planning process is a plan. A plan is a roadmap outlining the steps needed to accomplish a task.
+When we think of a task, it is defined by its goal and constraints. Example: *Booking a flight (goal)* with a certain *budget (constraint)*. But a complex task requires planning. The output of a planning process is a plan. A plan is a roadmap outlining the steps needed to accomplish a task.
 
 So, effective planning required the model to- understand the task -> consider different options to achieve that task -> and choosing the most promising one.
 
@@ -116,7 +116,7 @@ When we are given a task, there are multiple ways it can be done, but not all wi
 
 In an agentic system, we can couple *planning* with *execution* within the same prompt. Example: We give model a prompt, ask it to think step-by-step and execute it. But what if the model thinks of a 100 step plan? That will end up with us waiting aimlessly and burning API credits while not producing any results. So to avoid unnecessary execution, we decouple planning from execution. We rather have *plan -> validate -> execution*.
 
-One such scenerio where validation comes in is when the plan involves tool calling, but the model doesn't have access to any tools. So that's an invalid step and needs to be retweaked. There are other scenerios as well like: If it goes beyond a certain number of steps.
+One such scenario where validation comes in is when the plan involves tool calling, but the model doesn't have access to any tools. So that's an invalid step and needs to be retweaked. There are other scenarios as well like: If it goes beyond a certain number of steps.
 
 But, if the validator says that the plan is good, we just go ahead and execute it. It is also important that we validate the output after execution of the task. Also, the planning step doesn't have to be end-to-end for the entire task, it can be for a sub-task as well.
 
@@ -204,7 +204,7 @@ The point of this is that we use this to check the capability of the model: Can 
 
 Reflection and Error correction can go hand-in-hand in an agentic system. There is also ReAct (Reason + Act).
 
-Let's say the agent actually failed to accomplish its task, then you can prompt it to reflect and learn on why it failed. Therefore its improving and based on that it creates a new plan.
+Let's say the agent actually failed to accomplish its task, then you can prompt it to reflect and learn on why it failed. Therefore it's improving and based on that it creates a new plan.
 
 Finally, it is important to note that reflection is easier to implement than planning and it provides surprisingly good performance in terms of the outputs. The only drawback though is its costs and latency.
 
@@ -224,15 +224,15 @@ Some other observations:
 - Different tasks require different tools.
 - Different models have different tool preferences.
 
-There was another interesting perspective mentioned where, as humans when we are given a tool we progressively go on to create more powerful tools rather than sticking with multiple simple ones. Similarly, can AI create tools it learnt from initially? For example: Lets say 2 tools are used frequently together by the agent. Then what if it can just combine it to a bigger tool?
+There was another interesting perspective mentioned where, as humans when we are given a tool we progressively go on to create more powerful tools rather than sticking with multiple simple ones. Similarly, can AI create tools it learnt from initially? For example: Let's say 2 tools are used frequently together by the agent. Then what if it can just combine it to a bigger tool?
 
-Another idea was to keep a skill manager which the agent can enquire too. As it keeps track of which tools helped in successful completion of task. Therefore keeping track of it in its list for later reuse.
+Another idea was to keep a skill manager which the agent can enquire to. As it keeps track of which tools helped in successful completion of task. Therefore keeping track of it in its list for later reuse.
 
 &nbsp;
 
 ### :material-progress-star-four-points: **Agent Failure modes and Evaluation**
 
-I think we've already prettymuch covered this. It's through evaluations we detect failures. Obviously there are many reasons for it (Planning failures, Tool failures, Efficiency - time of execution and how much it can do), but its mainly caused in tool calling. So continuous testing and evaluation is what will fix it.
+I think we've already pretty much covered this. It's through evaluations we detect failures. Obviously there are many reasons for it (Planning failures, Tool failures, Efficiency - time of execution and how much it can do), but it's mainly caused in tool calling. So continuous testing and evaluation is what will fix it.
 
 &nbsp;
 
@@ -262,7 +262,7 @@ There are 3 types of knowledge which models can use:
 
 Next we focus on the two functions which a memory system consists of: Memory Retrieval and Memory Management.
 
-The former is something we've already seen. The later is something which is actively in works. We have also seen cases where ChatGPT ignores the initial messages as the conversation increases and LangChain allowing you to choose the last N messages of the conversation.
+The former is something we've already seen. The latter is something which is actively in works. We have also seen cases where ChatGPT ignores the initial messages as the conversation increases and LangChain allowing you to choose the last N messages of the conversation.
 
 There were few approaches mentioned on handling memory which I wanted to mention here:
 

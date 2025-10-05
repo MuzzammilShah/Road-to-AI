@@ -27,7 +27,7 @@ hide:
 
 Providing context to models can mitigate hallucinations:
 
-- If the model is not provided with the necessary info, then it will have to rely on it's internal knowledge (which might be unreliable, causing it to hallucinate).
+- If the model is not provided with the necessary info, then it will have to rely on its internal knowledge (which might be unreliable, causing it to hallucinate).
 - Or just give it tools to gather info:
 
 	- The process of gathering necessary context for a given query is called **Context Construction**.
@@ -39,8 +39,8 @@ Providing context to models can mitigate hallucinations:
 - Decompose a prompt into smaller prompts targeting different subtask.
 - Read the prompting guide provided by the developer (if any).
 - Use the model playground to understand the model.
-- Version your prompts - Test you changes systematically.
+- Version your prompts - Test your changes systematically.
 - Standardize your evaluation metrics and evaluation data, so that we can compare the performance of different tasks.
-- Evaluate your prompt for the system as a whole. As sometimes it way do well for a subtask but bad for the whole system.
+- Evaluate your prompt for the system as a whole. As sometimes it may do well for a subtask but bad for the whole system.
 
 &nbsp;
