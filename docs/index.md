@@ -4,6 +4,66 @@ hide:
   - toc
 ---
 
+<style>
+  #vanta-background {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    min-height: 100vh !important;
+    overflow: hidden !important;
+    z-index: -1 !important;
+  }
+
+  .landing-page .hero-content {
+    position: absolute !important;
+    top: 50% !important;
+    left: 10% !important;
+    transform: translateY(-50%) !important;
+    width: min(40%, 480px) !important;
+    padding: 20px !important;
+    z-index: 1 !important;
+  }
+
+  .hero-logo {
+    display: none !important;
+    width: 80% !important;
+    margin-bottom: 10px !important;
+  }
+
+  body[data-md-color-scheme="default"] .light-logo {
+    display: block !important;
+  }
+
+  body[data-md-color-scheme="slate"] .dark-logo {
+    display: block !important;
+  }
+
+  .hero-content h1 {
+    font-size: 0.1em !important;
+  }
+
+  .hero-content p {
+    font-size: 1.2em !important;
+  }
+
+  @media (max-width: 768px) {
+    .landing-page .hero-content {
+      left: 5% !important;
+      width: 90% !important;
+      padding: 10px !important;
+    }
+
+    .hero-logo {
+      width: 100% !important;
+    }
+
+    .hero-content p {
+      font-size: 1.1em !important;
+    }
+  }
+</style>
+
 <script>
 (function ensureLandingStyles() {
   var existing = document.querySelector('link[data-landing-custom-style]');

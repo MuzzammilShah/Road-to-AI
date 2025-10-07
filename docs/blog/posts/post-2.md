@@ -1,7 +1,8 @@
 ---
-title: Private GPT
+title: Private GPT on Linux/WSL
 date:
   created: 2025-10-01
+  updated: 2025-10-07
 categories:
   - GPTs and LLMs
 ---
@@ -11,9 +12,6 @@ categories:
 </div>
 
 <!-- more -->
-<div align="center" style="font-size: 0.7em; font-style: italic;">
-  Image courtesy: <a href="https://x.com/ollama/status/1932179388151255081" target="_blank" style="text-decoration: underline; color: inherit;">Ollama</a>
-</div>
 
 &nbsp;
 
@@ -27,7 +25,7 @@ So I went in, got my hands dirty and got that set up. Took me a couple of weeks 
 
 &nbsp;
 
-## :material-toolbox: Setup and Installation
+## :material-toolbox: Installation and Setup
 
 ### **Ollama**
 
@@ -61,7 +59,7 @@ Awesome, once all that is done, you will be asked to make an Admin credential. D
 
 Awesome, so if everything is done right, Ollama would have also been recognised by default and you will see your model being listed in the UI. Go ahead and try it out. You have officially set up your very own Private GPT!
 
-## :fontawesome-solid-gears: Advanced Topics
+## :fontawesome-solid-gears: Useful features (Advanced Setups)
 
 Okay so you have set up our Private GPT (Yay). That's the easy part so let's get into the cool part. Now, there are a lot of capabilities we can unlock from here, to truly build an intelligent system which is useful for us and that is what I will be covering here. Everything which I have tried and which ACTUALLY worked.
 
@@ -74,9 +72,9 @@ This used to be slightly tricky during the earlier versions (especially the redi
 The [Env Configuration](https://docs.openwebui.com/getting-started/env-configuration#microsoft) of the documentation covers this really well including all the variables you require. Make sure you follow the Microsoft Learn link where they guide you through making the app on Entra. I have attached how that app is going to look after all of it is done:
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-2-assets/od-5.png" alt="oAuth Setup" width="90%">
-<p><i>2 IDs, 1 Secret URL and 1 Redirect URL</i></p>
+<img src="/assets/images/blog-assets/post-2-assets/od-5.png" alt="oAuth Setup" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
 </div>
+<div align="center" style="font-size: 0.7em; font-style: italic;">2 IDs, 1 Secret URL and 1 Redirect URL</div>
 
 Couple of important points here:
 
@@ -101,58 +99,28 @@ Here's some visual help on which all values you are supposed to consider as you 
 <br>
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-2-assets/od-2.png" alt="OneDrive Setup - Overview page" width="90%">
-<p><i>Overview of the app created for handling OneDrive setup</i></p>
+<img src="/assets/images/blog-assets/post-2-assets/od-2.png" alt="OneDrive Setup - Overview page" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
 </div>
+<div align="center" style="font-size: 0.7em; font-style: italic;">Overview of the app created for handling OneDrive setup</div>
 
 <br>
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-2-assets/od-1.png" alt="OneDrive Setup - API Permissions" width="90%">
-<p><i>Necessary API Permissions that need to be delegated</i></p>
+<img src="/assets/images/blog-assets/post-2-assets/od-1.png" alt="OneDrive Setup - API Permissions" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
 </div>
+<div align="center" style="font-size: 0.7em; font-style: italic;">Necessary API Permissions that need to be delegated</div>
 
 <br>
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-2-assets/od-3.png" alt="OneDrive Setup - SPA Redirect" width="90%">
+<img src="/assets/images/blog-assets/post-2-assets/od-3.png" alt="OneDrive Setup - SPA Redirect" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
 </div>
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-2-assets/od-4.png" alt="OneDrive Setup - Redirect Tokens check" width="90%">
-<p><i>For Redirect ensure you select 'Single-Page Application' and check the two tokens options</i></p>
+<img src="/assets/images/blog-assets/post-2-assets/od-4.png" alt="OneDrive Setup - Redirect Tokens check" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
 </div>
+<div align="center" style="font-size: 0.7em; font-style: italic;">For Redirect ensure you select 'Single-Page Application' and check the two tokens options</div>
 
 &nbsp;
 
-### III. **Improving Model performance**
-
-One major issue I had observed was users had to wait for a few seconds before the model could start responding. Now that doesn't really sound like a big deal, but when you are trying to push your users to use a private, secured GPT environment you also essentially have to convince them to move away from the brilliant ChatGPT platform (which is not an easy task). One major thing which makes ChatGPT very attractive is its performance. The speed of response is just ridiculously fast. We can't obviously match the infrastructure they have for the computation, but we can make our system marginally better.
-
-> While this is something I am still exploring (will update this section as I find more) here are a few tweaks I did find.
-
-Keeping the Model "warm" - Now this involves choosing one model and making sure it always runs whether it's been invoked or not. So Ollama remains active in the GPU resource therefore able to pull up more juice for faster response time. This way when the user does call the model for a query it responds almost immediately.
-
-<div align="center">
-<img src="/assets/images/blog-assets/post-2-assets/owu-1.png" alt="Ollama control" width="90%">
-</div>
-
-<div align="center">
-<img src="/assets/images/blog-assets/post-2-assets/owu-2.png" alt="Ollama control" width="90%">
-</div>
-
-Now this obviously comes with its drawbacks. A major one was already addressed - Infrastructure. Normally we do not really have that much GPU memory to always keep that resource active. What about the other projects which are running on our server? While GPU utilization implemented in NVIDIA Drivers is pretty intelligent, we need to keep an eye too. Take a look at the following image:
-
-<div align="center">
-<img src="/assets/images/blog-assets/post-2-assets/owu-3.png" alt="Ollama control" width="90%">
-</div>
-
-So from what I have observed so far, the other parameter tweaks that you do to a model directly impact the GPU utilization for it. In my case, I have noticed a change whenever I change the context window of a model.
-
-<div align="center">
-<img src="/assets/images/blog-assets/post-2-assets/owu-4.png" alt="Ollama control" width="90%">
-</div>
-
-I might be wrong here, maybe there is another factor causing this. But it is worth noting that you have to be very aware of the environment you are working in. While it's very tempting to reach the performance capability of ChatGPT it's also important to understand what the limits of your environment are as well as you cannot afford to have any downtime while you have users using your application.
-
-&nbsp;
+!!! info "Will add more features as I implement them and if they are useful enough to be worth documenting"
