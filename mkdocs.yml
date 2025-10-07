@@ -188,7 +188,7 @@ plugins:
       ignore_h1_titles: true
   - blog:
       archive: false
-      post_excerpt: required
+      post_excerpt: optional
       post_excerpt_separator: "<!-- more -->"
       post_readtime: true
       pagination_per_page: 5

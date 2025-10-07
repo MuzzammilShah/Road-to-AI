@@ -12,9 +12,6 @@ categories:
 </div>
 
 <!-- more -->
-<div align="center" style="font-size: 0.7em; font-style: italic;">
-  Image courtesy: <a href="https://www.anthropic.com/news/model-context-protocol" target="_blank" style="text-decoration: underline; color: inherit;">Anthropic</a>
-</div>
 
 &nbsp;
 
@@ -55,11 +52,21 @@ A. MCP Servers provide tool schemas + functions already defined for you.
 MCP is essentially a Client-Server Architecture. The following two slides show this well.
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-1-assets/mcp-arch-1.png" alt="Client-Server Architecture" width="90%">
+    <img 
+        src="/assets/images/blog-assets/post-1-assets/mcp-arch-1.png" 
+        alt="Client-Server Architecture" 
+        width="80%" 
+        style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"
+    >
 </div>
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-1-assets/mcp-arch-2.png" alt="Working of Client-Server Architecture" width="90%">
+    <img 
+        src="/assets/images/blog-assets/post-1-assets/mcp-arch-2.png" 
+        alt="Working of Client-Server Architecture" 
+        width="80%" 
+        style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"
+    >
 </div>
 
 In the second image above, we can see three different functionalities which MCP offers: Tools, Resources and Prompt Templates. So how do we utilize them?
@@ -114,7 +121,7 @@ In the second image above, we can see three different functionalities which MCP 
     Below shows the two ways. In direct we specifically choose the file we need via `@`, but in template we simply mention it as part of the prompt and it is sent to the client. The application then decides whether it needs to take that data or not (Rather than having a tool call first to take the data, then pass it to the prompt and then send).
 
     <div align="center">
-    <img src="/assets/images/blog-assets/post-1-assets/mcp-resources.png" alt="Working of Client-Server Architecture" width="90%">
+    <img src="/assets/images/blog-assets/post-1-assets/mcp-resources.png" alt="Working of Client-Server Architecture" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
     </div>
 
 3. **Prompts**
@@ -138,7 +145,12 @@ In the second image above, we can see three different functionalities which MCP 
 The image below depicts the typical communication lifecycle between MCP servers and clients.
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-1-assets/communication-lifecycle.png" alt="Communication Lifecycle" width="90%">
+    <img 
+        src="/assets/images/blog-assets/post-1-assets/communication-lifecycle.png" 
+        alt="Communication Lifecycle" 
+        width="80%" 
+        style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"
+    >
 </div>
 
 It is important to understand the steps here as these will be seen in code as well.
@@ -157,15 +169,30 @@ There are types for this as well depending on where the servers are running:
 - Remote servers: `HTTP+SSE (Server Sent Events)` or `Streamable HTTP`.
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-1-assets/local-connection.png" alt="Local Connection" width="90%">
+    <img 
+        src="/assets/images/blog-assets/post-1-assets/local-connection.png" 
+        alt="Local Connection" 
+        width="80%" 
+        style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"
+    >
 </div>
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-1-assets/remote-connections.png" alt="Remote Connection" width="90%">
+    <img 
+        src="/assets/images/blog-assets/post-1-assets/remote-connections.png" 
+        alt="Remote Connection" 
+        width="80%" 
+        style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"
+    >
 </div>
 
 <div align="center">
-<img src="/assets/images/blog-assets/post-1-assets/stateless-connection.png" alt="Stateless Connection" width="90%">
+    <img 
+        src="/assets/images/blog-assets/post-1-assets/stateless-connection.png" 
+        alt="Stateless Connection" 
+        width="80%" 
+        style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"
+    >
 </div>
 
 > Streamable HTTP will be the standard protocol which will be used going forward as stateless connections are much preferred.
