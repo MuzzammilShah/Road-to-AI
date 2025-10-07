@@ -1,8 +1,7 @@
 ---
 title: Open Source LLMs
 date:
-  created: 2025-10-02
-  updated: 2025-10-07
+  created: 2025-10-07
 categories:
   - GPTs and LLMs
 ---
