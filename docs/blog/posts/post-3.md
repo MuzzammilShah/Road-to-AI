@@ -12,7 +12,7 @@ categories:
 
 <!-- more -->
 
-<div align="center" style="font-size: 0.7em; font-style: italic;">This thumbnail has nothing to do with Apple Inc. I just really liked how it shows the 'Evolution of Icons' over time which kinda goes with the 'Optimization journey' that I am covering here. So that's that haha.</div>
+<div align="center" style="font-size: 0.7em; font-style: italic;">This thumbnail has nothing to do with Apple Inc. I just really liked how it shows the 'Evolution of Icons' over time, which kinda goes with the 'Optimization journey' I'm covering here. So that's that haha. Image courtesy: <a href="https://basicappleguy.com/" target="_blank" style="text-decoration: none; color: inherit;">Basic Apple Guy</a></div>
 
 &nbsp;
 
@@ -62,7 +62,7 @@ Okay, so the Model Context Window that we assigned was definitely a factor. Here
 - For the current system, I used `llama3.2:3b` and `gemma3:4b` alternatively, ranging their context size from 10,000 up to 50,000 MAX. As you increase the size, you will observe a slight delay in response.
 - Now, another alternative to reduce the load on the GPU is to use a *quantized* version of the model, which is why I went ahead and pulled `llama3.2:3b-instruct-q4_0` and `gemma3:4b-it-q4_K_M1`. A quick note on what a quantized model is—basically the same capability of its original parameters, just that it's a lot more squashed out so the GPU doesn't have to work on it too much like it normally would (Yeah that was bad. It's like a pixelated image but still contains all the main core contents). Quantize Models for Memory/Speed Gains: Use quantized versions of models whenever possible. Quantization (like 4-bit (q4) or 8-bit) drastically reduces model memory footprint with minimal quality loss, enabling larger models to run on smaller GPUs. I suggest you go ahead and watch [this part of the video](https://youtu.be/FQTorLqMyMU?si=zam6UgxNMPhTOZUd&t=45) to have a better understanding then lol. Anyway, using these versions of the model did make a slight difference as the GPU utilization while using these went from 90% down to 67%, so there was definitely some load taken off.
 
-- **The Major disappointment part:** Achieving recent relevant data. Now, I had also implemented Web Search functionality via Tavily API and Ollama API (latter is more recent). Although they did seem to pull up the right links for the sources (sometimes even that went wrong), the models just fail to utilize them. There were times it just wouldn't parse through the links and others the context size isn't big enough to process all the information.
+- **The Major disappointment part:** Achieving recent relevant data. Now, I had also implemented Web Search functionality via Tavily API and Ollama API (the latter is a more recent release). Although they did seem to pull up the right links for the sources (sometimes even that went wrong), the models just fail to utilize them. There were times it just wouldn't parse through the links and others the context size isn't big enough to process all the information.
 
 <div align="center">
 <img src="/assets/images/blog-assets/post-3-assets/oai-gpt-outputs.png" alt="Ollama control" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
@@ -96,7 +96,7 @@ While the problem of utilizing the power of our GPU to the right amount has been
 
 ## Phase 3(a): Model Accuracy
 
-Keeping all of those above observations in mind, I went ahead today focusing purely on how I can get the model to answer accurately within it's provided context size and web search tool calling capability. While I wanted to go further and see if anything can be done via RAG-Embeddings-Retrieval, there was one final config providede by open webui which was left to be experimented with. And I finally got the results!
+Keeping all of those above observations in mind, I went ahead today focusing purely on how I can get the model to answer accurately within its provided context size and web search tool-calling capability. While I wanted to go further and see if anything can be done via RAG-Embeddings-Retrieval, there was one final config provided by Open WebUI that was left to be experimented with. And I finally got the results!
 
 <div align="center">
 <img src="/assets/images/blog-assets/post-3-assets/pgpt-settings.png" alt="Ollama control" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
@@ -116,11 +116,11 @@ Keeping all of those above observations in mind, I went ahead today focusing pur
 <div align="center">
 <img src="/assets/images/blog-assets/post-3-assets/pgpt-query3-o1.png" alt="Ollama control" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
 </div>
-<div align="center" style="font-size: 0.7em; font-style: italic;">Same question asked to the ollama cloud hosted mamoth gpt-oss (120B) with and without the tool calling functionality. Correct answer again with the right sources!</div>
+<div align="center" style="font-size: 0.7em; font-style: italic;">Same question asked to the ollama cloud hosted mammoth gpt-oss (120B) with and without the tool calling functionality. Correct answer again with the right sources!</div>
 
-Now, apart from the settings we changed (which we will talk about in a moment), the sources that were considered by the model were actually pretty good and contained direct information without any additional disturbance of information in the site. I think this also played a huge factor to the kind of response by the model - More clean and relevant your data, better the answers :)
+Now, apart from the settings we changed (which we will talk about in a moment), the sources the model considered were actually pretty good and contained direct information without any additional disturbance of information on the site. I think this also played a huge factor in the kind of response the model gave—the more clean and relevant your data, the better the answers :)
 
-!!! info "Anyway, I wanted to breakdown the exact behaviour of the above setup which is why I went to my good friend ChatGPT to explain this to me. I loved the response so I am just going to put them here so it's easy to understand and refer back to."
+!!! info "Anyway, I wanted to break down the exact behaviour of the above setup which is why I went to my good friend ChatGPT to explain this to me. I loved the response so I am just going to put them here so it's easy to understand and refer back to."
 
 ## Phase 3(b): The breakdown
 
@@ -250,6 +250,6 @@ By systematically comparing, you’ll see exactly where one configuration adds o
 
 ---------
 
-Okay, so this blog turned out to be a lot longer than I expected. I will end with this here and hopefully blog on another set of optimization journey as I continue to explore on this.
+Okay, this blog turned out to be a lot longer than I expected. I'll end it here and hopefully blog about another set of optimization journeys as I keep exploring this.
 
 &nbsp;

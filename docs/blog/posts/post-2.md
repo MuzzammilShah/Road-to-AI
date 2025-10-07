@@ -2,7 +2,6 @@
 title: Private GPT on Linux/WSL
 date:
   created: 2025-10-01
-  updated: 2025-10-07
 categories:
   - GPTs and LLMs
 ---
