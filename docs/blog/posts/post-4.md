@@ -2,6 +2,7 @@
 title: Agentic AI
 date:
   created: 2025-10-28
+  updated: 2025-10-29
 categories:
   - AI Agents
 ---
@@ -77,3 +78,52 @@ Here we’ve seen the different types of agentic applications currently in use, 
 
 So, when implementing one of these things yourself, one of the most important skills is to look at a complex workflow and figure out what are the individual steps so you can implement an agentic workflow to execute those steps one at a time. And that is exactly what we will be looking at in Task decomposition.
 
+### **Task decomposition**
+
+One of the key skills in building agentic workflows is to look at a bunch of stuff that maybe someone does and to identify the discrete steps that it could be implemented with.
+
+And when I'm looking at the individual discrete steps, one question I'm always asking myself is, can this step be implemented with either an LLM or with one of the tools such as an API or a function call that I have access to? And in case the answer is no, I'll then often ask myself, how would I as a human do this step? And is it possible to decompose this further or break this down into even smaller steps that then maybe is more amenable to implementation with an LLM or with one of the software tools that I have?
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-1/task-decomposition.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+### **Evaluation (evals)**
+
+"Your ability to drive evals for your agentic workflow makes a huge difference in your ability to build them effectively."
+
+There are some simple ways to evaluate your agent like:
+
+- You can write codes to evaluate *objective criteria*, such as 'did it mention a competitor or not'.
+- Using an LLM as a judge for more *subjective criteria* such as 'what's the quality of this essay'.
+
+But later, we will learn about two major types of evals:
+
+- One is *end-to-end*, where you measure the output quality of the entire agent.
+- Other is *component level* evals, where you measure the quality of the output of a single step in the agentic workflow.
+
+It turns out that these are useful for driving different parts of your development process.
+
+There is another method apart from this where you just examine the *intermediate outputs* - we call these the *traces of the LLM*, in order to understand where it is falling short of my expectations. And we call this *error analysis*, where we just read through the intermediate outputs of every single step to try to spot opportunities for improvement.
+
+### **Agentic design patterns**
+
+1. Reflection
+2. Tool Use
+3. Planning
+4. Multi-agent collaboration
+
+*(There were some great slides which showed examples on the above, feel free to watch that. But since we will be diving deep into this as well, I didn't want to get hung around in just the overview stuff for now).*
+
+*Update: Also damn, the quiz was slightly more tricky than I thought it would be lol. But its done and I also tried out the research agent which was already developed by sensei, you can checkout it's output [here](/assets/images/blog-assets/post-4-assets/module-1/final_report.html), very impressive actually. Now we move on!*
+
+<div class="x-twitter-embed" data-url="https://twitter.com/MoShahx07/status/1983342282142343654">
+    <blockquote class="twitter-tweet">
+		<a href="https://twitter.com/MoShahx07/status/1983342282142343654"></a>
+    </blockquote>
+</div>
+
+&nbsp;
+
+## **Reflection Design Pattern**
+-----
