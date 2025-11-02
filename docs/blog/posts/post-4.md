@@ -318,3 +318,165 @@ I also loved the example sensei showed on how he used Claude desktop (client) to
 
 *"It turns out that one of the things I've seen that distinguishes people that can execute agentic workflows really well versus teams that are not as efficient at it is your ability to drive a disciplined evaluation process."*
 
+### **Evaluations (evals)**
+
+When developing an agentic AI system, it's difficult to know in advance where it will work and where it won't work so well, and thus where you should focus your effort. So very common advice is to try to build even a quick and dirty system to start, so you can then try it out and look at it to see where it may not yet be working as well as you wish, to then have much more focused efforts to develop it even further. In contrast, I find that it's sometimes less useful to sit around for too many weeks theorizing and hypothesizing how to build it. It's often better to just build a quick system in a safe, reasonable way that doesn't leak data, kind of do it in a responsible way, but just build something quickly so you can look at it and then use that initial prototype to prioritize and try further development.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/evals-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+In the above diagram's case, you might conclude that one common error mode is that it is struggling with the dates. In that case, one thing you might consider would be to of course figure out how to improve your system to make it extract due dates better, but also maybe write an eval to measure the accuracy with which it is extracting due dates.
+
+So one of the reasons why building a quick and dirty system and looking at the output is so helpful is it even helps you decide what do you want to put the most effort into evaluating.
+
+So this is what improving an Agentic AI workflow will often feel like. Look at the output, see what's wrong, then if you know how to fix it, just fix it. But if you need a longer process of improving it, then put in place an eval and use that to drive further development.
+
+One other thing to consider is if after working for a while, if you think those 20 examples (as seen in the above diagram) you had initially aren't good enough, maybe they don't cover all the cases you want, or maybe 20 examples is just too few, then you can always add to the eval set over time to make sure it better reflects your personal judgments on whether or not the system's performance is sufficiently satisfactory. This is just one example.
+
+In order to think about how to build evals for your application, the evals you build will often have to reflect whatever you see or you're worried about going wrong in your application. And it turns out that broadly, there are two axes of evaluation.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/evals-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+As seen in the above diagram, it turns out that broadly, there are two axes of evaluation. On the top axis is the way you evaluate the output. In some cases, you evaluate it by writing code with objective evals, and sometimes you use an LLM-as-a-judge for more subjective evals. On the other axis is whether you have a per-example ground truth or not. So for checking invoice date extraction, we were writing code to evaluate if we got the actual date, and that had a per-example ground truth because each invoice has a different actual date. But in the example where we checked marketing copy length, every example had a length limit of 10, and so there was no per-example ground truth for that problem. In contrast, for counting gold standard talking points, there was a per-example ground truth because each article had different important talking points. But we used an LLM-as-a-judge to read the essay to see if those topics were adequately mentioned because there's so many different ways to mention the talking points. And the last of the four quadrants would be LLM-as-a-judge with no per-example ground truth. And one place where we saw that was if you are grading charts with a rubric. This is when we're looking at visualizing the coffee machine sales, and if you ask it to create a chart according to a rubric, such as whether it's clear access labels and so on, there is the same rubric for every chart, and that would be using an LLM-as-a-judge but without a per-example ground truth.
+
+And by the way, those are sometimes also called end-to-end evals because one end is the input end, which is the user query prompt, and the other end is the final output. And so all of these are evals for the entire end-to-end system's performance.
+
+Finally, some quick tips on this.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/evals-3.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+### **Error Analysis and Prioritizing next steps**
+
+Let's say you've built an agentic workflow and if it's not yet working as well as you wish, the question is where do you focus your efforts to make it better? Turns out agentic workflows have many different components and working on some of the components could be much more fruitful than working on some other components. So your skill at choosing where to focus your efforts makes a huge difference in the speed with which you can make improvements to your system. And I found that one of the biggest predictors for how efficient and how good a team is, is whether or not they're able to drive a disciplined error analysis process to tell you where to focus your efforts. So this is an important skill.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/error-analysis-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+So it turns out that there are teams that sometimes look at this and go by gut to pick one of these components to work on and sometimes that works and sometimes that leads to many months of work with very little progress in the overall performance of the system. So rather than going by gut to decide which of these many components to work on, I think it's much better to carry out an error analysis to better understand each step in the workflow. And in particular, I'll often examine the traces and that means the intermediate output after each step in order to understand which component's performance is subpar, meaning say much worse than what a human expert would do, because that points to where there may be room for security improvement.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/error-analysis-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+To introduce some terminology, the overall set of outputs of all of the intermediate steps is often called the *trace* of a run of this agent. And then some terminology you see in other sources as well is the output of a single step is sometimes called a *span* (This is terminology from the computer observability literature where people try to figure out what computers are doing).
+
+Below is a table diagram of how error analysis debugging is done to focus on which component to focus on for improving first.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/error-analysis-3.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+And some tips for error analysis.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/error-analysis-4.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+### **More Error Analysis examples**
+
+In the previous section, we saw how we can perform error analysis in the research agent example. Here, we will look at a few more. As for many developers, it's only by seeing multiple examples that you can then get practice and hone your intuitions about how to carry out error analysis.
+
+Other two examples are invoice processing and responding to customer emails. Also, the percentages in the respective second images will not add up to 100% because the errors are not mutually exclusive.
+
+Invoicing error analysis:
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/invoice-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/invoice-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+Customer email analysis:
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/customer-email-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/customer-email-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+Next, we will see how instead of doing end-to-end analysis of the entire system, how we can do a component based one.
+
+### **Component-level evaluations**
+
+Let's take a look at how to build and use component-level evals. In our example of a research agent, we said that the research agent was sometimes missing key points. But if the problem was web search, if every time we change the web search engine, we need to rerun the entire workflow, that can give us a good metric for performance, but *that type of eval is expensive*. Moreover, this is a pretty complicated workflow, so even if web search made things a little bit better, maybe noise introduced by the randomness of other components would make it harder to see little improvements to the web search quality.
+
+So as an alternative to only using end-to-end evals, what I would do is consider building an eval just to measure the quality of the web search component. For example, to measure the quality of the web search results, you might create a list of gold standard web resources. So for a handful of queries, have an expert say, these are the most authoritative sources that if someone was searching the internet, they really should find these web pages or any of these web pages would be good.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/component-analysis-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+And then you can write code to capture how many of the web search outputs correspond to the gold standard web resources. The standard metrics from information retrieval, the F1 score, but there are standard metrics that allow you to measure of a list of web pages returned by web search, how much does that overlap with what an expert determined are the gold standard web resources. With this, you're now armed with a way to evaluate just the quality of the web search component.
+
+And so as you vary the parameters or hyperparameters of how you care about web search, such as if you swap in and out different web search engines, so maybe try Google and Bing and Dr. Go and Tivoli and U.com and others, or as you vary the number of results or as you vary the date range that you ask the web search engines to search over, this can very quickly let you judge if the quality of the web search component is going up and does make more incremental improvements. And then of course, before you call the job done, it would be good to run an end-to-end eval to make sure that after tuning your web search system for a while that you are improving the overall system performance.
+
+But during that process of tuning these hyperparameters one at a time, you could do so much more efficiently by evaluating just one component rather than needing to rerun end-to-end evals every single time.
+
+So component level evals can provide a clearer signal for specific errors. It actually lets you know if you're improving the web search component or whatever component you're working on and avoid the noise in the complexity of the overall end-to-end system. And if you're working on a project where you have different teams focused on different components, it can also be more efficient for one team to just have his own very clear metric to optimize without needing to worry about all of the other components. And so this lets the team work on a smaller, more targeted problem faster. So when you've decided to work on improving a component, consider if it's worth putting in place a component-wise eval and if that will let you go faster on improving the performance of that component.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/component-analysis-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+Now the one thing you may be wondering is, if you decided to improve a component, how do you actually go about making that one component work better?
+
+### **How to address problems you identify**
+
+An agentic workflow may comprise many different types of components, and so your tools for improving different components will be pretty different.
+
+For the component which is non-LLM dependant:
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/non-llm-comp.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+For LLM based component (Here keep fine tuning as the very last resort as its too expensive to implement. Rather focus on improving your intuition on which model among the pool of models perform best for respective tasks):
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/llm-comp.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+*Smaller models (~8b range types) are maybe not as good as the larger ones in following instructions. But its better to label that different models are better for different tasks.*
+
+*Next would be to keep reading other peoples prompts to see what works and why (after having learnt the art of structuring your prompt).*
+
+### **Latency, cost optimization**
+
+When you start developing, usually the number one thing to worry about is just are the outputs sufficiently high quality. But then when the system is working well and you put in the production, then there's often value to make it run faster as well as run at lower cost as well. Here is where latency and cost optimization comes in (and personally I have always found this to be a HUGE deal breaker at the end).
+
+For latency, Time the workflow for each step.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/latency.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+For cost optimization, Cost per tokens check for each step.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/cost-opt.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+### **Development process summary**
+
+We've seen mainly tips in this module, now lets just have a quick look at how this entire process looks like while going through it.
+
+When we're building these workflows, there are two major activities where we often spending time on. One is *building*, so writing software, trying to write code to improve my system. And the second, which sometimes doesn't feel like progress, but is equally important, is *analysis* to help me decide where to focus my build efforts next. And we often go back and forth between building and analyzing, including things like error analysis.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/dev-process.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+So the workflow of building an agentic system often goes back and forth. It's not a linear process. We sometimes tune the end-to-end system, then do some error analysis, then improve a component for a bit, then tune the component-level evals.
+
+&nbsp;
+
