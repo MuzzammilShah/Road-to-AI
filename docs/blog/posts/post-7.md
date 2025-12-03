@@ -18,23 +18,23 @@ categories:
 
 &nbsp;
 
-I first came across Windows WSL through [Network Chuck’s video](https://youtu.be/vxTW22y8zV8?si=kLo7LnCe166j0sUl) about a year ago when it came out and honestly it was just mind blowing. Because almost every AI/ML based project is primarily designed to function on a Linux environment especially when it comes to its development.
+I first came across Windows WSL through [Network Chuck’s video](https://youtu.be/vxTW22y8zV8?si=kLo7LnCe166j0sUl) about a year ago when it came out and honestly it was just mind-blowing. Because almost every AI/ML based project is primarily designed to function in a Linux environment, especially when it comes to its development.
 
 !!! note "Note"
-     If you feel blog write-ups like this is not for you, I would 100% recommend y’all to watch that network chuck video linked above. They essentially cover the same thing :)
+  If you feel blog write-ups like this are not for you, I would 100% recommend y’all watch that Network Chuck video linked above. They essentially cover the same thing :)
 
-Now, MacOS is just brilliant and ofcourse it adapts really well and it almost always has no issues to have those same apps run on it.
+Now, macOS is just brilliant and of course it adapts really well, and it almost always has no issues running those same apps.
 But the main problem arises when you have a Windows machine. Yes, you could have Ubuntu as your second OS under dual-boot but those who have tried that would know what an absolute pain it is to set up. So, getting access to Windows WSL felt almost euphoric.
 
-I had done it a year ago and boy it felt amazing to finally run the projects I wanted to try and see what is actually going on under the hood (funnily enough, those were actually Open WebUI and Ollama which I still work with even now). Since I had already covered how those can be setup on MacOS, I thought it would only be fair to do one for Windows as well. Plus, the implementation which I did a year back was a bit sloppy. I got the opportunity to do that again on a fresh Windows machine.
+I had done it a year ago and boy it felt amazing to finally run the projects I wanted to try and see what is actually going on under the hood (funnily enough, those were actually Open WebUI and Ollama which I still work with even now). Since I had already covered how those can be set up on macOS, I thought it would only be fair to do one for Windows as well. Plus, the implementation that I did a year back was a bit sloppy. I got the opportunity to do that again on a fresh Windows machine.
 
-So this time I put in all the lessons I had from my previous experience and had like the smoothest setup done (and I documented it ofcourse which is what you will be reading here).
+So this time I put in all the lessons I had from my previous experience and had like the smoothest setup done (and I documented it of course, which is what you will be reading here).
 
 &nbsp;
 
 ## Why are we doing this?
 
-The final aim is to be able to try out Docker’s MCP Toolkit with Claude Desktop as my Client. I have already covered how to set those up on MacOS in my [previous blog]( https://docs.muhammedshah.com/blog/2025/11/13/model-context-protocol-hands-on/). Now, In order to use docker on Windows it needs to have WSL underneath (will explain more on this). While it’s more straightforward to do this on an Ubuntu machine, Claude Desktop still doesn’t officially support on Linux. Therefore the only option was to setup WSL so docker runs smoothy and we can have the same environment as we did in MacOS.
+The final aim is to be able to try out Docker’s MCP Toolkit with Claude Desktop as my Client. I have already covered how to set those up on macOS in my [previous blog]( https://docs.muhammedshah.com/blog/2025/11/13/model-context-protocol-hands-on/). Now, in order to use Docker on Windows it needs to have WSL underneath (will explain more on this). While it’s more straightforward to do this on an Ubuntu machine, Claude Desktop still doesn’t officially support Linux. Therefore the only option was to set up WSL so Docker runs smoothly and we can have the same environment as we did on macOS.
 
 ### What Docker Desktop does under the hood on Windows
 
@@ -58,7 +58,7 @@ Because of that, Docker Desktop for Windows typically expects WSL 2 (or Hyper-V 
 
 &nbsp;
 
-Awesome, now that we have got the basics and our reason to implement this, lets go ahead with the setup.
+Awesome, now that we have got the basics and our reason to implement this, let's go ahead with the setup.
 
 ## Setup walkthrough
 
@@ -66,7 +66,7 @@ Awesome, now that we have got the basics and our reason to implement this, lets 
 
 Docker Desktop is supported on Windows 10/11 (not Windows Server). If your “Windows machine” is actually Windows Server 2019/2022, Docker Desktop isn’t supported. In that case you’d have to install Docker Engine on Windows Server for Windows containers. 
 
-If you are not sure, Run this in Command Prompt:
+If you are not sure, run this in Command Prompt:
 
 ```
 systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
@@ -79,9 +79,9 @@ But if it says **Windows Server 2019/2022**, Docker Desktop isn’t supported on
 
 ### **Step 1 - Confirm virtualization is ready**
 
-Check virtualization enabled: Open Task Manager → Performance (CPU) and look for “Virtualization: Enabled.” If it’s Disabled, enable Intel VT-x/AMD-V in BIOS/UEFI and reboot.
+Check virtualization is enabled: Open Task Manager → Performance (CPU) and look for “Virtualization: Enabled.” If it’s Disabled, enable Intel VT-x/AMD-V in BIOS/UEFI and reboot.
 
-Also, confirm the Windows hypervisor is allowed (this is optional)
+Also, confirm the Windows hypervisor is allowed (this is optional).
 
 Run PowerShell (Admin):
 
@@ -89,7 +89,7 @@ Run PowerShell (Admin):
 bcdedit /enum | findstr -i hypervisorlaunchtype
 ```
 
-You want `Auto` or it’s fine if it is blank as well (that means it was already enabled for you and would have noticed it in Task Manager itself). If it shows `Off`, enable Hypervisor again and reboot.
+You want `Auto`, or it’s fine if it is blank as well (that means it was already enabled for you and you would have noticed it in Task Manager itself). If it shows `Off`, enable Hypervisor again and reboot.
 
 
 ### **Step 2 - Install WSL (Windows Subsystem for Linux)**
@@ -104,7 +104,7 @@ wsl --update
 
 Reboot if prompted.
 
-Launch Ubuntu once to create your Linux username/password (Make sure you save this somewhere).
+Launch Ubuntu once to create your Linux username/password (make sure you save this somewhere).
 
 Verify WSL status and version:
 
@@ -115,7 +115,7 @@ wsl -l -v
 
 You should see your distro at Version 2. *Why WSL? Docker Desktop uses WSL 2 as its Linux kernel backend on Windows for Linux containers. It’s the recommended path.*
 
-Now, there is a good chance when you ran the above two commands you would have received the following outputs respectively:
+Now, there is a good chance that when you ran the above two commands you would have received the following outputs respectively:
 
 ```
 C:\Windows\System32>wsl –status
@@ -127,9 +127,9 @@ C:\Windows\System32>wsl -l -v
 Windows Subsystem for Linux has no installed distributions. You can resolve this by installing a distribution with the instructions below: Use 'wsl.exe --list --online' to list available distributions and 'wsl.exe --install <Distro>' to install.
 ```
 
-If yes, Your output just means WSL is installed and set to use WSL 2, but you haven’t installed a Linux distro yet. That’s normal. Next steps below will finish it and get Docker Desktop working.
+If yes, your output just means WSL is installed and set to use WSL 2, but you haven’t installed a Linux distro yet. That’s normal. Next steps below will finish it and get Docker Desktop working.
 
-If you got the right versions shown then you may proceed directly to **Step 3**.
+If you got the right versions shown, then you may proceed directly to **Step 3**.
 
 
 ### **Step 2(b) - Install a Linux distro (Ubuntu) for WSL**
@@ -141,7 +141,7 @@ wsl --list --online
 wsl --install -d Ubuntu-24.04
 ```
 
-If `Ubuntu-24.04` isn’t listed, use `Ubuntu` (the default `LTS`) instead. For me `24.04` is the current LTS. After install, reboot if asked, then launch “Ubuntu” once to create your Linux username (again, make sure you note that down somewhere, will come in handy).
+If `Ubuntu-24.04` isn’t listed, use `Ubuntu` (the default `LTS`) instead. For me, `24.04` is the current LTS. After install, reboot if asked, then launch “Ubuntu” once to create your Linux username (again, make sure you note that down somewhere, will come in handy).
 
 Verify by running:
 
@@ -181,9 +181,9 @@ If you see the *hello-world* message, you’re good!
 
 ## Conclusion
 
-Just run `docker` in your command line (without Administrator is also fine) and you should see a bunch of options for the command. Along with that, the `wsl` status commands as well shown at the start. If both succeed, then your Docker Desktop+WSL2 is healthy.
+Just run `docker` in your command line (without Administrator privileges is also fine) and you should see a bunch of options for the command. Along with that, run the `wsl` status commands shown at the start. If both succeed, then your Docker Desktop+WSL2 is healthy.
 
-And now you are all set to use!
+And now you are all set to use it!
 
 If you would like to know what you want to implement, head over to [this section](https://docs.muhammedshah.com/blog/2025/11/13/model-context-protocol-hands-on/#observations-and-results) of my MCP Hands-on implementation blog.
 
