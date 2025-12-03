@@ -20,7 +20,8 @@ categories:
 
 If you are a new Mac user like me then you might have noticed that your GitHub repo suddenly contains a new file called `.DS_Store`. It took me a while to understand what it was and how I can remove it. So without any other unnecessary detail, I have provided a set of commands to run to first remove it from your repo. After that, if you are still interested, you can read what that file is along with a simple breakdown explaining what the commands you ran actually do.
 
-!!! info "If you have been using web frameworks to build your project or had used a coding agent to make your spaces, then your `.gitignore` file prolly already handles ignoring this file. So you don't need to go further in this blog, you are already set. But if you are like me and had already pushed your personal projects to GitHub (cloud), and would like to remove it and prevent this from happening in future pushes, then this is for you."
+!!! info "Important Note"
+    If you have been using web frameworks to build your project or had used a coding agent to make your spaces, then your `.gitignore` file prolly already handles ignoring this file. So you don't need to go further in this blog, you are already set. But if you are like me and had already pushed your personal projects to GitHub (cloud), and would like to remove it and prevent this from happening in future pushes, then this is for you.
 
 &nbsp;
 

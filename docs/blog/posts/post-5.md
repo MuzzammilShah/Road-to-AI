@@ -2,6 +2,7 @@
 title: Model Context Protocol (Hands-on)
 date:
   created: 2025-11-13
+  updated: 2025-12-03
 categories:
   - MCP
 ---
@@ -122,7 +123,7 @@ So I went ahead and changed the prompt to look for the `.gitignore` files in my 
 
 Yes, I could have used the Agent for this as well, but since I am on the free version of Claude, I didn't really want to use my chat limit of their top-tier model immediately. So I just did that work manually for now haha (no harm in doing that though right?)
 
-### Web Scraping
+### Web Scraping MCP
 
 My first ever query to an MCP server was to access my personal website and give me an SEO report. So I wanted to do the same this time as well.
 
@@ -134,7 +135,7 @@ For this particular tool, it doesn't really ask you for 'Approve run' (unlike th
 
 Not gonna show the final output fully as it is private (not exactly) but I don't want to be too much of a narcissist by putting more stuff about me here more than I already am lol.
 
-### YouTube Video Transcript
+### YouTube Video Transcript MCP
 
 This one needed two attempts from me (and just in time as I ran out of my Claude limit for the day). The first video I uploaded didn't contain a transcript apparently, and it was true, closed captions weren't available for this. My bad.
 
@@ -147,6 +148,56 @@ Then I went ahead with the one I knew for sure would have a transcript and again
 <div align="center">
 <img src="/assets/images/blog-assets/post-5-assets/post-5-12.png" alt="Post 5 image" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
 </div>
+
+!!! info "Update: 3rd December, 2025"
+    Yesterday I tried a couple of more MCPs which were more relavent to my work. Those were pretty cool so I wanted to document few notes on those in this part of the blog.
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-5-assets/post-5-13.png" alt="Post 5 image" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+### LinkedIn MCP
+
+This particular one was interesting because I was wondering if scrapping data from LinkedIn was allowed legally? But turns out it was a community developed MCP. It still uses automation in the backend, just that the setup felt prettymuch better. 
+
+!!! warning "Before you read further"
+    I should add that scrapping data from LinkedIn without the official method is unethical and is against their Terms & Conditions. The work that I did was purely for Experimental and Research purpose only. Please ensure that if you intend to work on the same, keep in mind the GDPR Compliance that we are all bound to.
+
+What I mean by that is, if you have tried automation of LinkedIn scrapping (via `selenium` in my case), you would use a chromium driver to drive the automation, but one drawback I would see is that - each session would be different. Which means, each time i start the automation, it is a new login to my LinkedIn account. Naturally, that is bad because you wouldn't want that to happen too frequently.
+
+This particular MCP server solves that by making us generate a **server cookie**. Essentially you create a code and it keeps your credentials and login cache active for about 30 days. That I thought was pretty cool. 
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-5-assets/post-5-14.png" alt="Post 5 image" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+Another point worth mentioning - As told, this was a community developed version. Even the server cookie we generated was via a docker image which the author had developed to specifically work with this MCP. While I thought this was very impressive work, it goes without saying that you should be using this at your own risk :)
+
+### PostgreSQL MCP
+
+This was another essential server I was looking forward to use as PostgreSQL is like my 'the most used DB'. The setup was fairly simple, you just have to add your Postgre URL. Now, in my case I had a server DB hosted so I had the link handy. If you have one too, then I just wanted to mention till which part of the URL you are meant to add and few things you might want to avoid (because I made those mistakes while trying it out XD)
+
+!!! note "Important"
+    At the time of working with this, it seems this particular server MCP has been archieved, so it is not actively maintained anymore. But you can still perform a basic Read-only operation as that's standard and works pretty well.
+
+URL format expected: `postgresql://user:password@host:port/db-name`
+
+Normally, if you have worked with Python, you would also add a SSL mode after the `db-name`, something like `?sslmode=prefer`. But you don't have to do that here (I haven't still seen the the MCP code developed for this, but I guess they handle it internally).
+
+Next, this may not be the case for everyone, but if your password has any special characters, especially `@`, then you will have to process that differently. Normally you would handle this via your code logic, but the MCP server doesn't do that, so the way to solve that is to switched your `@` with `%40`. The reason being, when the server URL is being processed, it tends to look for the hostname after the `@` in the URL. So having that speciall character in between hinders that. So if your password is `P@@sword` (this is a terrible password by the way, please don't keep it this simple), then you would update it to `p%40%40ssword`.
+
+And yeah that is all you need to do. While using this, I suggest you use a good LLM which is great at code, as querying on this MCP Server is only efficient which the query generated in good. I used Sonnet 3.7 and Claude arguably provides the best coding models so it worked like a charm.
+
+### HubSpot MCP
+
+Finally, this MCP would have been an absolute game changer. But as you see in the screenshot above, it literally had 0 (ZERO) TOOLS to invoke. So, it was pretty useless. 
+
+The only points worth noting are:
+
+1. You would need a Developer API (which you can access if you have a developer account).
+2. It seems this server doesn't exactly run locally and it runs in a remote environment. I am still not completely sure what that means for us to use it, but I would love to figure that out and update it here as I learn more.
+
+I also went through the HubSpot doc to see if they had officially launched this. They have (I still need to dive deep into the specifics) but it seems the Docker MCP Toolkit still doesn't have it. But I am sure that should come out soon as HubSpot is pretty huge haha.
 
 &nbsp;
 
