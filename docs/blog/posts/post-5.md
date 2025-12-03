@@ -15,7 +15,7 @@ categories:
 
 &nbsp;
 
-# Trying MCP Hands-on
+# :simple-anthropic: Trying MCP Hands-on
 
 Okay before I start, I should tell you, I am super excited right now. Like really really stoked. I have been studying MCP for weeks now and even got my hands on some of them via Deeplearning.AI courses, but never really tried it up to its potential on my own. 
 
