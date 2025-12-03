@@ -1,5 +1,5 @@
 ---
-title: Clean up `.DS_Store` after pushing to GitHub
+title: Cleaning up `.DS_Store` on MacOS
 date:
   created: 2025-11-14
 categories:
@@ -16,7 +16,7 @@ categories:
 
 &nbsp;
 
-# :material-git: Clean up `.DS_Store` after pushing to GitHub
+# :material-git: How to clean up `.DS_Store` if it has already been pushed to GitHub (accidently ofcourse)
 
 If you are a new Mac user like me then you might have noticed that your GitHub repo suddenly contains a new file called `.DS_Store`. It took me a while to understand what it was and how I can remove it. So without any other unnecessary detail, I have provided a set of commands to run to first remove it from your repo. After that, if you are still interested, you can read what that file is along with a simple breakdown explaining what the commands you ran actually do.
 
