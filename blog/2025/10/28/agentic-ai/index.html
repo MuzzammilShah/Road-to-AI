@@ -1,0 +1,5005 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../07/the-journey-of-optimization/">
+      
+      
+        <link rel="next" href="../../../11/13/model-context-protocol-hands-on/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Agentic AI - Road to AI</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%202C6.47%202%202%206.47%202%2012s4.47%2010%2010%2010%2010-4.47%2010-10S17.53%202%2012%202m3.1%205.07c.14%200%20.28.05.4.16l1.27%201.27c.23.22.23.57%200%20.78l-1%201-2.05-2.05%201-1c.1-.11.24-.16.38-.16m-1.97%201.74%202.06%202.06-6.06%206.06H7.07v-2.06z%22/%3E%3C/svg%3E');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M13%2014h-2V9h2m0%209h-2v-2h2M1%2021h22L12%202z%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M13%2013h-2V7h2m0%2010h-2v-2h2M12%202A10%2010%200%200%200%202%2012a10%2010%200%200%200%2010%2010%2010%2010%200%200%200%2010-10A10%2010%200%200%200%2012%202%22/%3E%3C/svg%3E');--md-admonition-icon--question:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M13%203c3.88%200%207%203.14%207%207%200%202.8-1.63%205.19-4%206.31V21H9v-3H8c-1.11%200-2-.89-2-2v-3H4.5c-.42%200-.66-.5-.42-.81L6%209.66A7.003%207.003%200%200%201%2013%203m-2.68%204.39h1.93c.01-.3.1-.53.28-.69a1%201%200%200%201%20.66-.23c.31%200%20.57.1.75.28.18.19.26.45.26.75%200%20.32-.07.59-.23.82-.14.23-.35.43-.61.59-.51.34-.86.64-1.05.91-.2.26-.31.68-.31%201.18h2c0-.31.04-.56.13-.74.09-.19.26-.36.51-.52.45-.24.82-.53%201.11-.93s.44-.81.44-1.31c0-.76-.27-1.37-.81-1.82-.53-.45-1.26-.68-2.19-.68-.87%200-1.57.2-2.11.59-.52.41-.78.98-.77%201.77zM12%2014h2v-2h-2zm1-13C8.41%201%204.61%204.42%204.06%208.9L2.5%2011h-.03l-.02.03c-.55.76-.62%201.76-.19%202.59.36.69%201%201.17%201.74%201.32V16c0%201.85%201.28%203.42%203%203.87V23h11v-5.5c2.5-1.67%204-4.44%204-7.5%200-4.97-4.04-9-9-9%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/macros-utils/x-twitter-link-card.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agentic-ai-my-course-notes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Road to AI" class="md-header__button md-logo" aria-label="Road to AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M10.628 7.25a2.25 2.25 0 1 1 0 1.5H8.622a2.25 2.25 0 0 1-2.513 1.466L5.03 12.124a2.25 2.25 0 1 1-1.262-.814l1.035-1.832A2.25 2.25 0 0 1 4.25 8c0-.566.209-1.082.553-1.478L3.768 4.69a2.25 2.25 0 1 1 1.262-.814l1.079 1.908A2.25 2.25 0 0 1 8.622 7.25ZM2.5 2.5a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0m4 4.75a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m6.25 0a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m-9.5 5.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Road to AI
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Agentic AI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../../ZeroToHero/" class="md-tabs__link">
+          
+  
+  
+  Neural Networks
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../../Books/" class="md-tabs__link">
+          
+  
+  
+  Library
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../" class="md-tabs__link">
+          
+  
+  
+  Blog
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Road to AI" class="md-nav__button md-logo" aria-label="Road to AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M10.628 7.25a2.25 2.25 0 1 1 0 1.5H8.622a2.25 2.25 0 0 1-2.513 1.466L5.03 12.124a2.25 2.25 0 1 1-1.262-.814l1.035-1.832A2.25 2.25 0 0 1 4.25 8c0-.566.209-1.082.553-1.478L3.768 4.69a2.25 2.25 0 1 1 1.262-.814l1.079 1.908A2.25 2.25 0 0 1 8.622 7.25ZM2.5 2.5a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0m4 4.75a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m6.25 0a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m-9.5 5.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5"/></svg>
+
+    </a>
+    Road to AI
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Neural Networks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zero to Hero Series
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backpropagation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Backpropagation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Micrograd
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_2" id="__nav_2_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture Notes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Lecture Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notes/A-main-video-lecture-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Master Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notes/micrograd-functionality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Micrograd Functionality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notes/value-object-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Value Object Creation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notes/crux-node-backpropagation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crux Node Backpropagation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notes/neurons-explaination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neurons Explaination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notes/expanding-tanh-and-adding-more-operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Expanding tanh and adding more operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notes/pytorch-comparision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch Comparison
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notes/multi-layer-perceptron/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Layer Perceptron
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_3" id="__nav_2_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notebooks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Notebooks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/1-derivative-simple-function/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Derivative Simple Function
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/2-derivative-function-with-multiple-inputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Derivative Function with Multiple Inputs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/3_1-graph-visualisation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Visualisation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/3-value-object/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Value Object
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/4_0_manual_backpropagation_simpleExpression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Backpropagation-0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/4_1_manual_backpropagation_simpleExpression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Backpropagation-1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/4_2_manual_backpropagation_simpleExpression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Backpropagation-2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/5_optimization_single_step_preview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optimization Single Step Preview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/6_0_backpropagation_neuron/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backpropagation Neuron
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/6_1_backpropagation_neuron_manual_calculation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backpropagation Neuron - Manual Calculation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/7_0_backward_func_each_operation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backward Function - Each operation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/7_1_backward_func_entire_graph/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backward Function - Entire Graph
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/8_handling_onenode_used_multiple_times/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handing one node used multiple times
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/9_expanding_tanh_into_more_operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Expanding tanh into more operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/x10_implementing_in_pytorch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementing in PyTorch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/x11_creating_a_multi_layer_perceptron/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Creating a MLP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/x12_creating_a_loss_function/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Creating a Loss function
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/x13_collecting_all_parameters_in_NN/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Collecting all parameters in Neural Net
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Micrograd/notebooks/x14_manual_gradient_descent_optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Gradient Descent Optimization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Language Model-1
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Language Model-1
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makemore Part 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_2" id="__nav_2_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set A
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Set A
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part1/A-main-makemore-part1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part1/A-Main-Notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jupyter Notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set B
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Set B
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part1/B-main-makemore-part1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part1/B-Main-Notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jupyter Notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_4" id="__nav_2_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set C
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Set C
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part1/C-main-makemore-part1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part1/C-Main-Notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jupyter Notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Language Model-2
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Language Model-2
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makemore Part 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_2" id="__nav_2_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set A
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Set A
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part2/A-main-makemore-part2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part2/A-main-notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jupyter Notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_3" id="__nav_2_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set B
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Set B
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part2/B-main-makemore-part2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part2/B-main-notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jupyter Notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_4" id="__nav_2_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set C
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Set C
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part2/C-main-makemore-part2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part2/C-main-notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jupyter Notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Language Model-3
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Language Model-3
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makemore Part 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5_2" id="__nav_2_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes and Codes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Notes and Codes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part3/A-main-makemore-part3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part3/executed-starter-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starter Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part3/A-main-notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jupyter Notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part3/visualization-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualization Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Language Model-4
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Language Model-4
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makemore Part 4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6_2" id="__nav_2_6_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes and Codes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Notes and Codes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part4/exercise-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercise 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part4/exercise-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercise 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part4/exercise-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercise 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part4/final-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Final code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Language Model-5
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Language Model-5
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makemore Part 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_7_2" id="__nav_2_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes and Codes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Notes and Codes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part5/Main-makemore-part-5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/Makemore-part5/Main-notebook-part-5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jupyter Notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_8" id="__nav_2_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPT-1
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GPT-1
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/GPT-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformer Model-1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_8_2" id="__nav_2_8_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Codes Implemented
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Codes Implemented
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/GPT-1/gpt-dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notebook Implemented
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/GPT-1/bigram/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bigram Script Breakdown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_9" id="__nav_2_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPT-2
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GPT-2
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/GPT-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformer Model-2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_9_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_9_2" id="__nav_2_9_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementation Notebooks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_9_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_9_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Implementation Notebooks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/GPT-2/section-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Section 0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/GPT-2/section-1a/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Section 1(a)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/GPT-2/section-1b/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Section 1(b)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/GPT-2/section-2a/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Section 2(a)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_10" id="__nav_2_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPT-Tokenizer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GPT-Tokenizer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/GPT-Tokenizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tokenizer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_11" id="__nav_2_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    General MISC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    General MISC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/General-MISC/intro-llms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intro to LLMs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../ZeroToHero/General-MISC/deepdive-llms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deep Dive into LLMs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Library
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../Books/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AI Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../Books/AI-Engineering/chapter-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to AI Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../Books/AI-Engineering/chapter-5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prompt Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../Books/AI-Engineering/chapter-6-a/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Retrieval Augmented Generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../Books/AI-Engineering/chapter-6-b/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Blog
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Categories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Categories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/ai-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/gpts-and-llms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPTs and LLMs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/misc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MISC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction-to-agentic-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction to Agentic Workflows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-design-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Design Pattern
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tool-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Use
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-tips-for-building-agentic-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical tips for building Agentic AI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patterns-for-highly-autonomous-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patterns for Highly Autonomous Agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2025-10-28 00:00:00+00:00" class="md-ellipsis">October 28, 2025</time>
+                      </div>
+                    </li>
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 13h1.5v2.82l2.44 1.41-.75 1.3L15 16.69zm4-5H5v11h4.67c-.43-.91-.67-1.93-.67-3a7 7 0 0 1 7-7c1.07 0 2.09.24 3 .67zM5 21a2 2 0 0 1-2-2V5c0-1.11.89-2 2-2h1V1h2v2h8V1h2v2h1a2 2 0 0 1 2 2v6.1c1.24 1.26 2 2.99 2 4.9a7 7 0 0 1-7 7c-1.91 0-3.64-.76-4.9-2zm11-9.85A4.85 4.85 0 0 0 11.15 16c0 2.68 2.17 4.85 4.85 4.85A4.85 4.85 0 0 0 20.85 16c0-2.68-2.17-4.85-4.85-4.85"/></svg>
+                          <time datetime="2025-11-05 00:00:00+00:00" class="md-ellipsis">November 5, 2025</time>
+                        </div>
+                      </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            in
+                            
+                              <a href="../../../../category/ai-agents/">AI Agents</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              34 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+
+
+<div align="center">
+<img src="/assets/images/blog-assets/thumbnails/post-4.png" alt="Post 4 Thumbnail" width="100%">
+</div>
+
+<!-- more -->
+
+<p>&nbsp;</p>
+<h1 id="agentic-ai-my-course-notes"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 20h7v2H6c-1.11 0-2-.89-2-2V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8.54l-1.5-.82-.5.28V4h-5v8l-2.5-2.25L8 12V4H6zm18-3-5.5-3-5.5 3 5.5 3zm-9 2.09v2L18.5 23l3.5-1.91v-2L18.5 21z"/></svg></span> Agentic AI (My course notes)<a class="headerlink" href="#agentic-ai-my-course-notes" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">All code implementations can be found in <a href="https://github.com/MuzzammilShah/Agentic-AI.git">my repository on github</a></p>
+</div>
+<h2 id="introduction-to-agentic-workflows"><strong>Introduction to Agentic Workflows</strong><a class="headerlink" href="#introduction-to-agentic-workflows" title="Permanent link">&para;</a></h2>
+<hr />
+<h3 id="what-is-agentic-ai"><strong>What is Agentic AI?</strong><a class="headerlink" href="#what-is-agentic-ai" title="Permanent link">&para;</a></h3>
+<p>An agentic AI workflow is a process where an LLM based app executes multiple steps to complete a task.</p>
+<p>Knowing how to decompose the task into steps and how to build the components to execute the individual steps turns out to be a tricky but important skill that will determine our ability to build agentic workflows for a huge range of exciting applications.</p>
+<p>Lets say we are building a comprehensive research agent- So when asked a query (like, how can we complete with SpaceX?) this agent starts with planning out what research to use, including calling a web search engine to download some web pages, and then to synthesize and rank findings, draft an outline, have an editor-to-agent review for coherence, and then finally generate a comprehensive markdown report. So, the final output will be on building a new rocket company to compete with SpaceX with an intro, background, findings, and so on.</p>
+<p>Now, one of the often-discussed areas of AI agents is how autonomous are they? What we read above was a relatively complex, highly autonomous Agentic AI workflow, but there are also other simpler workflows that are incredibly valuable.</p>
+<h3 id="degrees-of-autonomy"><strong>Degrees of autonomy</strong><a class="headerlink" href="#degrees-of-autonomy" title="Permanent link">&para;</a></h3>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-1/degrees-of-autonomy.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-1/degrees-of-autonomy-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Keeping the above diagram in mind, You will find that there are tons of applications in the less autonomous end of the spectrum that are very valuable being built for tons of businesses today, and at the same time, there are also applications being worked on at the more highly autonomous end of the spectrum, but those are usually less easily controllable, a little bit more unpredictable, and also a lot of active research as well to figure out how to build these more highly autonomous agents.</p>
+<h3 id="benefits-of-agentic-ai"><strong>Benefits of Agentic AI</strong><a class="headerlink" href="#benefits-of-agentic-ai" title="Permanent link">&para;</a></h3>
+<p>I think the one biggest benefit of agentic workflows is that it allows you to do many tasks effectively that just previously were not possible. But there are other benefits as well, including parallelism (which we will talk about after the coding benchmark example) that lets you do certain things quite fast, as well as modularity that lets you combine the best of three components from many different places to build an effective workflow.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-1/benchmark-gpt3.5-vs-gpt4.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>First comes <em>Coding Benchmark</em>: The diagram above shows us the data on a coding benchmark that tests the ability of different LLMs to write code to carry out certain tasks. The benchmark used in this case is called Human Eval. It turns out that GPT 3.5, if asked to write the code directly, gets 40% right on this benchmark. This is a positive k-metric. GPT 4 is a much better model. Its performance leaps to 67% with this also non-agentic workflow.</p>
+<p>But it turns out that as large as the improvement was from GPT 3.5 to GPT 4, that improvement is dwarfed by what you can achieve by wrapping GPT 3.5 within an agentic workflow.</p>
+<p>Using different agentic techniques (which we will learn more on later), you can prompt GPT 3.5 to write code and then maybe reflect on the code and figure out if you can improve it. And using techniques like that, you can actually get GPT 3.5 to get much higher levels of performance. And similarly, GPT 4 used in the context of an agentic workflow also does much better. </p>
+<p>So even with today's best LLMs, an agentic workflow lets you get much better performance. And in fact, what we saw in this example was the improvement from one generation of model to another, which is huge, is still not as big a difference as implementing an agentic workflow on the previous generation of model.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-1/parallelization-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-1/parallelization-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Next comes <em>Parallelization</em>: This is another benefit of using agentic workflows where they can parallelize some tasks and thus do certain things much faster than a human. The first diagram shows how it can do almost 9 web searches at once. Second diagram shows how we can experiment with it by changing the specific components like the search API or even trying out different LLMs rather than sticking with just one for all the different steps, to see which modifications can provide better outputs for our task.</p>
+<h3 id="agentic-ai-applications"><strong>Agentic AI Applications</strong><a class="headerlink" href="#agentic-ai-applications" title="Permanent link">&para;</a></h3>
+<p>Here we’ve seen the different types of agentic applications currently in use, like customer service etc. The main point to takeaway would be the below diagram which shows how easy/hard it is to build your agent based on what you have.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-1/agentic-ai-applications.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>So, when implementing one of these things yourself, one of the most important skills is to look at a complex workflow and figure out what are the individual steps so you can implement an agentic workflow to execute those steps one at a time. And that is exactly what we will be looking at in Task decomposition.</p>
+<h3 id="task-decomposition"><strong>Task decomposition</strong><a class="headerlink" href="#task-decomposition" title="Permanent link">&para;</a></h3>
+<p>One of the key skills in building agentic workflows is to look at a bunch of stuff that maybe someone does and to identify the discrete steps that it could be implemented with.</p>
+<p>And when I'm looking at the individual discrete steps, one question I'm always asking myself is, can this step be implemented with either an LLM or with one of the tools such as an API or a function call that I have access to? And in case the answer is no, I'll then often ask myself, how would I as a human do this step? And is it possible to decompose this further or break this down into even smaller steps that then maybe is more amenable to implementation with an LLM or with one of the software tools that I have?</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-1/task-decomposition.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<h3 id="evaluation-evals"><strong>Evaluation (evals)</strong><a class="headerlink" href="#evaluation-evals" title="Permanent link">&para;</a></h3>
+<p>"Your ability to drive evals for your agentic workflow makes a huge difference in your ability to build them effectively."</p>
+<p>There are some simple ways to evaluate your agent like:</p>
+<ul>
+<li>You can write codes to evaluate <em>objective criteria</em>, such as 'did it mention a competitor or not'.</li>
+<li>Using an LLM as a judge for more <em>subjective criteria</em> such as 'what's the quality of this essay'.</li>
+</ul>
+<p>But later, we will learn about two major types of evals:</p>
+<ul>
+<li>One is <em>end-to-end</em>, where you measure the output quality of the entire agent.</li>
+<li>Other is <em>component level</em> evals, where you measure the quality of the output of a single step in the agentic workflow.</li>
+</ul>
+<p>It turns out that these are useful for driving different parts of your development process.</p>
+<p>There is another method apart from this where you just examine the <em>intermediate outputs</em> - we call these the <em>traces of the LLM</em>, in order to understand where it is falling short of my expectations. And we call this <em>error analysis</em>, where we just read through the intermediate outputs of every single step to try to spot opportunities for improvement.</p>
+<h3 id="agentic-design-patterns"><strong>Agentic design patterns</strong><a class="headerlink" href="#agentic-design-patterns" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Reflection</li>
+<li>Tool Use</li>
+<li>Planning</li>
+<li>Multi-agent collaboration</li>
+</ol>
+<p><em>(There were some great slides which showed examples on the above, feel free to watch that. But since we will be diving deep into this as well, I didn't want to get hung around in just the overview stuff for now).</em></p>
+<p><em>Update: Also damn, the quiz was slightly more tricky than I thought it would be lol. But its done and I also tried out the research agent which was already developed by sensei, you can checkout it's output <a href="../../../../../assets/images/blog-assets/post-4-assets/module-1/final_report.html">here</a>, very impressive actually. Now we move on!</em></p>
+<div class="x-twitter-embed" data-url="https://twitter.com/MoShahx07/status/1983342282142343654">
+    <blockquote class="twitter-tweet">
+        <a href="https://twitter.com/MoShahx07/status/1983342282142343654"></a>
+    </blockquote>
+</div>
+
+<p>&nbsp;</p>
+<h2 id="reflection-design-pattern"><strong>Reflection Design Pattern</strong><a class="headerlink" href="#reflection-design-pattern" title="Permanent link">&para;</a></h2>
+<hr />
+<h3 id="reflection-to-improve-outputs-of-task"><strong>Reflection to improve outputs of task</strong><a class="headerlink" href="#reflection-to-improve-outputs-of-task" title="Permanent link">&para;</a></h3>
+<p>One design consideration to keep in mind is, reflection is much more powerful when there is new additional external information that you can ingest into the reflection process.</p>
+<p>For example, if you can run the code and have that code output or error messages as an additional input to the reflection step, that really lets the LLM reflect much more deeply and figure out what may be going wrong. This results in a much better second version of the code than if there wasn't this external information that you can ingest. So one thing to keep in mind, whenever reflection has an opportunity to get additional information, that makes it much more powerful.</p>
+<p>The attached diagram shows exactly that, where rather than just feeding the provided code from step 1 back into reflection, we execute it ourselves and give additional data for reflection, therefore providing us with a better output.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-2/reflection-with-external-feedback.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Reflection does not make an LLM always get everything right 100% of the time, but it can often give it maybe a modest bump in performance.</p>
+<h3 id="why-not-just-direct-generation"><strong>Why not just direct generation?</strong><a class="headerlink" href="#why-not-just-direct-generation" title="Permanent link">&para;</a></h3>
+<p>Direct generation aka Zero shot prompting. There are different types of how we can provide all possible information to the LLM.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-2/zero-one-few-shot-prompting.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Below diagram is adapted from the research paper by Madaan and others, and this shows a range of different tasks being implemented with different models and with and without reflection. The way to read this diagram is to look at these pairs of adjacent light followed by dark-colored bars, where the light bar shows zero-shot prompting and the dark bar shows the same model but with reflection.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-2/study-showing-improvement.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>So some tips for writing reflection prompts: It helps to clearly indicate that you want it to review or to reflect on the first draft of the output. And if you can specify a clear set of criteria/instructions in points, such as whether the domain name is easy to pronounce and whether it may have negative connotations or for email, check the tone and verify the facts. Then that guides the LLM better in reflecting and critiquing on the criteria that you care the most about.</p>
+<h3 id="chart-generation-workflow"><strong>Chart generation workflow</strong><a class="headerlink" href="#chart-generation-workflow" title="Permanent link">&para;</a></h3>
+<p>This is a fun example where we'll start to look at multi-modal inputs and outputs. We'll have an algorithm reflect on an image being generated or a chart being generated. </p>
+<div class="admonition note">
+<p class="admonition-title">Code for this can be found in the repo mentioned at the start of this blog!</p>
+</div>
+<p>One thing you may find is that sometimes using a reasoning model for reflection may work better than a non-reasoning model.</p>
+<p>Now, when you're building an application, one thing you may be wondering is, does reflection actually improve performance on your specific application? From various studies, reflection improves performance by a little bit on some, by a lot on some others, and maybe barely any at all on some other applications.</p>
+<p>And so it'll be useful to understand its impact on your application and also give you guidance on how to tune either the initial generation or the reflection prompt to try to get better performance.</p>
+<h3 id="evaluating-impact-of-reflection"><strong>Evaluating impact of reflection</strong><a class="headerlink" href="#evaluating-impact-of-reflection" title="Permanent link">&para;</a></h3>
+<p>Reflection often improves the performance of the system, but before I commit to keeping it, I would usually want to double check how much it actually improves the performance, because it does slow down the system a little bit by needing to take an extra step.</p>
+<p>Let's take a look at evals for reflection workflows.</p>
+<p>Let's look at an example of using reflection to improve the database query that an LLM writes to fetch data to answer questions. Let's say you run a retail store, and you may get questions like, which color product has the highest total sales? To answer a question like this, you might have an LLM generate a database query. After writing a database query, instead of using that directly to fetch information from the database, you may have an LLM, the same or different LLM, reflect on the version one database query and update it to maybe an improved one, and then execute that database query against the database to fetch information to finally have an LLM answer the question.</p>
+<p>So the question is, does using a second LLM to reflect and improve on the database or SQL query actually improve the final output? In order to evaluate this, I might collect a set of questions or set of prompts together with ground truth answers. So maybe one would be, how many items are sold in May 2025? What's the most expensive item in the inventory? How many styles are carried in my store? And I write down for maybe 10, 15 prompts, the ground truth answer. Then you can run this workflow without reflection. So without reflection would mean to take the SQL query generated by the first LLM and to just see what answer it gives. And with reflection would mean to take the database query generated after the second LLM has reflected on it to see what answer that fetches from the database. And then we can measure the percentage of correct answers from no reflection and with reflection. In this example, no reflection gets the answers right 87% of the time, with reflection gets it right 95% of the time. And this would suggest that reflection is meaningfully improving the quality of the database queries I'm able to get to pull out the correct answer.</p>
+<p>One thing that developers often end up doing as well is rewrite the reflection prompt. So for example, do you want to add to reflection prompt an instruction to make the database query run faster or make it clearer? Or you may just have different ideas for how to rewrite either the initial generation prompt or the reflection prompt. Once you put in place evals like this, you can quickly try out different ideas for these prompts and measure the percentage correct your system has as you change the prompts in order to get a sense of which prompts work best for your application. <em>So if you're trying out a lot of prompts, building evals is important.</em></p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-2/evaluation-impact-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>It really helps you have a systematic way to choose between the different prompts you might be considering. But this example is one of when you can use objective evals because there is a right answer. The number of items sold was 1,301 and the answer is either right or wrong. How about applications where you need more subjective rather than objective evaluations? In the plotting example that we saw in the previous example, without reflection we had the stack bar graph, with reflection we had this graph. But how do we know which plot is actually better? Measuring which of those plots is better is more of a subjective criteria rather than a purely black and white objective criteria. <em>So for these more subjective criteria, one thing you might do is use an LLM as a judge.</em> </p>
+<p>And maybe a basic approach to do this might be to feed both plots into an LLM, a multi-modal LLM that can accept two images as input, and just ask it which image is better. It turns out this doesn't work that well as it turns out that there's some known issues of using LLMs to compare two inputs to tell you which one is better. First, it turns out the answers are often not very good. It could be sensitive to the exact wording of the prompt of the LLM as a judge, and sometimes the rank ordering doesn't correspond that well to human expert judgment. And one manifestation of this is <em>many LLMs will have a position bias</em>. Many LLMs, it turns out, will often pick the first option more often than the second option.</p>
+<p>So, Instead of asking an LLMs to compare a pair of inputs, <em>grading with a rubric can give more consistent results</em>. So, for example, you might prompt an LLM to tell it, given a single image, assess the attached image against the quality rubric, and the rubric or grading criteria may have clear criteria like does the plot have a clear title, are the access labels present, is it an appropriate chart type, and so on, with a handful of criteria like this. Even here, it turns out that instead of asking the LLM to grade something on a scale of 1 to 5, which it tends not to be well calibrated on, if you instead give it, say, 5 binary criteria, 5-0-1 criteria, and have it give 5 binary scores, and you add up those scores to get the number from 1 to 5 or 1 to 10 if you have 10 binary criteria, that tends to give more consistent results. </p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-2/evaluation-impact-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>And so if we're to gather a handful, say 10-15 user queries for different visualizations that the user may want to have of the coffee machine sales, then you can have it generate images without reflection or generate images with reflection, and use a rubric like this to score each of the images to then check the degree to which or whether or not the images generated with reflection are really better than the ones without reflection. And then once you've built up a set of evals like this, if ever you want to change the initial generation prompt or you want to change the reflection prompt, you can also rerun this eval to see if, say, updating one of your prompts allows the system to generate images that scores more points according to this rubric. And so this too gives you a way to keep on tuning your prompts to get better and better performance. </p>
+<p>What you may find when building evaluations for reflection or for other agentic workflows is that when there is an objective criteria, code-based evaluation is usually easier to manage. And in the example that we saw with the database query, we built up a database of ground truth examples and ground truth outputs and just wrote code to see how often the system generated the right answer in a really objective evaluation metric. In contrast for small subjective tasks, you might use an element as a judge but it usually takes a little bit more tuning, such as having to think through what rubric you may want to use to get the LLM as a judge to be well calibrated or to output reliable evals.</p>
+<h3 id="using-external-feedback"><strong>Using external feedback</strong><a class="headerlink" href="#using-external-feedback" title="Permanent link">&para;</a></h3>
+<p>The diagram below should clearly tell you why external feedback is important.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-2/roi-on-prompt-engg.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Finally, as we move on to tool calling, the below examples show where tools fit in to provide better results. So, Challenge -&gt; Source of feedback (tool) need to solve it.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-2/tool-calling-egs.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>&nbsp;</p>
+<h2 id="tool-use"><strong>Tool Use</strong><a class="headerlink" href="#tool-use" title="Permanent link">&para;</a></h2>
+<hr />
+<h3 id="what-are-tools"><strong>What are tools?</strong><a class="headerlink" href="#what-are-tools" title="Permanent link">&para;</a></h3>
+<p>Just as we as humans can do a lot more with tools than we can with just our bare hands, LLMs too can also do a lot more with access to tools. If you were to write a function and give the LLM access to this function, then that lets it respond with a more useful answer. When we let LLMs call functions, or more precisely, let an LLM request to call functions, that's what we mean by tool use, and the tools are just functions that we provide to the LLM that it can request to call. </p>
+<p>One important aspect of tool use is, we can leave it up to the LLM to decide whether or not to use any of the tools. Another thing you would notice is that, unlike all of our above examples <em>tools</em> aren't hard coded or fixed to a part of the workflow.</p>
+<p>So as a developer, it'll be up to you to think through what are the sorts of things you want an application to really do, and then to create the functions or the tools that are needed to make them available to the LLM to let it use the appropriate tools to complete the sorts of tasks that maybe a restaurant recommender or a retail question answer or a finance assistant may want to do. So depending on your application, you may have to implement and make different tools available to your LLM.</p>
+<p>Now, there are also many use cases where you want to make multiple tools or multiple functions available for the LLM for it to choose which of any to call. Like how we see in the following image.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-3/multiple-tools.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Being able to give your LLM access to tools is a pretty big deal. It will make your applications much more powerful.</p>
+<h3 id="creating-a-tool"><strong>Creating a tool</strong><a class="headerlink" href="#creating-a-tool" title="Permanent link">&para;</a></h3>
+<p>Here sensei shows what it would look like if you had to write prompts yourself to tell it when to use tools, and this is what we had to do in an earlier era before LLMs were trained directly to use tools.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-3/creating-tool-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-3/creating-tool-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>What's happening above: Developer provides function, LLM decides to use it, LLM outputs request, developer’s system executes the function, result fed back to LLM.</p>
+<p>To summarize, here's the process for getting LLM to use tools - First, you have to provide the tool to the LLM, implement the function, and then tell the LLM that it is available. When the LLM decides to call a tool, it then generates a specific output that lets you know that you need to call the function for the LLM. Then you call the function, get its output, take the output of the function you just called, and give that output back to the LLM, and the LLM then uses that to go on to whatever it decides to do next, which in our examples in this video was to just generate the final output, but sometimes it may even decide that the next step is to go call yet another tool, and the process continues.</p>
+<p>Now, it turns out that this all-caps function syntax is a little bit clunky. This is what we used to do before LLMs were trained natively or to know by themselves how to request that tools be called. With modern LLMs, you don't need to tell it to output all-caps function (this was shown as an example in the video, where the tool function was mentioned after a keyword 'FUNCTION'), then search for all-caps function, and so on. Instead, LLMs are trained to use a specific syntax to request very clearly when it wants a tool called.</p>
+<h3 id="tool-syntax"><strong>Tool syntax</strong><a class="headerlink" href="#tool-syntax" title="Permanent link">&para;</a></h3>
+<p>Okay, so here was more about the <code>AISuite</code> library which sensei and his friends had developed, but it still captured the essence of tool calling (my first encounter and implementation of tool calling was via Vercel's AI SDK which is also the core functionality of my AI Persona project - <a href="https://chat.muhammedshah.com/">Chat AI</a>).</p>
+<p>The following two diagram shows it all.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-3/tool-calling-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-3/tool-calling-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Also, in the second diagram above I am not really sure how the parameter got its description, sensei only mentioned it got from the "documentation", so I am not really sure how that works here. We will prolly see that in the lab implementations hopefully.</p>
+<div class="admonition note">
+<p class="admonition-title">Code implemetations of the graded/ungraded labs for this can be found in the repo mentioned at the start of this blog!</p>
+</div>
+<h3 id="code-execution"><strong>Code execution</strong><a class="headerlink" href="#code-execution" title="Permanent link">&para;</a></h3>
+<p>Okay so I lowkey had a spoiler for this section as I had already learnt about this capability through karpathy sensei in one of his general audience videos. So yes, this is as mind blowing as andrew sensei is telling in the video.</p>
+<p>He takes an example of how a simple calculator can be a tool, but in the case of a scientific calculator, instead of making that as a tool, we can ask LLM to execute it as a code instead as it is much easier to calculate exponents via code. And that is what the following two images summarise haha.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-3/code-exec-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-3/code-exec-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Finally, there was a point where execution of these codes are much safer to be done in a sandbox environment (a similar example to replit where the agent suggested to remove all the python files via <code>rm *.py</code>), some suggested environments were: Docker and E2B. I personally haven't got the chance to use those 2 for code execution specifically, but hopefully I get the chance to soon.</p>
+<h3 id="mcp"><strong>MCP</strong><a class="headerlink" href="#mcp" title="Permanent link">&para;</a></h3>
+<p>MCP, the Model Context Protocol, was a standard proposed by Anthropic but now adopted by many other companies and by many developers as a way to give an LLM access to more context and to more tools. There are a lot of developers developing around the MCP ecosystem and so learning about this will give you a lot more access to resources for your applications.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-3/mcp-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>The above diagram shows us the pain points that MCP attempts to solve. If one developer is writing an application that wants to integrate with data from Slack and Google Drive and GitHub or access data from a Postgres database, then they might have to write code to wrap around Slack APIs to have functions to provide to the application, write code to wrap around Google Drive APIs to parse the application, and similarly for these other tools or data sources. </p>
+<p>Then what has been happening in the developer community is if a different team is building a different application, then they too will integrate by themselves with Slack and Google Drive and GitHub and so on. </p>
+<p>So many developers were all building custom wrappers around these types of data sources. And so if there are M applications being developed and there are N tools out there, the total amount of work done by the community was M times N. What MCP did was propose a standard for applications to get access to tools and data sources so that the total work that needs to be done by the community is now M plus N rather than M times N. The initial design of MCP focused a lot on how to give more context to an LLM or how to fetch data. So a lot of the initial tools were ones that would just fetch data. And if you read the MCP documentation, that refers to these asresources. But MCP gives access to both data as well as the more general functions that an application may want to call.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-3/mcp-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>As you can see in the above diagram, It turns out that there are many MCP clients. These are the applications that want access to tools or to data as well as service, which are often the software wrappers that then give access to data in Slack or GitHub or Google Drive or allows you to take actions at these different types of resources. So today there's a rapidly growing list of MCP clients that consume the tools or the resources as well as MCP service that provide the tools and the resources. And I hope that you find it useful to build your own MCP client. Your application maybe one day will be an MCP client. And if you want to provide resources to other developers, maybe you can build your own MCP server someday.</p>
+<p>I also loved the example sensei showed on how he used Claude desktop (client) to ask questions on his repos on github (server) like explain the project or what were the last set of PRs. Prolly the simplest example I have seen, shown very well. A detailed breakdown on MCP can be found on my other <a href="https://docs.muhammedshah.com/blog/2025/09/01/model-context-protocol/">blog post</a> which was also by DeepLearning.AI!</p>
+<p>&nbsp;</p>
+<h2 id="practical-tips-for-building-agentic-ai"><strong>Practical tips for building Agentic AI</strong><a class="headerlink" href="#practical-tips-for-building-agentic-ai" title="Permanent link">&para;</a></h2>
+<hr />
+<p><em>"It turns out that one of the things I've seen that distinguishes people that can execute agentic workflows really well versus teams that are not as efficient at it is your ability to drive a disciplined evaluation process."</em></p>
+<h3 id="evaluations-evals"><strong>Evaluations (evals)</strong><a class="headerlink" href="#evaluations-evals" title="Permanent link">&para;</a></h3>
+<p>When developing an agentic AI system, it's difficult to know in advance where it will work and where it won't work so well, and thus where you should focus your effort. So very common advice is to try to build even a quick and dirty system to start, so you can then try it out and look at it to see where it may not yet be working as well as you wish, to then have much more focused efforts to develop it even further. In contrast, I find that it's sometimes less useful to sit around for too many weeks theorizing and hypothesizing how to build it. It's often better to just build a quick system in a safe, reasonable way that doesn't leak data, kind of do it in a responsible way, but just build something quickly so you can look at it and then use that initial prototype to prioritize and try further development.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/evals-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>In the above diagram's case, you might conclude that one common error mode is that it is struggling with the dates. In that case, one thing you might consider would be to of course figure out how to improve your system to make it extract due dates better, but also maybe write an eval to measure the accuracy with which it is extracting due dates.</p>
+<p>So one of the reasons why building a quick and dirty system and looking at the output is so helpful is it even helps you decide what do you want to put the most effort into evaluating.</p>
+<p>So this is what improving an Agentic AI workflow will often feel like. Look at the output, see what's wrong, then if you know how to fix it, just fix it. But if you need a longer process of improving it, then put in place an eval and use that to drive further development.</p>
+<p>One other thing to consider is if after working for a while, if you think those 20 examples (as seen in the above diagram) you had initially aren't good enough, maybe they don't cover all the cases you want, or maybe 20 examples is just too few, then you can always add to the eval set over time to make sure it better reflects your personal judgments on whether or not the system's performance is sufficiently satisfactory. This is just one example.</p>
+<p>In order to think about how to build evals for your application, the evals you build will often have to reflect whatever you see or you're worried about going wrong in your application. And it turns out that broadly, there are two axes of evaluation.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/evals-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>As seen in the above diagram, it turns out that broadly, there are two axes of evaluation. On the top axis is the way you evaluate the output. In some cases, you evaluate it by writing code with objective evals, and sometimes you use an LLM-as-a-judge for more subjective evals. On the other axis is whether you have a per-example ground truth or not. So for checking invoice date extraction, we were writing code to evaluate if we got the actual date, and that had a per-example ground truth because each invoice has a different actual date. But in the example where we checked marketing copy length, every example had a length limit of 10, and so there was no per-example ground truth for that problem. In contrast, for counting gold standard talking points, there was a per-example ground truth because each article had different important talking points. But we used an LLM-as-a-judge to read the essay to see if those topics were adequately mentioned because there's so many different ways to mention the talking points. And the last of the four quadrants would be LLM-as-a-judge with no per-example ground truth. And one place where we saw that was if you are grading charts with a rubric. This is when we're looking at visualizing the coffee machine sales, and if you ask it to create a chart according to a rubric, such as whether it's clear access labels and so on, there is the same rubric for every chart, and that would be using an LLM-as-a-judge but without a per-example ground truth.</p>
+<p>And by the way, those are sometimes also called end-to-end evals because one end is the input end, which is the user query prompt, and the other end is the final output. And so all of these are evals for the entire end-to-end system's performance.</p>
+<p>Finally, some quick tips on this.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/evals-3.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<h3 id="error-analysis-and-prioritizing-next-steps"><strong>Error Analysis and Prioritizing next steps</strong><a class="headerlink" href="#error-analysis-and-prioritizing-next-steps" title="Permanent link">&para;</a></h3>
+<p>Let's say you've built an agentic workflow and if it's not yet working as well as you wish, the question is where do you focus your efforts to make it better? Turns out agentic workflows have many different components and working on some of the components could be much more fruitful than working on some other components. So your skill at choosing where to focus your efforts makes a huge difference in the speed with which you can make improvements to your system. And I found that one of the biggest predictors for how efficient and how good a team is, is whether or not they're able to drive a disciplined error analysis process to tell you where to focus your efforts. So this is an important skill.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/error-analysis-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>So it turns out that there are teams that sometimes look at this and go by gut to pick one of these components to work on and sometimes that works and sometimes that leads to many months of work with very little progress in the overall performance of the system. So rather than going by gut to decide which of these many components to work on, I think it's much better to carry out an error analysis to better understand each step in the workflow. And in particular, I'll often examine the traces and that means the intermediate output after each step in order to understand which component's performance is subpar, meaning say much worse than what a human expert would do, because that points to where there may be room for security improvement.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/error-analysis-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>To introduce some terminology, the overall set of outputs of all of the intermediate steps is often called the <em>trace</em> of a run of this agent. And then some terminology you see in other sources as well is the output of a single step is sometimes called a <em>span</em> (This is terminology from the computer observability literature where people try to figure out what computers are doing).</p>
+<p>Below is a table diagram of how error analysis debugging is done to focus on which component to focus on for improving first.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/error-analysis-3.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>And some tips for error analysis.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/error-analysis-4.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<h3 id="more-error-analysis-examples"><strong>More Error Analysis examples</strong><a class="headerlink" href="#more-error-analysis-examples" title="Permanent link">&para;</a></h3>
+<p>In the previous section, we saw how we can perform error analysis in the research agent example. Here, we will look at a few more. As for many developers, it's only by seeing multiple examples that you can then get practice and hone your intuitions about how to carry out error analysis.</p>
+<p>Other two examples are invoice processing and responding to customer emails. Also, the percentages in the respective second images will not add up to 100% because the errors are not mutually exclusive.</p>
+<p>Invoicing error analysis:</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/invoice-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/invoice-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Customer email analysis:</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/customer-email-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/customer-email-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Next, we will see how instead of doing end-to-end analysis of the entire system, how we can do a component based one.</p>
+<h3 id="component-level-evaluations"><strong>Component-level evaluations</strong><a class="headerlink" href="#component-level-evaluations" title="Permanent link">&para;</a></h3>
+<p>Let's take a look at how to build and use component-level evals. In our example of a research agent, we said that the research agent was sometimes missing key points. But if the problem was web search, if every time we change the web search engine, we need to rerun the entire workflow, that can give us a good metric for performance, but <em>that type of eval is expensive</em>. Moreover, this is a pretty complicated workflow, so even if web search made things a little bit better, maybe noise introduced by the randomness of other components would make it harder to see little improvements to the web search quality.</p>
+<p>So as an alternative to only using end-to-end evals, what I would do is consider building an eval just to measure the quality of the web search component. For example, to measure the quality of the web search results, you might create a list of gold standard web resources. So for a handful of queries, have an expert say, these are the most authoritative sources that if someone was searching the internet, they really should find these web pages or any of these web pages would be good.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/component-analysis-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>And then you can write code to capture how many of the web search outputs correspond to the gold standard web resources. The standard metrics from information retrieval, the F1 score, but there are standard metrics that allow you to measure of a list of web pages returned by web search, how much does that overlap with what an expert determined are the gold standard web resources. With this, you're now armed with a way to evaluate just the quality of the web search component.</p>
+<p>And so as you vary the parameters or hyperparameters of how you care about web search, such as if you swap in and out different web search engines, so maybe try Google and Bing and Dr. Go and Tivoli and U.com and others, or as you vary the number of results or as you vary the date range that you ask the web search engines to search over, this can very quickly let you judge if the quality of the web search component is going up and does make more incremental improvements. And then of course, before you call the job done, it would be good to run an end-to-end eval to make sure that after tuning your web search system for a while that you are improving the overall system performance.</p>
+<p>But during that process of tuning these hyperparameters one at a time, you could do so much more efficiently by evaluating just one component rather than needing to rerun end-to-end evals every single time.</p>
+<p>So component level evals can provide a clearer signal for specific errors. It actually lets you know if you're improving the web search component or whatever component you're working on and avoid the noise in the complexity of the overall end-to-end system. And if you're working on a project where you have different teams focused on different components, it can also be more efficient for one team to just have his own very clear metric to optimize without needing to worry about all of the other components. And so this lets the team work on a smaller, more targeted problem faster. So when you've decided to work on improving a component, consider if it's worth putting in place a component-wise eval and if that will let you go faster on improving the performance of that component.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/component-analysis-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Now the one thing you may be wondering is, if you decided to improve a component, how do you actually go about making that one component work better?</p>
+<h3 id="how-to-address-problems-you-identify"><strong>How to address problems you identify</strong><a class="headerlink" href="#how-to-address-problems-you-identify" title="Permanent link">&para;</a></h3>
+<p>An agentic workflow may comprise many different types of components, and so your tools for improving different components will be pretty different.</p>
+<p>For the component which is non-LLM dependant:</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/non-llm-comp.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>For LLM based component (Here keep fine tuning as the very last resort as its too expensive to implement. Rather focus on improving your intuition on which model among the pool of models perform best for respective tasks):</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/llm-comp.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p><em>Smaller models (~8b range types) are maybe not as good as the larger ones in following instructions. But its better to label that different models are better for different tasks.</em></p>
+<p><em>Next would be to keep reading other peoples prompts to see what works and why (after having learnt the art of structuring your prompt).</em></p>
+<h3 id="latency-cost-optimization"><strong>Latency, cost optimization</strong><a class="headerlink" href="#latency-cost-optimization" title="Permanent link">&para;</a></h3>
+<p>When you start developing, usually the number one thing to worry about is just are the outputs sufficiently high quality. But then when the system is working well and you put in the production, then there's often value to make it run faster as well as run at lower cost as well. Here is where latency and cost optimization comes in (and personally I have always found this to be a HUGE deal breaker at the end).</p>
+<p>For latency, Time the workflow for each step.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/latency.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>For cost optimization, Cost per tokens check for each step.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/cost-opt.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<h3 id="development-process-summary"><strong>Development process summary</strong><a class="headerlink" href="#development-process-summary" title="Permanent link">&para;</a></h3>
+<p>We've seen mainly tips in this module, now lets just have a quick look at how this entire process looks like while going through it.</p>
+<p>When we're building these workflows, there are two major activities where we often spending time on. One is <em>building</em>, so writing software, trying to write code to improve my system. And the second, which sometimes doesn't feel like progress, but is equally important, is <em>analysis</em> to help me decide where to focus my build efforts next. And we often go back and forth between building and analyzing, including things like error analysis.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-4/dev-process.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>So the workflow of building an agentic system often goes back and forth. It's not a linear process. We sometimes tune the end-to-end system, then do some error analysis, then improve a component for a bit, then tune the component-level evals.</p>
+<div class="admonition note">
+<p class="admonition-title">Code implemetations of the ungraded labs for this can be found in the repo mentioned at the start of this blog! There was no graded lab for this.</p>
+</div>
+<p>&nbsp;</p>
+<h2 id="patterns-for-highly-autonomous-agents"><strong>Patterns for Highly Autonomous Agents</strong><a class="headerlink" href="#patterns-for-highly-autonomous-agents" title="Permanent link">&para;</a></h2>
+<hr />
+<p>This section I felt was highly illustrative so I have added the slides which I thought would be essential and relavent during revision. I have added necessary points wherever necessary as well.</p>
+<h3 id="planning-workflows"><strong>Planning workflows</strong><a class="headerlink" href="#planning-workflows" title="Permanent link">&para;</a></h3>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/planning-workflow-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/planning-workflow-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/planning-workflow-3.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/planning-workflow-4.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<h3 id="creating-and-executing-llm-plans"><strong>Creating and executing LLM plans</strong><a class="headerlink" href="#creating-and-executing-llm-plans" title="Permanent link">&para;</a></h3>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/creating-plans.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Here, apart from JSON, people also use XML, and last resort is ofcouse via Text.</p>
+<h3 id="planning-with-code-execution"><strong>Planning with code execution</strong><a class="headerlink" href="#planning-with-code-execution" title="Permanent link">&para;</a></h3>
+<p>Planning with code execution is the idea that, instead of asking an LLM to output a plan in, say, JSON format to execute one step at a time, why not have the LLM just try to write code and that code can capture multiple steps of the plan, like call this function, then call this function, then call this function, and by executing code generated by the LLM, we can actually carry outfairly complex plans. Let's take a look at when you might want to use this technique.</p>
+<p>Let's say you want to build a system to answer questions about coffee machine sales based on a spreadsheet with data like this of previous sales. You might have an LLM with a set of tools like these to get column max, to look at a certain column and get the maximum value, so there's a whole answer, what's the most expensive coffee, or get column mean, filter rows, get column min, get column median, sum rows, and so on. So these are examples of a range of tools you might give an LLM to process this spreadsheet or these rows and columns of data in different ways. Now, if a user were to ask which month had the highest sales of hot chocolate, it turns out that you can answer this query using these tools, but it's pretty complicated. You'd have to use filter rows to extract transactions in January for hot chocolate, then do stats on that, and then repeat for February, figure out stats on that, then repeat for March, repeat for April, repeat for May, all the way through December, and then take the max, and so you can actually string it together with a pretty complicated process using these tools, but it's not such a great solution. But worse, whether someone to ask how many unique transactions were there last week, well, these tools are insufficient to get that answer, so you may end up creating a new tool, get unique entries, or you may run into another query, what were the amounts of last five transactions, then you have to create yet another tool to get the data to answer that query.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/code-execution-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/code-execution-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>And in practice, we've seen teams, when they run across more and more queries, end up creating more and more and more and more tools to try to give the other enough tools to cover all the range of things someone may ask about a dataset like this. So this approach is brittle, inefficient, and I've seen teams continuously dealing with edge cases and trying to create more tools, but it turns out there is a better way, which is if you were to prompt LLM to say, please write code to solve the user's query and return your answer as Python code, maybe delimited with these beginning and ending execute Python XML tags, then LLM can just write code to load the spreadsheet into a data processing library, here it's using the pandas library, and then here it actually is coming up with a plan.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/code-execution-3.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/code-execution-4.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>The plan is, after loading the CSV, first it has to ensure the date column is parsed a certain way, then sort by the date, select the last five transactions, show just the price column, and so on. But these are the steps one, two, three, and four, and five, say, of the plan. Because a programming language like Python, and in this example, also with the pandas data processing library imported, because this has many built-in functions, hundreds or even thousands of functions, and moreover, these are functions that the LLM has seen a lot of data on how to call when. By letting your LLM write code, it can choose from these hundreds or thousands of relevant functions that it's already seen a lot of data on when to use, so this lets it string together different choices of functions to call from this very large library in order to come up with a plan for answering a fairly complex query like this.</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/code-execution-5.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Lastly, it turns out that planning with code works well. From this diagram adapted from a research paper by Xinyao Wang and others, you can see that for many different models for the tasks that they examined, code as action in which the LLM is invited to write code and take actions through code, that is superior to having it write JSON and then translate JSON into action or text. And you also see a trend that writing code outperforms having the LLM write a plan in JSON, and writing a plan in JSON is also a bit better than writing a plan in just plain text. Now, of course, there are applications where you might want to give your custom tools to an LLM to use, and so writing code isn't for every single application. But when it does apply, it can be a very powerful way for an LLM to express a plan.</p>
+<h3 id="multi-agentic-workflows"><strong>Multi-agentic workflows</strong><a class="headerlink" href="#multi-agentic-workflows" title="Permanent link">&para;</a></h3>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/multi-agent-workflow-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/multi-agent-workflow-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/multi-agent-workflow-3.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/multi-agent-workflow-4.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<h3 id="communication-patterns-for-multi-agent-systems"><strong>Communication patterns for multi-agent systems</strong><a class="headerlink" href="#communication-patterns-for-multi-agent-systems" title="Permanent link">&para;</a></h3>
+<p>This is an extension to the above diagrams^</p>
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/multi-agent-communications-1.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/multi-agent-communications-2.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<div align="center">
+<img src="/assets/images/blog-assets/post-4-assets/module-5/multi-agent-communications-3.png" alt="Agentic AI" width="80%" style="border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+</div>
+
+<p>Note: All-to-all approach is not really feasible at the moment so we normally would avoid that.</p>
+<div class="admonition note">
+<p class="admonition-title">Code implemetations of the graded/ungraded labs for this can be found in the repo mentioned at the start of this blog!</p>
+</div>
+<p>&nbsp;</p>
+<h2 id="final-notes"><strong>Final notes</strong><a class="headerlink" href="#final-notes" title="Permanent link">&para;</a></h2>
+<hr />
+<p>That’s the end of this! The course was absolutely amazing, took me about a week to wrap it up, and I’d 100% recommend y’all watch it as well.</p>
+<p>You’ll also notice this kind of felt like introductory content, but I think it covers the essentials and gives us a good idea of how to first identify an agentic system and how we can actually label our work as a 'qualified agent' (since there are many projects out there that claim they are actually "agents," haha).</p>
+<p>You can find the course on the <a href="https://learn.deeplearning.ai/courses/agentic-ai/lesson/pu5xbv/welcome!">official deeplearning.ai website</a> and all of the images above are credited to them. I hold no ownership of them and am only using them for purely educational and informational purposes (and am not commercializing this content in any way).</p>
+<p>Thank you for reading, now we move on to the next one! Happy learning :)</p>
+<p>&nbsp;</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+        
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../07/the-journey-of-optimization/" class="md-footer__link md-footer__link--prev" aria-label="Previous: The Journey of Optimization">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                The Journey of Optimization
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../../11/13/model-context-protocol-hands-on/" class="md-footer__link md-footer__link--next" aria-label="Next: Model Context Protocol (Hands-on)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Model Context Protocol (Hands-on)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024-2026 Muhammed Muzzammil Shah
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://muhammedshah.com" target="_blank" rel="noopener" title="muhammedshah.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2m-5.15 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56M14.34 14H9.66c-.1-.66-.16-1.32-.16-2s.06-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2M12 19.96c-.83-1.2-1.5-2.53-1.91-3.96h3.82c-.41 1.43-1.08 2.76-1.91 3.96M8 8H5.08A7.92 7.92 0 0 1 9.4 4.44C8.8 5.55 8.35 6.75 8 8m-2.92 8H8c.35 1.25.8 2.45 1.4 3.56A8 8 0 0 1 5.08 16m-.82-2C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2M12 4.03c.83 1.2 1.5 2.54 1.91 3.97h-3.82c.41-1.43 1.08-2.77 1.91-3.97M18.92 8h-2.95a15.7 15.7 0 0 0-1.38-3.56c1.84.63 3.37 1.9 4.33 3.56M12 2C6.47 2 2 6.5 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://linkedin.com/in/muhammed-shah" target="_blank" rel="noopener" title="linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/muzzammilshah" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.top", "navigation.path", "navigation.sections", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../../../javascripts/macros-utils/x-twitter-widget.js"></script>
+      
+    
+  </body>
+</html>
