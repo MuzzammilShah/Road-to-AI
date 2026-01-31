@@ -1,8 +1,8 @@
-# **:simple-openai: TRANSFORMER MODEL - GPT 2**
+# **:material-code-block-tags: TRANSFORMER MODEL - GPT 2**
 
-!!! warning "Ongoing project"
+!!! warning "This project is on a Hiatus due to different ongoing priorities. It's already halfway done, so I'd would love to come back to this soon :)"
 
-**Timeline: 6th April, 2025 - PRESENT (Weekends only)**
+**Timeline: 6th April - 25th May, 2025 (On a Hiatus)**
 
 ## Introduction
 
