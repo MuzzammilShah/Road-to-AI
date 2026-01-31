@@ -23,7 +23,7 @@ The learning resources are divided into three primary sections: **Language Model
 |Topic | Implementation of | Lecture Link | Documentation Status |
 |------|--------|------|------|
 |Transformer Model-1 (GPT)|Build GPT|[Read notes](GPT-1/index.md)| :material-progress-check: Done |
-|Transformer Model-2 (GPT)|Reproducing GPT-2|[Read notes](GPT-2/index.md)| :material-progress-clock: Ongoing |
+|Transformer Model-2 (GPT)|Reproducing GPT-2|[Read notes](GPT-2/index.md)| :material-progress-alert: On a Hiatus |
 |Tokenizers|Build GPT Tokenizer|[Read notes](GPT-Tokenizer/index.md)| :material-progress-alert: - |
 
 **III. 🧩 General MISC**

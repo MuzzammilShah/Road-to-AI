@@ -147,8 +147,8 @@ markdown_extensions:
   - toc:
       permalink: true
       toc_depth: 2
+  - md_in_html    
   - attr_list
-  - md_in_html
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
@@ -169,7 +169,7 @@ extra:
     - icon: material/web
       link: https://muhammedshah.com
     - icon: fontawesome/brands/linkedin
-      link: https://linkedin.com/muhammedshah
+      link: https://linkedin.com/in/muhammed-shah
     - icon: simple/github
       link: https://github.com/muzzammilshah
   debug:

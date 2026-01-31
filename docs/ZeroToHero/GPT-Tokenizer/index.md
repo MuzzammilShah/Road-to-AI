@@ -1,3 +1,3 @@
-# **:simple-openai: TOKENIZATION**
+# **:material-head-dots-horizontal-outline: TOKENIZATION**
 
 COMING SOON

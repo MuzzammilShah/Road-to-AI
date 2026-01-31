@@ -3,7 +3,7 @@ hide:
   - navigation
 --- -->
 
-# **:simple-openai: TRANSFORMER MODEL - GPT 1**
+# **:material-code-block-tags: TRANSFORMER MODEL - GPT 1**
 
 **Timeline: 11th - 21st February, 2025**
 
