@@ -140,9 +140,6 @@ nav:
       - Retrieval Augmented Generation: Books/AI-Engineering/chapter-6-a.md
       - AI Agents: Books/AI-Engineering/chapter-6-b.md
 
-  - Blog:
-    - blog/index.md
-
 markdown_extensions:
   - toc:
       permalink: true
