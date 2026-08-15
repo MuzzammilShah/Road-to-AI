@@ -2,6 +2,7 @@ site_name: "Road to AI"
 
 theme:
   name: material
+  custom_dir: overrides
   icon:
     logo: octicons/ai-model-16
     admonition:
@@ -10,7 +11,7 @@ theme:
       info: material/alert-circle
       question: material/head-question-outline
     
-  favicon: assets/images/favicon.png
+  favicon: assets/images/docs-logo.png
   font:
     text: "Inter"
 
