@@ -1,0 +1,105 @@
+/* ツイート埋め込みのコンテナスタイル */
+.x-twitter-embed {
+   margin: 1rem auto;
+   /* 上下に1rem、左右は自動でマージンを設定（中央寄せ） */
+   max-width: 550px;
+   /* 最大幅を550pxに制限 */
+   width: 100%;
+   /* 親要素の幅いっぱいに広げる */
+   display: flex;
+   /* フレックスボックスレイアウトを使用 */
+   justify-content: center;
+   /* 水平方向の中央寄せ */
+   align-items: center;
+   /* 垂直方向の中央寄せ */
+}
+
+/* ツイート本体のスタイル調整 */
+.twitter-tweet {
+   border-radius: 16px !important;
+   /* 角を丸める */
+   overflow: hidden !important;
+   /* はみ出た部分を隠す */
+   margin: 0 !important;
+   /* マージンをリセット */
+   width: 100% !important;
+   /* 親要素の幅いっぱいに広げる */
+}
+
+/* レンダリング済みツイートのスタイル */
+.twitter-tweet.twitter-tweet-rendered {
+   border-radius: 16px !important;
+   /* 角を丸める */
+   overflow: hidden !important;
+   /* はみ出た部分を隠す */
+   margin: 0 auto !important;
+   /* 上下マージンなし、左右auto（中央寄せ） */
+   width: 100% !important;
+   /* 親要素の幅いっぱいに広げる */
+}
+
+/* 埋め込みiframeのスタイル */
+iframe.twitter-tweet-rendered {
+   border-radius: 16px !important;
+   /* 角を丸める */
+   margin: 0 auto !important;
+   /* 上下マージンなし、左右auto（中央寄せ） */
+   width: 100% !important;
+   /* 親要素の幅いっぱいに広げる */
+   min-width: 0 !important;
+   /* モバイル表示時の最小幅を0に設定（はみ出し防止） */
+}
+
+/* ダークモード時のスタイル調整 */
+[data-md-color-scheme="slate"] .twitter-tweet {
+   background-color: #1e2029 !important;
+   /* ダークモード時の背景色 */
+   border: 1px solid rgba(255, 255, 255, 0.12) !important;
+   /* ダークモード時の枠線 */
+}
+
+/* ライトモード時のスタイル調整 */
+[data-md-color-scheme="default"] .twitter-tweet {
+   background-color: #ffffff !important;
+   /* ライトモード時の背景色 */
+   border: 1px solid rgba(0, 0, 0, 0.12) !important;
+   /* ライトモード時の枠線 */
+}
+
+/* タブレットサイズ向けのレスポンシブ対応 */
+@media screen and (max-width: 550px) {
+   .x-twitter-embed {
+      margin: 1rem 0.5rem;
+      /* 上下1rem、左右0.5remのマージン */
+      width: auto;
+      /* 幅を自動調整 */
+   }
+
+   /* ツイートコンテンツの幅調整 */
+   .twitter-tweet,
+   .twitter-tweet.twitter-tweet-rendered,
+   iframe.twitter-tweet-rendered {
+      width: 100% !important;
+      /* 親要素の幅いっぱいに広げる */
+      max-width: 100% !important;
+      /* 最大幅を親要素に合わせる */
+      margin: 0 !important;
+      /* マージンをリセット */
+   }
+
+   /* iframeのはみ出し防止 */
+   iframe {
+      max-width: 100% !important;
+      /* 最大幅を親要素に合わせる */
+      width: 100% !important;
+      /* 親要素の幅いっぱいに広げる */
+   }
+}
+
+/* スマートフォンサイズ向けの調整 */
+@media screen and (max-width: 400px) {
+   .x-twitter-embed {
+      margin: 1rem 0.25rem;
+      /* 上下1rem、左右0.25remのマージン（より狭く） */
+   }
+}

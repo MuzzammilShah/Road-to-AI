@@ -1,0 +1,217 @@
+/* カスタムリンクカードのスタイル定義 */
+/* General styles */
+.custom-link-card {
+    display: flex;
+    /* フレックスボックスでレイアウト */
+    background: #fff;
+    /* カードの背景色 */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    /* 透過性のある境界線 */
+    border-radius: 8px;
+    /* 角を丸くする */
+    padding: 16px;
+    /* 内側の余白 */
+    margin: 16px 0;
+    /* カード間の余白 */
+    align-items: center;
+    /* 垂直方向の中央揃え */
+    color: rgba(0, 0, 0, 0.87);
+    /* テキストの色（87%の不透明度で読みやすさを確保） */
+    cursor: pointer;
+    /* ホバー時のポインタスタイル変更でクリック可能を示す */
+    transition: background-color 0.2s;
+    /* 背景色変更時の0.2秒のスムーズなアニメーション */
+}
+
+/* ホバー時のスタイル */
+.custom-link-card:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    /* ホバー時の背景色（5%の黒で微妙な強調） */
+}
+
+/* カードのメインコンテンツ領域 */
+.custom-link-card-content {
+    flex: 1;
+    /* 残りのスペースを全て占有し、画像とバランスを取る */
+    padding-right: 16px;
+    /* コンテンツと画像の間の余白確保 */
+    display: flex;
+    /* フレックスボックスでコンテンツを縦に配置 */
+    flex-direction: column;
+    /* 縦方向のレイアウト */
+    justify-content: flex-start;
+    /* コンテンツを上から配置 */
+    min-height: 100px;
+    /* 最小高さを設定して一貫性を維持 */
+}
+
+/* カードのタイトル部分 */
+/*
+タイトルの色設定について：
+1. 現在の設定：MkDocs Materialのテーマカラーに連動
+   - ライトモード: var(--md-primary-fg-color)
+   - ダークモード: var(--md-primary-fg-color--light)
+
+2. 固定カラーを使用する場合：
+   特定の色（例：Material Design Indigo）の方が視認性が良い場合は、
+   以下のように直接色を指定することもできます：
+
+   .custom-link-card-title {
+       color: #3f51b5;
+   }
+
+   [data-md-color-scheme="slate"] .custom-link-card-title {
+       color: #2196f3;
+   }
+
+   注: インディゴの場合、これらの値が最も読みやすい結果となることがテストで確認されています。
+*/
+.custom-link-card-title {
+    font-weight: bold;
+    /* タイトルを太字で強調 */
+    font-size: 1.2em;
+    /* 基本フォントサイズの1.2倍 */
+    margin-bottom: 8px;
+    /* タイトルと説明文の間の余白 */
+    color: var(--md-primary-fg-color);
+    /* テーマのプライマリカラーを使用 */
+    /* color: #2196f3; */
+    /* 特定の色を使用する場合 */
+}
+
+/* カードの説明文 */
+.custom-link-card-description {
+    font-size: 0.9em;
+    /* 基本フォントサイズの0.9倍で読みやすさを確保 */
+    margin-bottom: 8px;
+    /* 説明文とドメイン名の間の余白 */
+    color: rgba(0, 0, 0, 0.87);
+    /* メインテキストと同じ色で統一感を出す */
+}
+
+/* ドメイン名表示部分 */
+.custom-link-card-domain {
+    font-size: 0.8em;
+    /* 基本フォントサイズの0.8倍で補足情報であることを示す */
+    color: #666;
+    /* グレーで補足的な情報であることを示す */
+    text-decoration: underline;
+    /* 下線でリンクであることを示す */
+}
+
+/* カード内の画像スタイル */
+.custom-link-card-image {
+    width: 180px;
+    /* 画像の固定幅を設定 */
+    height: auto;
+    /* 高さは幅に応じて自動調整 */
+    object-fit: contain;
+    /* アスペクト比を保ちながら画像をボックス内に収める */
+    border-radius: 4px;
+    /* 画像の角を少し丸める */
+    margin-left: 16px;
+    /* コンテンツとの間隔を確保 */
+}
+
+/* ダークモード用のスタイル定義 */
+/* Dark mode styles */
+[data-md-color-scheme="slate"] .custom-link-card {
+    background: #2e303e;
+    /* ダークモードの背景色（より目に優しい暗い色） */
+    border-color: rgba(255, 255, 255, 0.1);
+    /* 境界線を薄い白で表示 */
+    color: rgba(255, 255, 255, 0.87);
+    /* テキストを明るい色で表示（87%の不透明度） */
+}
+
+/* ダークモード時のホバースタイル */
+[data-md-color-scheme="slate"] .custom-link-card:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    /* ホバー時は微かに明るく */
+}
+
+/* ダークモード時のタイトルスタイル */
+[data-md-color-scheme="slate"] .custom-link-card-title {
+    color: var(--md-primary-fg-color--light);
+    /* ダークモード時は明るい色のバリエーションを使用 */
+    /* color: #2196f3; */
+    /* 特定の色を使用する場合 */
+}
+
+/* ダークモード時の説明文スタイル */
+[data-md-color-scheme="slate"] .custom-link-card-description {
+    color: rgba(255, 255, 255, 0.87);
+    /* 説明文も明るい色で表示 */
+}
+
+/* ダークモード時のドメイン名スタイル */
+[data-md-color-scheme="slate"] .custom-link-card-domain {
+    color: rgba(255, 255, 255, 0.6);
+    /* ドメイン名は少し暗めの白で表示 */
+}
+
+/* SVGアイコンのスタイル設定 */
+/* SVGパスのカラー設定 */
+.custom-link-card-image .custom-link-card-icon {
+    fill: #333333;
+    /* ライトモードでのSVGの色 */
+}
+
+/* ダークモード時のSVGパスカラー */
+[data-md-color-scheme="slate"] .custom-link-card-image .custom-link-card-icon {
+    fill: #ffffff;
+    /* ダークモードでのSVGの色 */
+}
+
+/* SVGアイコンの余白設定 */
+.custom-link-card-image svg {
+    padding: 10px;
+    /* アイコンの周りに余白を設定 */
+}
+
+/* レスポンシブデザイン用のスタイル */
+/* Responsive styles */
+@media (max-width: 600px) {
+    .custom-link-card {
+        flex-direction: column;
+        /* モバイル表示時は縦方向にレイアウト */
+        align-items: flex-start;
+        /* 左揃えを維持 */
+    }
+
+    .custom-link-card-content {
+        width: 100%;
+        /* コンテンツ幅を最大に */
+        min-height: auto;
+        /* モバイル時は最小高さを解除 */
+        margin-bottom: 16px;
+        /* コンテンツと画像の間隔を確保 */
+        padding-right: 0;
+        /* 右パディングをリセット */
+    }
+
+    .custom-link-card-image {
+        width: 100%;
+        /* 画像幅を親要素に合わせる */
+        display: flex;
+        /* フレックスボックスで中央配置 */
+        justify-content: center;
+        /* 水平方向の中央揃え */
+        margin: 16px 0;
+        /* 上下の余白を追加 */
+    }
+
+    .custom-link-card-image img,
+    .custom-link-card-image svg {
+        max-width: 180px;
+        /* 画像とSVGの最大幅を制限 */
+        max-height: 180px;
+        /* 最大高さを設定 */
+        width: auto;
+        /* 幅を自動調整 */
+        height: auto;
+        /* 高さを自動調整 */
+        margin: 0 auto;
+        /* 中央配置 */
+    }
+}
