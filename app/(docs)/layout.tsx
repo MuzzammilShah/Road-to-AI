@@ -1,4 +1,5 @@
 import { DocsLayout } from 'fumadocs-ui/layouts/spacious';
+import { CollapsedSidebarControls } from '@/components/collapsed-sidebar-controls';
 import { baseOptions } from '@/lib/layout.shared';
 import { source } from '@/lib/source';
 
@@ -14,6 +15,8 @@ export default function Layout({ children }: LayoutProps<'/'>) {
       links={[]}
     >
       {children}
+      {/* Classic-layout pill (open sidebar + search) while the sidebar is collapsed. */}
+      <CollapsedSidebarControls />
     </DocsLayout>
   );
 }

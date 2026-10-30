@@ -129,3 +129,18 @@ html > body[data-scroll-locked] {
     margin: 1rem 0.25rem;
   }
 }
+
+/*
+ * Collapsed sidebar (spacious layout): components/collapsed-sidebar-controls.tsx shows the classic
+ * "open sidebar + search" pill at the top-left, so hide the layout's own expand button (the first
+ * button in the page header, only rendered while collapsed) and start the breadcrumb after the pill.
+ */
+@media (min-width: 768px) {
+  #fd-spacious-layout:has([data-collapsed="true"]) #nd-page-panel > header > button:first-child {
+    display: none;
+  }
+
+  #fd-spacious-layout:has([data-collapsed="true"]) #nd-page-panel > header {
+    padding-inline-start: 5.5rem;
+  }
+}

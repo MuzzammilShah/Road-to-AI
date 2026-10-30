@@ -20,8 +20,10 @@ export default async function Page(props: PageProps<'/[...slug]'>) {
     <DocsPage
       toc={page.data.toc}
       full={page.data.full}
-      tableOfContent={{ enabled: !page.data.hideToc }}
-      tableOfContentPopover={{ enabled: !page.data.hideToc }}
+      // 'normal' = the classic layout's TOC (thin line with a sliding indicator); spacious defaults
+      // to 'block'.
+      tableOfContent={{ enabled: !page.data.hideToc, style: 'normal' }}
+      tableOfContentPopover={{ enabled: !page.data.hideToc, style: 'normal' }}
     >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
