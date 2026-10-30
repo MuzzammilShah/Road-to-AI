@@ -1,0 +1,662 @@
+---
+title: "Exercise 1"
+---
+
+{/* Generated from notebooks/ZeroToHero/Makemore-part4/exercise-1.ipynb by scripts/convert-notebooks.mjs. Do not edit: edit the notebook and run `npm run notebooks`. */}
+
+<NotebookDownload href="/notebooks/ZeroToHero/Makemore-part4/exercise-1.ipynb" />
+
+Becoming a backprop ninja - Exercise 1
+
+```python
+import torch
+import torch.nn.functional as F
+import matplotlib.pyplot as plt # for making figures
+%matplotlib inline
+```
+
+```python
+# read in all the words
+words = open('names.txt', 'r').read().splitlines()
+print(len(words))
+print(max(len(w) for w in words))
+print(words[:8])
+```
+
+```text title="Output"
+32033
+15
+['emma', 'olivia', 'ava', 'isabella', 'sophia', 'charlotte', 'mia', 'amelia']
+```
+
+```python
+# build the vocabulary of characters and mappings to/from integers
+chars = sorted(list(set(''.join(words))))
+stoi = {s:i+1 for i,s in enumerate(chars)}
+stoi['.'] = 0
+itos = {i:s for s,i in stoi.items()}
+vocab_size = len(itos)
+print(itos)
+print(vocab_size)
+```
+
+```text title="Output"
+{1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'f', 7: 'g', 8: 'h', 9: 'i', 10: 'j', 11: 'k', 12: 'l', 13: 'm', 14: 'n', 15: 'o', 16: 'p', 17: 'q', 18: 'r', 19: 's', 20: 't', 21: 'u', 22: 'v', 23: 'w', 24: 'x', 25: 'y', 26: 'z', 0: '.'}
+27
+```
+
+```python
+# build the dataset
+block_size = 3 # context length: how many characters do we take to predict the next one?
+
+def build_dataset(words):
+  X, Y = [], []
+
+  for w in words:
+    context = [0] * block_size
+    for ch in w + '.':
+      ix = stoi[ch]
+      X.append(context)
+      Y.append(ix)
+      context = context[1:] + [ix] # crop and append
+
+  X = torch.tensor(X)
+  Y = torch.tensor(Y)
+  print(X.shape, Y.shape)
+  return X, Y
+
+import random
+random.seed(42)
+random.shuffle(words)
+n1 = int(0.8*len(words))
+n2 = int(0.9*len(words))
+
+Xtr,  Ytr  = build_dataset(words[:n1])     # 80%
+Xdev, Ydev = build_dataset(words[n1:n2])   # 10%
+Xte,  Yte  = build_dataset(words[n2:])     # 10%
+```
+
+```text title="Output"
+torch.Size([182625, 3]) torch.Size([182625])
+torch.Size([22655, 3]) torch.Size([22655])
+torch.Size([22866, 3]) torch.Size([22866])
+```
+
+```python
+# ok biolerplate done, now we get to the action:
+```
+
+```python
+# utility function we will use later when comparing manual gradients to PyTorch gradients
+def cmp(s, dt, t):
+  ex = torch.all(dt == t.grad).item()
+  app = torch.allclose(dt, t.grad)
+  maxdiff = (dt - t.grad).abs().max().item()
+  print(f'{s:15s} | exact: {str(ex):5s} | approximate: {str(app):5s} | maxdiff: {maxdiff}')
+```
+
+```python
+n_embd = 10 # the dimensionality of the character embedding vectors
+n_hidden = 64 # the number of neurons in the hidden layer of the MLP
+
+g = torch.Generator().manual_seed(2147483647) # for reproducibility
+C  = torch.randn((vocab_size, n_embd),            generator=g)
+# Layer 1
+W1 = torch.randn((n_embd * block_size, n_hidden), generator=g) * (5/3)/((n_embd * block_size)**0.5)
+b1 = torch.randn(n_hidden,                        generator=g) * 0.1 # using b1 just for fun, it's useless because of BN
+# Layer 2
+W2 = torch.randn((n_hidden, vocab_size),          generator=g) * 0.1
+b2 = torch.randn(vocab_size,                      generator=g) * 0.1
+# BatchNorm parameters
+bngain = torch.randn((1, n_hidden))*0.1 + 1.0
+bnbias = torch.randn((1, n_hidden))*0.1
+
+# Note: I am initializating many of these parameters in non-standard ways
+# because sometimes initializating with e.g. all zeros could mask an incorrect
+# implementation of the backward pass.
+
+parameters = [C, W1, b1, W2, b2, bngain, bnbias]
+print(sum(p.nelement() for p in parameters)) # number of parameters in total
+for p in parameters:
+  p.requires_grad = True
+```
+
+```text title="Output"
+4137
+```
+
+```python
+batch_size = 32
+n = batch_size # a shorter variable also, for convenience
+# construct a minibatch
+ix = torch.randint(0, Xtr.shape[0], (batch_size,), generator=g)
+Xb, Yb = Xtr[ix], Ytr[ix] # batch X,Y
+```
+
+```python
+# forward pass, "chunkated" into smaller steps that are possible to backward one at a time
+
+emb = C[Xb] # embed the characters into vectors
+embcat = emb.view(emb.shape[0], -1) # concatenate the vectors
+# Linear layer 1
+hprebn = embcat @ W1 + b1 # hidden layer pre-activation
+# BatchNorm layer
+bnmeani = 1/n*hprebn.sum(0, keepdim=True)
+bndiff = hprebn - bnmeani
+bndiff2 = bndiff**2
+bnvar = 1/(n-1)*(bndiff2).sum(0, keepdim=True) # note: Bessel's correction (dividing by n-1, not n)
+bnvar_inv = (bnvar + 1e-5)**-0.5
+bnraw = bndiff * bnvar_inv
+hpreact = bngain * bnraw + bnbias
+# Non-linearity
+h = torch.tanh(hpreact) # hidden layer
+# Linear layer 2
+logits = h @ W2 + b2 # output layer
+# cross entropy loss (same as F.cross_entropy(logits, Yb))
+logit_maxes = logits.max(1, keepdim=True).values
+norm_logits = logits - logit_maxes # subtract max for numerical stability
+counts = norm_logits.exp()
+counts_sum = counts.sum(1, keepdims=True) #DONE
+counts_sum_inv = counts_sum**-1 # if I use (1.0 / counts_sum) instead then I can't get backprop to be bit exact... #DONE
+probs = counts * counts_sum_inv #DONE
+logprobs = probs.log()  #DONE
+loss = -logprobs[range(n), Yb].mean() #DONE
+
+# PyTorch backward pass
+for p in parameters:
+  p.grad = None
+for t in [logprobs, probs, counts, counts_sum, counts_sum_inv, # afaik there is no cleaner way
+          norm_logits, logit_maxes, logits, h, hpreact, bnraw,
+         bnvar_inv, bnvar, bndiff2, bndiff, hprebn, bnmeani,
+         embcat, emb]:
+  t.retain_grad()
+loss.backward()
+loss
+```
+
+```text title="Output"
+tensor(3.3221, grad_fn=<NegBackward0>)
+```
+
+---------
+
+**EXERCISE 1**
+
+[13:01](https://www.youtube.com/watch?v=q8SA3rM6ckI&t=781s) to [19:05](https://youtu.be/q8SA3rM6ckI?si=mm8M8feWFToF4STA&t=1145) `cmp('logprobs', dlogprobs, logprobs)`
+
+```python
+print(logprobs.shape)
+logprobs[range(n), Yb]
+```
+
+```text title="Output"
+torch.Size([32, 27])
+```
+
+```text title="Output"
+tensor([-4.0562, -3.0820, -3.6629, -3.2621, -4.1229, -3.4201, -3.2428, -3.9554,
+        -3.1259, -4.2500, -3.1582, -1.6256, -2.8483, -2.9654, -2.9990, -3.1882,
+        -3.9132, -3.0643, -3.5065, -3.5153, -2.8832, -3.0837, -4.2941, -4.0007,
+        -3.4440, -2.9220, -3.1386, -3.8946, -2.6488, -3.5292, -3.3408, -3.1560],
+       grad_fn=<IndexBackward0>)
+```
+
+```python
+print(Yb.shape)
+Yb
+```
+
+```text title="Output"
+torch.Size([32])
+```
+
+```text title="Output"
+tensor([ 8, 14, 15, 22,  0, 19,  9, 14,  5,  1, 20,  3,  8, 14, 12,  0, 11,  0,
+        26,  9, 25,  0,  1,  1,  7, 18,  9,  3,  5,  9,  0, 18])
+```
+
+```python
+#simple breakdown
+#now here we know there are 32 examples, for explanation lets assume we only have 3 in total i.e. a,b,c
+
+#loss = - (a + b + c) / 3 ==> so we are basically doing the mean calculation here
+#loss = - (1/3a + 1/3b + 1/3c) ==> same equation
+#so now, when we take the derivative wrt a
+#dloss/da = -1/3 ==>where 3 is the number of elements we consider, so we can also say that it is -1/n, therefore
+#dloss/dn = -1/n
+```
+
+```python
+#So based on our calculation above
+dlogprobs = torch.zeros_like(logprobs) #same as torch.zeros((32, 27)) as we need the same shape as logprobs. So instead of hardcoding the values we did this
+dlogprobs[range(n), Yb] = -1.0/n #as we need to do it for each of the elements in the array
+
+#Now, lets check
+cmp('logprobs', dlogprobs, logprobs)
+```
+
+```text title="Output"
+logprobs        | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[19:06](https://youtu.be/q8SA3rM6ckI?si=mO61nJLwtQpxsjju&t=1146) to [20:55](https://youtu.be/q8SA3rM6ckI?si=fgJsPGOCdJIIRYC9&t=1255) `cmp('probs', dprobs, probs)`
+
+```python
+dprobs = (1.0/probs) * dlogprobs #we had to take the derivative of logprobs, which was 1/x --> d/dx(log(x)) = 1/x 
+#then we multiplied it with dlogprobs (the one we calculated before this for the chainrule)
+
+cmp('probs', dprobs, probs)
+```
+
+```text title="Output"
+probs           | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[20:56](https://youtu.be/q8SA3rM6ckI?si=sNM67lNSfsmUke2Y&t=1256) to [26:21](https://youtu.be/q8SA3rM6ckI?si=5MWGHdf1v-72g5ib&t=1581) `cmp('counts_sum_inv', dcounts_sum_inv, counts_sum_inv)`
+
+```python
+# probs = counts * counts_sum_inv, now here before we do the multiplication, take a look at the matrix dimensions using `.shape`
+# You would see that `counts` would have 3x3 and `counts_sum_inv` will have 3x1
+# So before the backpropagation calculation, there is 'broadcasting' happening where the value of b is been replicated/broadcasted multiple time across the matrix
+
+# Example
+# c = a * b
+# a[3x3] * b[3x1] ---->
+# a[1,1]*b1 + a[1,2]*b1 + a[1,3]*b1
+# a[2,1]*b2 + a[2,2]*b2 + a[2,3]*b2
+# a[3,1]*b3 + a[3,2]*b3 + a[2,3]*b3
+# ====> c[3x3]
+
+# The point of this is just to show that there are two things happening internally: The broadcasting and then the backpropagation
+
+# (first case) The derivative of c wrt b will be a
+# So, here just `counts` will remain -> then `dprobs` is multiplied because chain rule.
+# Finally, in order to make `dcounts_sum_inv` the same dimension as `counts_sum_inv` we sum all of them by 1 and also keepdims as true
+
+dcounts_sum_inv = (counts * dprobs).sum(1, keepdims=True) # So this is our final manually calculated equation
+
+cmp('counts_sum_inv', dcounts_sum_inv, counts_sum_inv)
+```
+
+```text title="Output"
+counts_sum_inv  | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[26:26](https://youtu.be/q8SA3rM6ckI?si=TBwv2QkGmkp-d8JR&t=1586) to [27:56](https://youtu.be/q8SA3rM6ckI?si=awbZx9fZ_-WB_q5M&t=1676) first contribution of `counts`
+
+```python
+# Here we have to calculate the second half of `dcounts` i.e. (Second case) The derivative of c wrt a will be b
+
+dcounts = counts_sum_inv * dprobs
+
+#but we cant compare it yet as `counts` is later depended on top again as well, which we will check
+```
+
+[27:57](https://youtu.be/q8SA3rM6ckI?si=APAFn28Pf8HVpbM3&t=1677) to [28:59](https://youtu.be/q8SA3rM6ckI?si=O5ja7cEm2xS_yuzN&t=1740) `cmp('counts_sum', dcounts_sum, counts_sum)`
+
+```python
+# counts_sum_inv = counts_sum**-1
+
+# Okay so for this, the derivative of x^-1 is -(x^-2)
+
+dcounts_sum = (-counts_sum**-2) * dcounts_sum_inv #Remember for this its the one before the `26:26 to 27:56 first contribution of counts` section
+
+cmp('counts_sum', dcounts_sum, counts_sum)
+```
+
+```text title="Output"
+counts_sum      | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[29:00](https://youtu.be/q8SA3rM6ckI?si=UsxgAcBfiU5GAHaz&t=1740) to [32:26](https://youtu.be/q8SA3rM6ckI?si=nsXvTD-8RWvUAubq&t=1947) `cmp('counts', dcounts, counts)`
+
+```python
+# counts_sum = counts.sum(1, keepdims=True)
+
+# Now here we know the shape of counts_sum is 32 by 1 and the shape of counts is 32 by 27. So we need to broadcast counts_sum 27 times
+# We are dirctly using a PyTorch function where it keeps adding numbers from `counts`
+
+dcounts += torch.ones_like(counts) * dcounts_sum #Also here we are adding `dcounts` as remember this is the second iteration of it, we had calculated one more value of it at the top
+
+cmp('counts', dcounts, counts)
+```
+
+```text title="Output"
+counts          | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[32:27](https://youtu.be/q8SA3rM6ckI?si=nsXvTD-8RWvUAubq&t=1947) to [33:13](https://youtu.be/q8SA3rM6ckI?si=Ydk-b_pmKybrrnxe&t=1994) `cmp('norm_logits', dnorm_logits, norm_logits)`
+
+```python
+# counts = norm_logits.exp()
+
+# Now here, the derivative of `norm_logits.exp()`, now the derivate of e^x is (famously) e^x, so its just `norm_logits.exp()` itself
+# so we can also just write it as `counts` directly  as it holds that value
+
+dnorm_logits = counts * dcounts
+
+cmp('norm_logits', dnorm_logits, norm_logits)
+```
+
+```text title="Output"
+norm_logits     | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[33:14](https://youtu.be/q8SA3rM6ckI?si=GIbBvHKGbW0RvlWf&t=1994) to [36:20](https://youtu.be/q8SA3rM6ckI?si=LGenDRNCeOVsWIkY&t=2180) `cmp('logit_maxes', dlogit_maxes, logit_maxes)`
+
+```python
+# norm_logits = logits - logit_maxes
+
+# Now here if you would look at the shape of all these variables, you would notice that there is internal broadcasting happening here (logit_maxes)
+
+dlogits = dnorm_logits.clone()
+dlogit_maxes = (-dnorm_logits).sum(1, keepdim=True) #WILL HAVE TO REWATCH THIS PART AGAIN, DIDN'T COMPLETELY GET IT
+
+cmp('logit_maxes', dlogit_maxes, logit_maxes)
+```
+
+```text title="Output"
+logit_maxes     | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[38:27](https://youtu.be/q8SA3rM6ckI?si=sVCg29V84Ua56x3H&t=2307) to [41:44](https://youtu.be/q8SA3rM6ckI?si=yHhzlWlaR9J4VBo_&t=2504) `cmp('logits', dlogits, logits)`
+
+```python
+# logit_maxes = logits.max(1, keepdim=True).values
+
+# Here, this step is similar to that of the first one in `dlogprobs` where we used torch.zeros_like() function
+# So we are doing another alternative way of doing that
+
+dlogits += F.one_hot(logits.max(1).indices, num_classes=logits.shape[1]) * dlogit_maxes #Just remember the += here as we already have one dlogits above
+
+cmp('logits', dlogits, logits)
+```
+
+```text title="Output"
+logits          | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[41:45](https://youtu.be/q8SA3rM6ckI?si=wJvhK8v1Hj2sEhc6&t=2505) to [53:25](https://youtu.be/q8SA3rM6ckI?si=xg15htmnJE03afh5&t=3216) `cmp('h', dh, h)`, `cmp('W2', dW2, W2)` and `cmp('b2', db2, b2)` - Bckpropagation through a linear layer
+
+( Till [49:56](https://youtu.be/q8SA3rM6ckI?si=nX-tCDJWXFHTgqi3&t=2996) had theoretical proofs on the matrix multiplication )
+
+```python
+# # Linear layer 2
+# logits = h @ W2 + b2 # output layer
+
+# in `b2` broadcasting is happening
+```
+
+```python
+# Need these for understanding the matrix mulitplication why we are multiplying with what
+dlogits.shape, h.shape, W2.shape, b2.shape
+```
+
+```text title="Output"
+(torch.Size([32, 27]),
+ torch.Size([32, 64]),
+ torch.Size([64, 27]),
+ torch.Size([27]))
+```
+
+```python
+# watch the last few minutes, probably from 51 to see how he broke down this based on the matrix sizes
+dh = dlogits @ W2.T
+dW2 = h.T @ dlogits
+db2 = dlogits.sum(0)
+
+cmp('h', dh, h)
+cmp('W2', dW2, W2)
+cmp('b2', db2, b2)
+```
+
+```text title="Output"
+h               | exact: True  | approximate: True  | maxdiff: 0.0
+W2              | exact: True  | approximate: True  | maxdiff: 0.0
+b2              | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[53:37](https://youtu.be/q8SA3rM6ckI?si=xASEEmeuBmpZwd6B&t=3217) to 55:12 `cmp('hpreact', dhpreact, hpreact)`
+
+```python
+# h = torch.tanh(hpreact) # hidden layer
+
+dhpreact = (1.0 - h**2)*dh #we saw that the derivative of tanh is also (1-a^2) where a was the external variable `a`, not the input `z` to tanh i.e. a = tanh(z)
+
+cmp('hpreact', dhpreact, hpreact)
+```
+
+```text title="Output"
+hpreact         | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[55:13](https://youtu.be/q8SA3rM6ckI?si=7v0ZQ9alRi52gD9s&t=3313) to 59:38 `cmp('bngain', dbngain, bngain)`
+
+```python
+bnraw.shape, bngain.shape, bnbias.shape, dhpreact.shape
+```
+
+```text title="Output"
+(torch.Size([32, 64]),
+ torch.Size([1, 64]),
+ torch.Size([1, 64]),
+ torch.Size([32, 64]))
+```
+
+```python
+# hpreact = bngain * bnraw + bnbias
+
+dbngain = (bnraw * dhpreact).sum(0, keepdim=True) #because dbraw and dhpreact are 32by64, but dbngain expects 1by64 (we also keep the dimension)
+dbnraw = (bngain * dhpreact)
+dbnbias = (dhpreact).sum(0, keepdim=True) #because dhpreact is 32by64 but the dbnbias expects 1by64 (we also keep the dimension)
+
+cmp('bngain', dbngain, bngain)
+cmp('bnbias', dbnbias, bnbias)
+cmp('bnraw', dbnraw, bnraw)
+```
+
+```text title="Output"
+bngain          | exact: True  | approximate: True  | maxdiff: 0.0
+bnbias          | exact: True  | approximate: True  | maxdiff: 0.0
+bnraw           | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[59:40](https://youtu.be/q8SA3rM6ckI?si=RNb8T5WGla37958Q&t=3580) to 1:04:1 `cmp('bnvar_inv', dbnvar_inv, bnvar_inv)`
+
+```python
+# From here we are working on the batch norm layer
+# the code has been spread out and broken down to different parts (based on the equations on the "bottom right corner box" in the paper for batch norm - See prev lecture) inorder to perform manual backprop more easily
+```
+
+```python
+bnraw.shape, bndiff.shape, bnvar_inv.shape
+```
+
+```text title="Output"
+(torch.Size([32, 64]), torch.Size([32, 64]), torch.Size([1, 64]))
+```
+
+```python
+# bnraw = bndiff * bnvar_inv
+
+dbnvar_inv = (bndiff * dbnraw).sum(0, keepdim=True)
+dbndiff = bnvar_inv * dbnraw #We will come back to this in 1:12:43 - (1)
+
+cmp('bnvar_inv', dbnvar_inv, bnvar_inv)
+```
+
+```text title="Output"
+bnvar_inv       | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[1:04:15](https://youtu.be/q8SA3rM6ckI?si=Mj6mc99YFmqYxo_l&t=3855) to 1:05:16 `cmp('bnvar', dbnvar, bnvar)`
+
+```python
+# bnvar_inv = (bnvar + 1e-5)**-0.5
+#This is a direct equation of derivative of x^n so the output should be n*x^n-1
+
+dbnvar = (-0.5 * ((bnvar + 1e-5) ** (-1.5))) * dbnvar_inv
+
+cmp('bnvar', dbnvar, bnvar)
+```
+
+```text title="Output"
+bnvar           | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[1:05:17](https://youtu.be/q8SA3rM6ckI?si=vjAXVF6w3BoZMC04&t=3917) to 1:09:01 - Why he implemented the bessel's correction (as there seem to be some problem/issue in the paper. Using Bias during training time and Unbiased during testing). But we prefer to use Unbiased during both training and testing and that is what we went ahead with.
+
+[1:09:02](https://youtu.be/q8SA3rM6ckI?si=WxOg7f0S-mqLiZfD&t=4142) to 1:12:42 `cmp('bndiff2', dbndiff2, bndiff2)`
+
+```python
+# bnvar = 1/(n-1)*(bndiff2).sum(0, keepdim=True)
+
+dbndiff2 = 1/(n-1) * torch.ones_like(bndiff2) * dbnvar
+
+cmp('bndiff2', dbndiff2, bndiff2)
+```
+
+```text title="Output"
+bndiff2         | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[1:12:43](https://youtu.be/q8SA3rM6ckI?si=HkT46KjpcZoit33H&t=4363) to 1:13:58 `cmp('bndiff', dbndiff, bndiff)`
+
+```python
+# bndiff2 = bndiff**2
+
+dbndiff += 2*bndiff * dbndiff2 #This is the (2)nd occurance of dbndiff - 59:40 so, we add it here
+
+cmp('bndiff', dbndiff, bndiff)
+```
+
+```text title="Output"
+bndiff          | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[1:13:59](https://youtu.be/q8SA3rM6ckI?si=t03BQ_sro2n6X0a2&t=4439) to 1:18:35 `cmp('bnmeani', dbnmeani, bnmeani)` and `cmp('hprebn', dhprebn, hprebn)`
+
+```python
+## Please go thorugh this one again, i didnt completely get it
+
+# bnmeani = 1/n*hprebn.sum(0, keepdim=True)
+# bndiff = hprebn - bnmeani
+
+dhprebn = dbndiff.clone() #we are making a copy of it
+dbnmeani = (-dbndiff).sum(0)
+
+dhprebn += (1.0/n)*(torch.ones_like(hprebn) * dbnmeani)
+
+cmp('bnmeani', dbnmeani, bnmeani)
+cmp('hprebn', dhprebn, hprebn)
+```
+
+```text title="Output"
+bnmeani         | exact: True  | approximate: True  | maxdiff: 0.0
+hprebn          | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[1:18:36](https://youtu.be/q8SA3rM6ckI?si=j_uFOOB3AsbrkbwM&t=4716) to 1:20:34  `cmp('embcat', dembcat, embcat)`, `cmp('W1', dW1, W1)` and `cmp('b1', db1, b1)`
+
+```python
+hprebn.shape, embcat.shape, W1.shape, b1.shape
+```
+
+```text title="Output"
+(torch.Size([32, 64]),
+ torch.Size([32, 30]),
+ torch.Size([30, 64]),
+ torch.Size([64]))
+```
+
+```python
+# Forward pass: hprebn = embcat @ W1 + b1
+
+dembcat = dhprebn @ W1.T
+dW1 = embcat.T @ dhprebn
+db1 = dhprebn.sum(0)
+
+cmp('embcat', dembcat, embcat)
+cmp('W1', dW1, W1)
+cmp('b1', db1, b1)
+```
+
+```text title="Output"
+embcat          | exact: True  | approximate: True  | maxdiff: 0.0
+W1              | exact: True  | approximate: True  | maxdiff: 0.0
+b1              | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[1:20:35](https://youtu.be/q8SA3rM6ckI?si=F8arFi8ee8a9eAvv&t=4835) to 1:21:58 `cmp('emb', demb, emb)`
+
+```python
+## Please rewatch this as well
+
+# embcat = emb.view(emb.shape[0], -1)
+
+demb = dembcat.view(emb.shape)
+
+cmp('emb', demb, emb)
+```
+
+```text title="Output"
+emb             | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+[1:21:59](https://youtu.be/q8SA3rM6ckI?si=cPimgFWzBgjrkpAr&t=4919) to  `cmp('C', dC, C)`
+
+```python
+## Please rewatch this as well
+# emb = C[Xb]
+
+dC = torch.zeros_like(C)
+for k in range(Xb.shape[0]):
+  for j in range(Xb.shape[1]):
+    ix = Xb[k,j]
+    dC[ix] += demb[k,j]
+
+cmp('C', dC, C)
+```
+
+```text title="Output"
+C               | exact: True  | approximate: True  | maxdiff: 0.0
+```
+
+And we are done with the first exercise!!
+
+```python
+# Exercise 1: backprop through the whole thing manually,
+# backpropagating through exactly all of the variables
+# as they are defined in the forward pass above, one by one
+
+# -----------------
+# YOUR CODE HERE :)
+# -----------------
+
+# cmp('logprobs', dlogprobs, logprobs)
+# cmp('probs', dprobs, probs)
+# cmp('counts_sum_inv', dcounts_sum_inv, counts_sum_inv)
+# cmp('counts_sum', dcounts_sum, counts_sum)
+# cmp('counts', dcounts, counts)
+# cmp('norm_logits', dnorm_logits, norm_logits)
+# cmp('logit_maxes', dlogit_maxes, logit_maxes)
+# cmp('logits', dlogits, logits)
+# cmp('h', dh, h)
+# cmp('W2', dW2, W2)
+# cmp('b2', db2, b2)
+# cmp('hpreact', dhpreact, hpreact)
+# cmp('bngain', dbngain, bngain)
+# cmp('bnbias', dbnbias, bnbias)
+# cmp('bnraw', dbnraw, bnraw)
+# cmp('bnvar_inv', dbnvar_inv, bnvar_inv)
+# cmp('bnvar', dbnvar, bnvar)
+# cmp('bndiff2', dbndiff2, bndiff2)
+# cmp('bndiff', dbndiff, bndiff)
+# cmp('bnmeani', dbnmeani, bnmeani)
+# cmp('hprebn', dhprebn, hprebn)
+# cmp('embcat', dembcat, embcat)
+# cmp('W1', dW1, W1)
+# cmp('b1', db1, b1)
+# cmp('emb', demb, emb)
+# cmp('C', dC, C)
+```

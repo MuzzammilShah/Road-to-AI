@@ -1,0 +1,125 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+/* preset.css only lists the classes of the docs/flux/home/notebook layouts; add the spacious one. */
+@import "fumadocs-ui/css/generated/spacious.css";
+
+/* Match the old MkDocs dark theme background. */
+.dark {
+  --color-fd-background: #121212;
+}
+
+/*
+ * Section accents (sidebar dropdown icons + a subtle primary colour per section).
+ * Each docs page emits `body { --color-fd-primary: var(--section-…) }` (SectionAccent in
+ * lib/sections.tsx); on <body> so portals (dropdown, search) pick it up too.
+ */
+:root {
+  --section-neural-networks: oklch(0.52 0.19 268);
+  --section-library: oklch(0.6 0.15 55);
+}
+
+.dark {
+  --section-neural-networks: oklch(0.76 0.12 268);
+  --section-library: oklch(0.8 0.13 70);
+}
+
+[data-section-icon="Brain"] {
+  color: var(--section-neural-networks);
+}
+
+[data-section-icon="LibraryBig"] {
+  color: var(--section-library);
+}
+
+/* Landing page: the sections below the globe use the globe's background so it reads as one surface. */
+.landing-surface {
+  background-color: #ffffff;
+}
+
+.dark .landing-surface {
+  background-color: #121212;
+}
+
+/* The default light card grey reads too dark on the white landing surface. */
+:root:not(.dark) .landing-cards {
+  --color-fd-card: hsl(0, 0%, 98.5%);
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+/* From the Fumadocs template: has to beat the scroll-lock library's inline styles. */
+html > body[data-scroll-locked] {
+  /* biome-ignore lint/complexity/noImportantStyles: overrides inline style */
+  margin-right: 0px !important;
+  /* biome-ignore lint/complexity/noImportantStyles: overrides inline style */
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+/* Wide images inside notes shrink instead of breaking the layout. Wide tables already scroll:
+   Fumadocs wraps each one in an overflow-auto div (`display: block` here broke the header row). */
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+
+/*
+ * X/Twitter embeds (components/mdx/tweet.tsx), ported from the MkDocs
+ * stylesheets/macros-utils/x-twitter-link-card.css.
+ */
+.x-twitter-embed {
+  margin: 1rem auto;
+  max-width: 550px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.x-twitter-embed .twitter-tweet,
+.x-twitter-embed .twitter-tweet.twitter-tweet-rendered {
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.x-twitter-embed iframe.twitter-tweet-rendered {
+  border-radius: 16px;
+  margin: 0 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Fallback card before the widget renders (or when it is blocked). */
+.x-twitter-embed blockquote.twitter-tweet {
+  padding: 1rem;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  overflow-wrap: anywhere;
+}
+
+.dark .x-twitter-embed blockquote.twitter-tweet {
+  background-color: #1e2029;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+@media screen and (max-width: 550px) {
+  .x-twitter-embed {
+    margin: 1rem 0.5rem;
+    width: auto;
+  }
+
+  .x-twitter-embed iframe {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .x-twitter-embed {
+    margin: 1rem 0.25rem;
+  }
+}
