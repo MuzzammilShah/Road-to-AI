@@ -1,0 +1,102 @@
+/* Gistコードブロック用のスタイル定義 */
+/* General styles */
+.gist-code-block {
+    background: #f8f8f8;
+    /* コードブロックの背景色 */
+    border: 1px solid #e1e4e8;
+    /* 境界線のスタイル */
+    border-radius: 6px;
+    /* 角を丸くする */
+    margin: 16px 0;
+    /* 上下の余白 */
+    padding: 16px;
+    /* 内側の余白 */
+    overflow-x: auto;
+    /* 横方向のスクロールを有効に */
+}
+
+/* ダークモード用のスタイル定義 */
+[data-md-color-scheme="slate"] .gist-code-block {
+    background: #2b2b2b;
+    /* ダークモードの背景色 */
+    border-color: #404040;
+    /* ダークモード時の境界線色 */
+}
+
+/* コードブロックのシンタックスハイライト */
+.gist-code-block pre {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    /* 背景を透明に */
+}
+
+.gist-code-block code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    /* モノスペースフォントを使用 */
+    font-size: 14px;
+    line-height: 1.5;
+    /* 行の高さを設定 */
+}
+
+/* 言語インジケーター */
+.gist-code-block .language-indicator {
+    color: #666;
+    /* 言語表示の色 */
+    font-size: 0.85em;
+    /* フォントサイズを少し小さく */
+    margin-bottom: 8px;
+    /* 下部の余白 */
+}
+
+/* ダークモード時の言語インジケーター */
+[data-md-color-scheme="slate"] .gist-code-block .language-indicator {
+    color: #999;
+    /* ダークモード時の色を明るく */
+}
+
+/* 行番号のスタイル */
+.gist-code-block .line-numbers {
+    color: #999;
+    /* 行番号の色 */
+    padding-right: 16px;
+    /* 右側の余白 */
+    text-align: right;
+    /* 右揃え */
+    user-select: none;
+    /* 選択不可に */
+}
+
+/* コピーボタンのスタイル */
+.gist-code-block .copy-button {
+    position: absolute;
+    /* 絶対位置指定 */
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 4px;
+    cursor: pointer;
+    /* カーソルをポインターに */
+    opacity: 0;
+    /* 初期状態は非表示 */
+    transition: opacity 0.2s;
+    /* フェードアニメーション */
+}
+
+/* ホバー時のコピーボタン表示 */
+.gist-code-block:hover .copy-button {
+    opacity: 1;
+    /* ホバー時に表示 */
+}
+
+/* ダークモード時のコピーボタン */
+[data-md-color-scheme="slate"] .gist-code-block .copy-button {
+    background: #363636;
+    /* ダークモードの背景色 */
+    border-color: #404040;
+    /* ダークモードの境界線色 */
+    color: #fff;
+    /* テキストを白に */
+}

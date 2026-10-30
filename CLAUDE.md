@@ -1,11 +1,16 @@
 # Road to AI: docs site
 
-Personal documentation site (notes, Jupyter notebooks, book notes on AI), served at docs.muhammedshah.com. It was migrated from MkDocs Material; `MIGRATION_NOTES.md` has the history and decisions. The MkDocs files are gone: `content/docs/` and `notebooks/` are the only sources.
+Personal documentation site (notes, Jupyter notebooks, book notes on AI), served at docs.muhammedshah.com. It was migrated from MkDocs Material and went live on Fumadocs on 2026-10-31. `content/docs/` and `notebooks/` are the only sources.
 
-> **Cutover order for merging this branch into `main`** (the owner does these; details in "Deployment" below):
-> 1. Settings → Environments → `github-pages` → add `main` to the allowed deployment branches (keep `gh-pages`).
-> 2. Settings → Pages → Source: "GitHub Actions".
-> 3. Merge, then watch the deploy run and spot-check the live site.
+- **Docs for this repo:**
+  - `MAINTAINING.md` is the step-by-step guide for humans (pages, notebooks, sections, deploy, rollback). Keep it in sync when a workflow changes.
+  - `archive/` holds the MkDocs config/theme and the migration history (`archive/MIGRATION_NOTES.md`). Nothing there is used by the site.
+- **How changes ship:**
+  1. Work on a branch.
+  2. Open a PR to `main`; CI runs the build and all checks.
+  3. Merging deploys automatically.
+  - Don't push to `main` or merge unless the owner asks.
+  - Never touch the `gh-pages` branch.
 
 ## Stack
 
@@ -45,7 +50,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - route handlers set `dynamic = 'force-static'`.
 - **URL parity with the old MkDocs site.** Docs are served at the site root (`baseUrl: '/'`), and folder and file names, including their case, are the URLs. Never rename content files or folders without adding redirects. `scripts/old-urls.txt` lists the URLs that must keep working. Headings carry explicit MkDocs-style ids (`## Title [#id]`), so old `#anchor` links keep working too.
 - **Notebooks are never executed.** The converter only reads the saved outputs.
-- **Biome is limited by an allow-list** in `biome.json`. It also formats YAML and Markdown, so keep `content/`, `notebooks/`, `*.md` and `.github/` out of its scope.
+- **Biome is limited by an allow-list** in `biome.json`. It also formats YAML and Markdown, so keep `content/`, `notebooks/`, `archive/`, `*.md` and `.github/` out of its scope.
 - **Read the versioned docs before using framework APIs:**
   - Next.js docs ship in `node_modules/next/dist/docs/` (see `AGENTS.md`).
   - Fumadocs: https://www.fumadocs.dev/docs, but trust the installed package source and types in `node_modules/fumadocs-*` when they differ.
@@ -70,6 +75,11 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - `manifest.webmanifest` and the icons are for the PWA / iOS home-screen;
   - `CNAME` is the custom domain for GitHub Pages (exported as `out/CNAME`), and `.nojekyll` is the empty Jekyll opt-out (see "Deployment").
 - **`scripts/`:** `convert-notebooks.mjs` (+ `lib/mdx.mjs`, `lib/site.mjs`), `check-links.mjs`, `check-parity.mjs`, `old-urls.txt`.
+- **`archive/`:** reference only.
+  - `mkdocs/` is the old MkDocs config, theme and workflow, copied from commit `f58d881`.
+  - `MIGRATION_NOTES.md` is the migration log.
+  - `README.md` is the overview and how to restore the old site.
+  - It is outside Biome, TypeScript, the build and the checks. Don't edit it, except to add history.
 
 ## App code map
 
@@ -107,10 +117,11 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - PRs to `main`: build and checks only, never a deploy.
   - Push to `main` (or a manual run on `main`): the `deploy` job runs `actions/deploy-pages`.
   - Concurrency group `pages` for main/manual runs, without cancelling an in-progress deploy; PR runs get their own group per PR.
-- **Repository settings:**
-  - Pages → Source is "GitHub Actions".
+- **Repository settings** (live since 2026-10-31):
+  - Pages → Source is "GitHub Actions", with HTTPS enforced.
   - The domain comes from the Pages settings; with Actions deploys, `public/CNAME` is kept but ignored.
-  - The `github-pages` environment must allow `main` (and keeps `gh-pages` for rollback).
+  - The `github-pages` environment allows `main` and `gh-pages` (the latter for rollback).
+- **Re-deploy without a change:** Actions → "Deploy to GitHub Pages" → Run workflow on `main`, or `gh workflow run deploy.yml --ref main`.
 - **`public/.nojekyll`** is exported as `out/.nojekyll`. Actions deploys don't run Jekyll anyway, but a branch deploy of `out/` would need it for `_next/`. The upload step sets `include-hidden-files: true`, otherwise dotfiles are dropped.
 - **Rollback:**
   1. Settings → Pages → Source: "Deploy from a branch: `gh-pages` / (root)". That branch holds the last MkDocs build, so the old site is back within about a minute.
@@ -125,6 +136,8 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 
 ## How to add a page
 
+`MAINTAINING.md` has the full versions of these recipes, with examples. All of them were tested end to end, so keep both files in sync.
+
 1. Create `content/docs/<Section>/<path>/<name>.mdx` with front matter `title:`. The URL becomes `/<Section>/<path>/<name>/`.
 2. Add `<name>` to the `pages` array of the folder's `meta.json`, at the position it should appear in the sidebar.
 3. Put images in `public/assets/images/...` and reference them as `/assets/images/...`.
@@ -136,7 +149,9 @@ A new sub-folder needs its own `meta.json` (`title`, `pages`) and must be listed
 
 1. Create `content/docs/<Section>/meta.json` with `"root": true`, `title`, `description`, `icon` and `pages`.
 2. In `lib/sections.tsx`, add the Lucide icon to `sectionIcons` and map the folder name to its accent colour (used by `SectionAccent`). In `app/global.css`, define the `--section-*` colour (light and dark) and its `[data-section-icon]` rule.
-3. Optionally add a navbar link in `lib/layout.shared.tsx`.
+3. Optionally add a navbar link in `lib/layout.shared.tsx` and a landing card in `app/(home)/page.tsx`.
+
+The build fails with "Unknown icon" if the `meta.json` icon is missing from `sectionIcons`. The MDX `<Icon>` component has its own short list in `components/mdx/icon.tsx`.
 
 ## How to add a notebook
 
