@@ -15,21 +15,16 @@ function containsLink(node: ReactNode): boolean {
  * "Timestamp: [00:12:59](youtube...)" headings) would nest `<a>` in `<a>`, so they keep their id
  * (TOC, anchors) but skip the self-link wrapper.
  */
-function createHeading(as: HeadingTag) {
-  return function MdxHeading(props: ComponentProps<HeadingTag>) {
-    if (!containsLink(props.children)) return <Heading as={as} {...props} />;
-    const Tag = as;
-    return (
-      <Tag {...props} className={['scroll-m-28', props.className].filter(Boolean).join(' ')} />
-    );
-  };
+export function MdxHeading({ as: Tag, ...props }: ComponentProps<HeadingTag> & { as: HeadingTag }) {
+  if (!containsLink(props.children)) return <Heading as={Tag} {...props} />;
+  return <Tag {...props} className={['scroll-m-28', props.className].filter(Boolean).join(' ')} />;
 }
 
 export const headings = {
-  h1: createHeading('h1'),
-  h2: createHeading('h2'),
-  h3: createHeading('h3'),
-  h4: createHeading('h4'),
-  h5: createHeading('h5'),
-  h6: createHeading('h6'),
+  h1: (props: ComponentProps<'h1'>) => <MdxHeading as="h1" {...props} />,
+  h2: (props: ComponentProps<'h2'>) => <MdxHeading as="h2" {...props} />,
+  h3: (props: ComponentProps<'h3'>) => <MdxHeading as="h3" {...props} />,
+  h4: (props: ComponentProps<'h4'>) => <MdxHeading as="h4" {...props} />,
+  h5: (props: ComponentProps<'h5'>) => <MdxHeading as="h5" {...props} />,
+  h6: (props: ComponentProps<'h6'>) => <MdxHeading as="h6" {...props} />,
 };
