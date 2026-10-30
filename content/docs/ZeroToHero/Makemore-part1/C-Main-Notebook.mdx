@@ -1,0 +1,283 @@
+---
+title: "Jupyter Notebook"
+---
+
+{/* Generated from docs/ZeroToHero/Makemore-part1/C-Main-Notebook.ipynb by scripts/convert-notebooks.mjs. Do not edit: edit the notebook and run `npm run notebooks`. */}
+
+<NotebookDownload href="/notebooks/ZeroToHero/Makemore-part1/C-Main-Notebook.ipynb" />
+
+```python
+words = open('names.txt', 'r').read().splitlines()
+```
+
+```python
+import torch
+
+N = torch.zeros((27, 27), dtype = torch.int32)
+
+chars = sorted(list(set(''.join(words))))
+
+stoi = {s:i+1 for i,s in enumerate(chars)}
+stoi['.'] = 0
+
+itos = {i:s for s,i in stoi.items()}
+```
+
+```python
+P = N.float()
+P /= P.sum(1, keepdim=True)
+```
+
+```python
+#Creating the training set of bigrams (x,y)
+xs, ys = [], []
+
+for word in words[:1]:
+    chs = ['.'] + list(word) + ['.']
+    for ch1, ch2 in zip(chs, chs[1:]):
+        ix1 = stoi[ch1]
+        ix2 = stoi[ch2]
+        print(ch1, ch2)
+        xs.append(ix1)
+        ys.append(ix2)
+
+xs = torch.tensor(xs)
+ys = torch.tensor(ys)
+```
+
+```text title="Output"
+. e
+e m
+m m
+m a
+a .
+```
+
+```python
+#Feeding these examples into a neural network
+import torch.nn.functional as F
+```
+
+```python
+#<=========OPTIMIZATION============>
+```
+
+```python
+xs
+```
+
+```text title="Output"
+tensor([ 0,  5, 13, 13,  1])
+```
+
+```python
+ys
+```
+
+```text title="Output"
+tensor([ 5, 13, 13,  1,  0])
+```
+
+```python
+# randomly initialize 27 neurons' weights. each neuron receives 27 inputs
+g = torch.Generator().manual_seed(2147483647)
+W = torch.randn((27, 27), generator=g, requires_grad=True) #Adding the third parameter here for the Backward pass (as remember in micrograd we had done the same thing)
+```
+
+```python
+#FORWARD PASS
+xenc = F.one_hot(xs, num_classes=27).float() # input to the network: one-hot encoding
+logits = xenc @ W # predict log-counts
+counts = logits.exp() # counts, equivalent to N
+probs = counts / counts.sum(1, keepdims=True) # probabilities for next character
+loss = -probs[torch.arange(5), ys].log().mean() #torch.arange(5) is basically 0 to 5(4) position, ys is from that tuple list | We calculate the probability values of that | Then we take their log values | Then we take their mean | Finally take the negative value (since NLL)
+```
+
+```python
+loss #This will be similar to the one we also calculated in the SUMMARY part of B-Main
+```
+
+```text title="Output"
+tensor(3.7693)
+```
+
+```python
+#BACKWARD PASS
+W.grad = None #the gradient is first set to zero
+loss.backward()
+```
+
+```python
+W.grad.shape
+```
+
+```text title="Output"
+torch.Size([27, 27])
+```
+
+```python
+W.grad
+```
+
+```python
+#UPDATE
+W.data += -0.1 * W.grad
+```
+
+--------------
+
+```python
+#JUST PUTTING THEM TOGETHER TO PERFORM GRADIENT DESCENT
+```
+
+```python
+#ONLY RUN THIS THE FIRST TIME
+# randomly initialize 27 neurons' weights. each neuron receives 27 inputs
+g = torch.Generator().manual_seed(2147483647)
+W = torch.randn((27, 27), generator=g, requires_grad=True) #Adding the third parameter here for the Backward pass (as remember in micrograd we had done the same thing)
+```
+
+```python
+#FORWARD PASS
+xenc = F.one_hot(xs, num_classes=27).float() # input to the network: one-hot encoding
+logits = xenc @ W # predict log-counts
+counts = logits.exp() # counts, equivalent to N
+probs = counts / counts.sum(1, keepdims=True) # probabilities for next character
+loss = -probs[torch.arange(5), ys].log().mean() #torch.arange(5) is basically 0 to 5(4) position, ys is from that tuple list | We calculate the probability values of that | Then we take their log values | Then we take their mean | Finally take the negative value (since NLL)
+```
+
+```python
+print(loss.item()) #CHECKING THE LOSS VALUE
+```
+
+```text title="Output"
+3.6891887187957764
+```
+
+```python
+#BACKWARD PASS
+W.grad = None #the gradient is first set to zero
+loss.backward()
+```
+
+```python
+#UPDATE
+W.data += -0.1 * W.grad
+```
+
+Yay, that worked. Noice
+
+----------------
+
+**PUTTING THEM ALL TOGETHER**
+
+```python
+# create the dataset
+xs, ys = [], []
+for w in words:
+  chs = ['.'] + list(w) + ['.']
+  for ch1, ch2 in zip(chs, chs[1:]):
+    ix1 = stoi[ch1]
+    ix2 = stoi[ch2]
+    xs.append(ix1)
+    ys.append(ix2)
+xs = torch.tensor(xs)
+ys = torch.tensor(ys)
+num = xs.nelement()
+print('number of examples: ', num)
+
+# initialize the 'network'
+g = torch.Generator().manual_seed(2147483647)
+W = torch.randn((27, 27), generator=g, requires_grad=True)
+```
+
+```text title="Output"
+number of examples:  228146
+```
+
+```python
+# gradient descent
+for k in range(20):
+  
+  # forward pass
+  xenc = F.one_hot(xs, num_classes=27).float() # input to the network: one-hot encoding
+  logits = xenc @ W # predict log-counts
+  counts = logits.exp() # counts, equivalent to N
+  probs = counts / counts.sum(1, keepdims=True) # probabilities for next character
+  loss = -probs[torch.arange(num), ys].log().mean() + 0.01*(W**2).mean()
+  print(loss.item())
+  
+  # backward pass
+  W.grad = None # set to zero the gradient
+  loss.backward()
+  
+  # update
+  W.data += -50 * W.grad
+```
+
+```text title="Output"
+3.7686190605163574
+3.378804922103882
+3.1610896587371826
+3.0271859169006348
+2.9344847202301025
+2.867231607437134
+2.816654920578003
+2.777147054672241
+2.7452545166015625
+2.7188305854797363
+2.6965057849884033
+2.6773722171783447
+2.6608052253723145
+2.6463513374328613
+2.633665084838867
+2.622471332550049
+2.6125471591949463
+2.6037065982818604
+2.595794439315796
+2.5886802673339844
+```
+
+SO WE ALMOST ACHIEVED A VERY LOW LOSS VALUE. SIMILAR TO THE LOSS VALUE WE CALCULATED IN A-MAIN, WHEN WE TYPED OUR OWN NAME AND SAW HOW IT PERFORMS
+
+--------------
+
+Finally *drumrolls*, we are going to see how sampling from this model produces the outputs (Spoiler alert: it will be the same as how we made the model manually, coz... it is the same model just that we made it using Neural nets)
+
+```python
+# finally, sample from the 'neural net' model
+g = torch.Generator().manual_seed(2147483647)
+
+for i in range(5):
+  
+  out = []
+  ix = 0
+  while True:
+    
+    # ----------
+    # BEFORE:
+    #p = P[ix]
+    # ----------
+    # NOW:
+    xenc = F.one_hot(torch.tensor([ix]), num_classes=27).float()
+    logits = xenc @ W # predict log-counts
+    counts = logits.exp() # counts, equivalent to N
+    p = counts / counts.sum(1, keepdims=True) # probabilities for next character
+    # ----------
+    
+    ix = torch.multinomial(p, num_samples=1, replacement=True, generator=g).item()
+    out.append(itos[ix])
+    if ix == 0:
+      break
+  print(''.join(out))
+```
+
+```text title="Output"
+juwjde.
+janaqah.
+pxzfby.
+a.
+nn.
+```
+
+--------

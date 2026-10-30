@@ -1,0 +1,24 @@
+{
+  "title": "Notebooks",
+  "pages": [
+    "1-derivative-simple-function",
+    "2-derivative-function-with-multiple-inputs",
+    "3_1-graph-visualisation",
+    "3-value-object",
+    "4_0_manual_backpropagation_simpleExpression",
+    "4_1_manual_backpropagation_simpleExpression",
+    "4_2_manual_backpropagation_simpleExpression",
+    "5_optimization_single_step_preview",
+    "6_0_backpropagation_neuron",
+    "6_1_backpropagation_neuron_manual_calculation",
+    "7_0_backward_func_each_operation",
+    "7_1_backward_func_entire_graph",
+    "8_handling_onenode_used_multiple_times",
+    "9_expanding_tanh_into_more_operations",
+    "x10_implementing_in_pytorch",
+    "x11_creating_a_multi_layer_perceptron",
+    "x12_creating_a_loss_function",
+    "x13_collecting_all_parameters_in_NN",
+    "x14_manual_gradient_descent_optimization"
+  ]
+}

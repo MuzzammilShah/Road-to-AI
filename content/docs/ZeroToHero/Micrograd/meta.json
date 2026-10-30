@@ -1,4 +1,8 @@
 {
   "title": "Backpropagation",
-  "pages": ["index", "notes"]
+  "pages": [
+    "index",
+    "notes",
+    "notebooks"
+  ]
 }

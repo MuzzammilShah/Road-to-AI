@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/components/mdx';
 import { Copyright } from '@/components/site-footer';
-import { source } from '@/lib/source';
+import { getDocumentTitle, source } from '@/lib/source';
 
 // Required catch-all at the site root: it never matches `/`, which is the landing page.
 export const dynamicParams = false;
@@ -17,7 +17,12 @@ export default async function Page(props: PageProps<'/[...slug]'>) {
   const MDX = page.data.body;
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage
+      toc={page.data.toc}
+      full={page.data.full}
+      tableOfContent={{ enabled: !page.data.hideToc }}
+      tableOfContentPopover={{ enabled: !page.data.hideToc }}
+    >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
@@ -44,7 +49,7 @@ export async function generateMetadata(props: PageProps<'/[...slug]'>): Promise<
   if (!page) notFound();
 
   return {
-    title: page.data.title,
+    title: getDocumentTitle(page),
     description: page.data.description,
   };
 }

@@ -1,0 +1,307 @@
+---
+title: "Section 0"
+---
+
+{/* Generated from docs/ZeroToHero/GPT-2/section-0.ipynb by scripts/convert-notebooks.mjs. Do not edit: edit the notebook and run `npm run notebooks`. */}
+
+<NotebookDownload href="/notebooks/ZeroToHero/GPT-2/section-0.ipynb" />
+
+----------
+
+## **Exploring the GPT-2 (124M) OpenAI checkpoint** [#exploring-the-gpt-2-124m-openai-checkpoint]
+
+> **How to read?**
+>
+> **CODE SNIPPET CELL** then **EXPLAINATION for that CODE CELL**
+
+We are loading the [GPT 2 model from Hugging face](https://huggingface.co/openai-community/gpt2):
+
+```python
+from transformers import GPT2LMHeadModel
+
+model_hf = GPT2LMHeadModel.from_pretrained("gpt2")
+sd_hf = model_hf.state_dict()
+
+for k, v in sd_hf.items():
+    print(k, v.shape)
+```
+
+```text title="Output"
+c:\Users\imdiv\OneDrive\Desktop\GitHub Portal\GPT-2\.venv\lib\site-packages\tqdm\auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+```
+
+```text title="Output"
+transformer.wte.weight torch.Size([50257, 768])
+transformer.wpe.weight torch.Size([1024, 768])
+transformer.h.0.ln_1.weight torch.Size([768])
+transformer.h.0.ln_1.bias torch.Size([768])
+transformer.h.0.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.0.attn.c_attn.bias torch.Size([2304])
+transformer.h.0.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.0.attn.c_proj.bias torch.Size([768])
+transformer.h.0.ln_2.weight torch.Size([768])
+transformer.h.0.ln_2.bias torch.Size([768])
+transformer.h.0.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.0.mlp.c_fc.bias torch.Size([3072])
+transformer.h.0.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.0.mlp.c_proj.bias torch.Size([768])
+transformer.h.1.ln_1.weight torch.Size([768])
+transformer.h.1.ln_1.bias torch.Size([768])
+transformer.h.1.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.1.attn.c_attn.bias torch.Size([2304])
+transformer.h.1.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.1.attn.c_proj.bias torch.Size([768])
+transformer.h.1.ln_2.weight torch.Size([768])
+transformer.h.1.ln_2.bias torch.Size([768])
+transformer.h.1.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.1.mlp.c_fc.bias torch.Size([3072])
+transformer.h.1.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.1.mlp.c_proj.bias torch.Size([768])
+transformer.h.2.ln_1.weight torch.Size([768])
+transformer.h.2.ln_1.bias torch.Size([768])
+transformer.h.2.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.2.attn.c_attn.bias torch.Size([2304])
+transformer.h.2.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.2.attn.c_proj.bias torch.Size([768])
+transformer.h.2.ln_2.weight torch.Size([768])
+transformer.h.2.ln_2.bias torch.Size([768])
+transformer.h.2.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.2.mlp.c_fc.bias torch.Size([3072])
+transformer.h.2.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.2.mlp.c_proj.bias torch.Size([768])
+transformer.h.3.ln_1.weight torch.Size([768])
+transformer.h.3.ln_1.bias torch.Size([768])
+transformer.h.3.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.3.attn.c_attn.bias torch.Size([2304])
+transformer.h.3.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.3.attn.c_proj.bias torch.Size([768])
+transformer.h.3.ln_2.weight torch.Size([768])
+transformer.h.3.ln_2.bias torch.Size([768])
+transformer.h.3.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.3.mlp.c_fc.bias torch.Size([3072])
+transformer.h.3.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.3.mlp.c_proj.bias torch.Size([768])
+transformer.h.4.ln_1.weight torch.Size([768])
+transformer.h.4.ln_1.bias torch.Size([768])
+transformer.h.4.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.4.attn.c_attn.bias torch.Size([2304])
+transformer.h.4.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.4.attn.c_proj.bias torch.Size([768])
+transformer.h.4.ln_2.weight torch.Size([768])
+transformer.h.4.ln_2.bias torch.Size([768])
+transformer.h.4.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.4.mlp.c_fc.bias torch.Size([3072])
+transformer.h.4.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.4.mlp.c_proj.bias torch.Size([768])
+transformer.h.5.ln_1.weight torch.Size([768])
+transformer.h.5.ln_1.bias torch.Size([768])
+transformer.h.5.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.5.attn.c_attn.bias torch.Size([2304])
+transformer.h.5.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.5.attn.c_proj.bias torch.Size([768])
+transformer.h.5.ln_2.weight torch.Size([768])
+transformer.h.5.ln_2.bias torch.Size([768])
+transformer.h.5.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.5.mlp.c_fc.bias torch.Size([3072])
+transformer.h.5.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.5.mlp.c_proj.bias torch.Size([768])
+transformer.h.6.ln_1.weight torch.Size([768])
+transformer.h.6.ln_1.bias torch.Size([768])
+transformer.h.6.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.6.attn.c_attn.bias torch.Size([2304])
+transformer.h.6.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.6.attn.c_proj.bias torch.Size([768])
+transformer.h.6.ln_2.weight torch.Size([768])
+transformer.h.6.ln_2.bias torch.Size([768])
+transformer.h.6.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.6.mlp.c_fc.bias torch.Size([3072])
+transformer.h.6.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.6.mlp.c_proj.bias torch.Size([768])
+transformer.h.7.ln_1.weight torch.Size([768])
+transformer.h.7.ln_1.bias torch.Size([768])
+transformer.h.7.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.7.attn.c_attn.bias torch.Size([2304])
+transformer.h.7.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.7.attn.c_proj.bias torch.Size([768])
+transformer.h.7.ln_2.weight torch.Size([768])
+transformer.h.7.ln_2.bias torch.Size([768])
+transformer.h.7.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.7.mlp.c_fc.bias torch.Size([3072])
+transformer.h.7.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.7.mlp.c_proj.bias torch.Size([768])
+transformer.h.8.ln_1.weight torch.Size([768])
+transformer.h.8.ln_1.bias torch.Size([768])
+transformer.h.8.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.8.attn.c_attn.bias torch.Size([2304])
+transformer.h.8.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.8.attn.c_proj.bias torch.Size([768])
+transformer.h.8.ln_2.weight torch.Size([768])
+transformer.h.8.ln_2.bias torch.Size([768])
+transformer.h.8.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.8.mlp.c_fc.bias torch.Size([3072])
+transformer.h.8.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.8.mlp.c_proj.bias torch.Size([768])
+transformer.h.9.ln_1.weight torch.Size([768])
+transformer.h.9.ln_1.bias torch.Size([768])
+transformer.h.9.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.9.attn.c_attn.bias torch.Size([2304])
+transformer.h.9.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.9.attn.c_proj.bias torch.Size([768])
+transformer.h.9.ln_2.weight torch.Size([768])
+transformer.h.9.ln_2.bias torch.Size([768])
+transformer.h.9.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.9.mlp.c_fc.bias torch.Size([3072])
+transformer.h.9.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.9.mlp.c_proj.bias torch.Size([768])
+transformer.h.10.ln_1.weight torch.Size([768])
+transformer.h.10.ln_1.bias torch.Size([768])
+transformer.h.10.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.10.attn.c_attn.bias torch.Size([2304])
+transformer.h.10.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.10.attn.c_proj.bias torch.Size([768])
+transformer.h.10.ln_2.weight torch.Size([768])
+transformer.h.10.ln_2.bias torch.Size([768])
+transformer.h.10.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.10.mlp.c_fc.bias torch.Size([3072])
+transformer.h.10.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.10.mlp.c_proj.bias torch.Size([768])
+transformer.h.11.ln_1.weight torch.Size([768])
+transformer.h.11.ln_1.bias torch.Size([768])
+transformer.h.11.attn.c_attn.weight torch.Size([768, 2304])
+transformer.h.11.attn.c_attn.bias torch.Size([2304])
+transformer.h.11.attn.c_proj.weight torch.Size([768, 768])
+transformer.h.11.attn.c_proj.bias torch.Size([768])
+transformer.h.11.ln_2.weight torch.Size([768])
+transformer.h.11.ln_2.bias torch.Size([768])
+transformer.h.11.mlp.c_fc.weight torch.Size([768, 3072])
+transformer.h.11.mlp.c_fc.bias torch.Size([3072])
+transformer.h.11.mlp.c_proj.weight torch.Size([3072, 768])
+transformer.h.11.mlp.c_proj.bias torch.Size([768])
+transformer.ln_f.weight torch.Size([768])
+transformer.ln_f.bias torch.Size([768])
+lm_head.weight torch.Size([50257, 768])
+```
+
+`sd_hf = model_hf.state_dict()`: Here we are using `state_dict()` to extract all the raw tensors of the model.
+
+Now, `sd_hf` is just a Dict, so we can print them. We have the key and values which are essentially the tensors along with their size.
+
+&nbsp;
+
+What is printed are the different parameters inide the GPT 2 model and their shape, like `transformer.wte.weight torch.Size([50257, 768])`, `transformer.h.0.ln_1.weight torch.Size([768])` etc. 
+
+&nbsp;
+
+We see that there is a tensor for the Token Embedding `transformer.wte.weight torch.Size([50257, 768])`:
+
+- `wte` is Weight for Token Embedding (Tokens) is of size `50257` by `768`.
+- So we have `50257` tokens in the GPT2 vocabulary.
+- And for each of those tokens there are `768` dimensional embedding which is the distributed representation that stands in for that token.
+- So each token is a little string piece and the numbers `786` are the vector that reperesent that token.
+
+We also see there is a tensor for the Positional Embedding `transformer.wpe.weight torch.Size([1024, 768])`:
+
+- `wpe` Weight for Positional Embedding (Positions), So GPT2 has `1024` postions that each token can be attending to in the past.
+- Each of those positions has a fixed vector `768` that is learned by optimization.
+
+&nbsp;
+
+Rest of them are just the other weights and biases of the rest of the transformer architecture in the GPT2 Model.
+
+&nbsp;
+
+```python
+sd_hf["transformer.wpe.weight"].view(-1)[:20]
+```
+
+```text title="Output"
+tensor([-0.0188, -0.1974,  0.0040,  0.0113,  0.0638, -0.1050,  0.0369, -0.1680,
+        -0.0491, -0.0565, -0.0025,  0.0135, -0.0042,  0.0151,  0.0166, -0.1381,
+        -0.0063, -0.0461,  0.0267, -0.2042])
+```
+
+Here we are taking the positional embeddings `sd_hf["transformer.wpe.weight"]`, flattening it out `.view(-1)` and seeing just the first 20 values `[:20]`- We will see that they are just a bunch of float values.
+
+&nbsp;
+
+```python
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+plt.imshow(sd_hf["transformer.wpe.weight"], cmap="gray")
+```
+
+```text title="Output"
+<matplotlib.image.AxesImage at 0x18eaee3bcd0>
+```
+
+![Cell 7 output](/notebook-outputs/ZeroToHero/GPT-2/section-0/cell-7-1.png)
+
+Here we are plotting those positional embeddings.
+
+&nbsp;
+
+```python
+plt.plot(sd_hf["transformer.wpe.weight"][:, 150])
+plt.plot(sd_hf["transformer.wpe.weight"][:, 200])
+plt.plot(sd_hf["transformer.wpe.weight"][:, 250])
+```
+
+```text title="Output"
+[<matplotlib.lines.Line2D at 0x18eb13e6530>]
+```
+
+![Cell 9 output](/notebook-outputs/ZeroToHero/GPT-2/section-0/cell-9-1.png)
+
+Here we just taking three random columns from that grey graph that we saw. Here we can see that it is noisy, so we know its not a very well trained model (its too wavey).
+
+&nbsp;
+
+```python
+plt.imshow(sd_hf["transformer.h.1.attn.c_attn.weight"][:300,:300], cmap="gray")
+```
+
+```text title="Output"
+<matplotlib.image.AxesImage at 0x18eb1445180>
+```
+
+![Cell 11 output](/notebook-outputs/ZeroToHero/GPT-2/section-0/cell-11-1.png)
+
+Here we are just observing another one of those tensors, in this case it is the first layer considering a small block size `[:300,:300]`.
+
+&nbsp;
+
+*Note: We don't really have to understand/know about that structure of those grey graph or what they mean, thats like a whole different case study :)*
+
+&nbsp;
+
+```python
+from transformers import pipeline, set_seed
+generator = pipeline('text-generation', model='gpt2')
+set_seed(42)
+generator("Hello, I'm a language model,", max_length=30, num_return_sequences=5)
+```
+
+```text title="Output"
+c:\Users\imdiv\OneDrive\Desktop\GitHub Portal\GPT-2\.venv\lib\site-packages\huggingface_hub\file_download.py:144: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\imdiv\.cache\huggingface\hub\models--gpt2. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+Device set to use cuda:0
+Truncation was not explicitly activated but `max_length` is provided a specific value, please use `truncation=True` to explicitly truncate examples to max length. Defaulting to 'longest_first' truncation strategy. If you encode pairs of sequences (GLUE-style) with the tokenizer you can select this strategy more precisely by providing a specific strategy to `truncation`.
+Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.
+```
+
+```text title="Output"
+[{'generated_text': 'Hello, I\'m a language model, so it\'s hard to be one," says Mr. De Silva. In the past, he\'d always been'},
+ {'generated_text': 'Hello, I\'m a language model, I\'m an architect."\n\n"No, very well, you\'re a thinker. You know better than'},
+ {'generated_text': "Hello, I'm a language model, you should also know that we implement C++ directly. It's also about keeping the C-like object model"},
+ {'generated_text': "Hello, I'm a language model, with your help. The more languages I can learn, the better the language will be because of my ability to"},
+ {'generated_text': "Hello, I'm a language model, and in order to work with a language model, your code must use a model. If you don't,"}]
+```
+
+Okay so till now we were able to load and view the model weights and parameters (first code cell), we can also load the model itself using HuggingFace's pipeline and send like a initial prompt which it needs to complete.
+
+Ultimately, what were are seeing is a complete model which can generate coherent texts, which is what we are aiming to achieve.
+
+&nbsp;

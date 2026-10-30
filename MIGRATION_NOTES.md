@@ -17,6 +17,8 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
 | typescript | 7.0.2 | |
 | @biomejs/biome | 2.6.4 | linter + formatter |
 | serve | 14.2.6 | dev-only, used to preview `out/` |
+| next-themes | 0.4.6 | already used by Fumadocs UI; made direct for `useTheme` (tweets, landing globe) |
+| zod | 4.6.7 | already used by Fumadocs; made direct for the extended page schema (`hideToc`) |
 
 - **Node:** `.nvmrc` = 24 (matches the dev machine, v24.11.1; your choice in Phase 0). `engines.node` = `>=22`.
 - **Scaffolder:** `create-fumadocs-app@16.2.27 --template +next+fuma-docs-mdx+static --linter biome --search orama --pm npm --no-git -y`. It ran in the session scratchpad, and the files were reviewed before copying.
@@ -43,9 +45,11 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
   - Valid values (from the `fumadocs-ui` types) are `'auto' | 'top'`.
 - **Trailing slashes:** `trailingSlash: true` makes Next's `Link` emit `/a/b/` hrefs, and the export writes `a/b/index.html`.
 - **Static search:**
-  - `app/api/search/route.ts` exports `staticGET`, which is written to `out/api/search`, an extensionless JSON file.
-  - The client fetches `/api/search`.
-  - In `next dev` that path answers 308 → `/api/search/`; the fetch follows it.
+  - `app/api/search.json/route.ts` exports `staticGET`, which is written to `out/api/search.json`.
+  - `components/search.tsx` passes `from: '/api/search.json'` to `useStaticSearch`.
+  - The index is about 3.0 MB raw, 0.6 MB gzipped, for 72 pages. It is downloaded the first time someone opens search.
+  - The template's extensionless `/api/search` would be served as `application/octet-stream`, which is not compressed. The `.json` name gets `application/json`, which GitHub Pages can compress.
+  - Code blocks are not indexed (Fumadocs default); notebook prose is.
 - **Font:** Inter via `next/font/google` (the template default, and your old MkDocs font).
 - **Theme:**
   - The `neutral` preset.
@@ -68,6 +72,114 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
 - **Search route:** `export const dynamic = 'force-static'`, as the bundled Next 16 static-export guide requires for route handlers.
 - **Assets:** only images that are actually referenced get copied to `public/assets/images/`. `blog-assets/` (93 MB) and the unused leftovers are dropped (your decision in Phase 0).
 
+## Content conversion (Phase 2)
+
+**Scripts:**
+- `npm run convert:pages` runs `scripts/convert-pages.mjs`: `docs/**/*.md` → `content/docs/**/*.mdx`, plus every `meta.json` and the referenced images.
+- `npm run notebooks` runs `scripts/convert-notebooks.mjs`: `docs/**/*.ipynb` → `.mdx`, plus output images and the download copies.
+- `npm run convert` runs both.
+- Shared code lives in `scripts/lib/` (`nav.mjs`, `mdx.mjs`, `site.mjs`).
+- The scripts are pure Node with no dependencies. They never write to `docs/` and never execute notebook code.
+- Each script deletes only files carrying its own "Generated from docs/…" banner, so re-runs are clean.
+
+**Results:**
+- Pages: 34 of 34 Markdown pages converted. Old `index.md` → the custom landing page in Phase 3.
+- Notebooks: 38 of 38. 981 cells, 269 text outputs, 64 images (20 PNG, 44 SVG), 0 error outputs. Output MIME types are only `text/plain`, `image/png` and `image/svg+xml`; the script fails loudly on anything else.
+- Navigation: 15 `meta.json` files.
+- Assets: 45 image assets copied, out of 175 files in `docs/assets/images`.
+- Manual edits to generated files: none. Everything is reproducible from the scripts.
+
+**How the conversion works:**
+- **Titles:** the frontmatter `title` is the `mkdocs.yml` nav label, and the leading H1 is removed (notebooks too, since `ignore_h1_titles` was set). The labels that differ from the old H1 are listed below.
+  - Browser-tab titles: 8 pages are all called "Lecture Notes" and 8 "Jupyter Notebook". Their `<title>` gets the sidebar context, e.g. "Lecture Notes (Set A) · Language Model-1" (`getDocumentTitle` in `lib/source.ts`). The visible page title stays the nav label.
+- **Nav → meta.json:**
+  - A nav group becomes a folder `meta.json` when all of its pages are in a sub-folder.
+  - Groups of flat files become `---Separators---` inside the parent folder, so URLs never change.
+  - Each folder's `index` is listed explicitly, which makes it a child item ("Micrograd") under a non-clickable group ("Backpropagation"), exactly like the MkDocs nav.
+- **Admonitions:** `!!! note/info/warning "Title"` → `<Callout type="info|warn" title=…>`. `??? note` → `<Accordions><Accordion title="Note">`.
+- **Grid cards** (Books index) → `<Cards><Card>`. The whole card is the link, so the "View my notes" link text is gone.
+- **Icons:**
+  - `:material-…:` / `:fontawesome-…:` → `<Icon name="…"/>` (Lucide: CircleCheckBig, CircleAlert, Sparkle, CornerDownRight, LibraryBig, Bird).
+  - `:material-owl:` → 🦉, because Lucide has no owl.
+  - Inside headings the star becomes "✦" text: JSX in a heading would land in the module-level TOC export and fail.
+  - The icons that were only in H1s went away with the H1s.
+- **Raw HTML → JSX:** `style` strings become objects, `class` becomes `className`, `align`/`width` become style, and void tags are self-closed. This includes the GPT-2 `display:flex` side-by-side images, which keep the same inline layout as before.
+- **Escaping:** `{ } <` outside code are escaped. `<!-- -->` comments are removed.
+- **Links:** `.md`/`.ipynb` links are rewritten to absolute directory URLs, keeping the `#anchor`. Absolute `https://docs.muhammedshah.com/...` links become root-relative.
+- **Images:**
+  - Paths become `/assets/images/...`.
+  - Markdown links/images resolve against the file; raw-HTML `src` and notebook cells resolve against the page URL, as MkDocs/mkdocs-jupyter did.
+  - External images become plain `<img>` and are never fetched at build time (`remarkImageOptions.external: false`, `useImport: false`).
+- **Heading anchors:** every heading gets an explicit MkDocs-style id (`## Title [#id]`, Python-Markdown slugify, with the `_1` suffix for duplicates). All 302 old non-H1 heading anchors exist in the new build. The only ones missing are the 43 ids of the removed page H1s; those links still land at the top of the right page.
+- **Front matter:** `hide: [toc]` (the 4 Books chapters) → `hideToc: true`, a custom schema field that turns the TOC off.
+- **Tweets:** `<div class="x-twitter-embed" data-url>` → `<Tweet url/>` (`components/mdx/tweet.tsx`). It loads `platform.twitter.com/widgets.js`, follows the site theme, and shows a link card until the widget renders. The CSS is ported from `x-twitter-link-card.css` into `app/global.css`. No new package was needed.
+- **Notebook outputs:**
+  - stream and `text/plain` → ```` ```text title="Output" ````; ANSI codes are stripped.
+  - PNG → Markdown image. SVG (graphviz, sized in `pt`) → plain `<img>` at its native size, because `remark-image` measured these as `NaN`.
+  - Files go to `public/notebook-outputs/<notebook path>/cell-<n>-<k>.<ext>`.
+- **Download links:** every notebook page links `/notebooks/<path>.ipynb` (copied to `public/notebooks/`).
+- **Indented code blocks:** MDX has none. The 2 that exist (tab-indented, in Micrograd notebook `4_2` cells 24 and 30) are converted to fences.
+
+**Rendering differences vs MkDocs, checked by comparing every page with the `gh-pages` HTML:**
+- 66 of 72 pages have identical counts of code blocks, images, tables, h2/h3 and list items.
+- **Lists:** Python-Markdown requires a blank line before a list, CommonMark does not. Some lists that MkDocs printed as plain "- item" text inside a paragraph now render as real lists (Makemore 2C, 3A, 5; Micrograd MLP and value-object notes). This is clearly what the notes intended.
+- **Books index:** the cards are Fumadocs Cards (h3 titles) instead of a list grid.
+- **Accordions:** their headers render as h3.
+
+**Repaired:** 14 nested links in `ZeroToHero/General-MISC/deepdive-llms.md` of the form `[text]([url](url))`. MkDocs rendered them with a broken `href="[url](url)"`, so they were dead links on the live site. The converter unwraps them to `[text](url)`. The source is unchanged.
+
+**Notebook source location (suggestion):**
+- Keep the `.ipynb` files in `docs/` until cleanup.
+- At cleanup, move them to `notebooks/` with the same relative paths (e.g. `notebooks/ZeroToHero/Micrograd/notebooks/x.ipynb`) and point `scripts/lib/site.mjs` there.
+- The Markdown pages then stop being generated: `content/docs/*.mdx` becomes the source, and `convert-pages.mjs` plus the page banners are removed.
+
+### Nav label vs old H1 (nav label is now the title)
+
+| Source | Title (nav label) | Old H1 |
+|---|---|---|
+| `ZeroToHero/index.md` | Zero to Hero Series | Zero to Hero Series (with icon) |
+| `ZeroToHero/Micrograd/index.md` | Micrograd | BACKPROPAGATION - Using an AutoGrad Engine |
+| `ZeroToHero/Micrograd/notes/A-main-video-lecture-notes.md` | Master Notes | MASTER NOTES - NEURAL NETWORKS AND BACKPROPAGATION |
+| `ZeroToHero/Micrograd/notes/crux-node-backpropagation.md` | Crux Node Backpropagation | Crux Node - Backpropagation |
+| `ZeroToHero/Makemore-part1..5/index.md` | Makemore Part 1…5 | LANGUAGE MODEL - 1…5 (part 4: "… (BACKPROPAGATION II)") |
+| `Makemore-part1/2 A/B/C-main-…md`, `Makemore-part3/A-…md` | Lecture Notes | SET A/B/C - LECTURE NOTES |
+| `Makemore-part5/Main-makemore-part-5.md` | Lecture Notes | LECTURE NOTES |
+| `ZeroToHero/GPT-1/index.md` | Transformer Model-1 | TRANSFORMER MODEL - GPT 1 |
+| `ZeroToHero/GPT-2/index.md` | Transformer Model-2 | TRANSFORMER MODEL - GPT 2 |
+| `ZeroToHero/GPT-Tokenizer/index.md` | Tokenizer | TOKENIZATION |
+| `ZeroToHero/General-MISC/intro-llms.md` | Intro to LLMs | INTRODUCTION TO LLMs |
+| `ZeroToHero/General-MISC/deepdive-llms.md` | Deep Dive into LLMs | DEEP DIVE INTO LLMs |
+| `Books/index.md` | Overview | AI/ML Books |
+| `Books/AI-Engineering/chapter-1/5/6-a/6-b.md` | (chapter nav labels) | AI Engineering by Chip Huyen |
+| Notebooks `Makemore-part1/2 *-Notebook` | Jupyter Notebook | SET A/B/C - NOTEBOOK |
+| Notebooks `GPT-2/section-*` | Section 0 / 1(a) / 1(b) / 2(a) | Section 0 / 1 - A / 1 - B / 2 - A |
+
+- `GPT-1/bigram.md` has no H1, so nothing was removed there.
+- The Books chapters lose their visible "AI Engineering by Chip Huyen" heading. The chapter title and the breadcrumb now carry the context.
+
+### Typos / errors spotted in the notes (not changed)
+
+| Typo | Occurrences | Where |
+|---|---|---|
+| "explaination" | 16 | GPT-1, Makemore-part4 exercise-1; also the URL `notes/neurons-explaination`, kept for parity |
+| "comparision" | 2 | Micrograd master notes; also the URL `notes/pytorch-comparision` |
+| "withing" | 1 | Makemore-part1 B |
+| "sitll" | 3 | Makemore-part1 A notebook, visualization-tools, GPT-2 2a |
+| "duing" | 3 | GPT-2 2a |
+| "thus time" (for "this time") | 1 | GPT-2 2a |
+| "theoritical(ly)" | 3 | Micrograd 4_1/4_2, Makemore-part4 exercise-1 |
+| "deriviti…" | 3 | Micrograd notebooks 2, 4_1, 4_2 |
+| "seperately" | 2 | GPT-1 index, GPT-2 1a |
+| "convered" | 1 | Micrograd index |
+| "tagets" | 1 | GPT-2 1b |
+| "recieve" | 3 | GPT-2 1b, Micrograd 6_0, 6_1 |
+| "occured" | 2 | Makemore-part1 A notebook, GPT-2 1b |
+| "calcualte" | 1 | Makemore-part4 exercise-1 |
+| "dimention" | 1 | Makemore-part1 A notebook |
+
+- The nested-link problem in `deepdive-llms.md` is described above.
+- External image URLs in Micrograd notebooks 6_0/6_1 (`imgs.search.brave.com/...` proxy links) may stop working at any time; consider copying those images locally.
+
 ## Deviations from the prompt
 
 - **Fumadocs docs vs installed template:**
@@ -75,6 +187,9 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
   - The scaffolded template (and the `fumadocs-mdx/macro` docs) use `defineDocs` from `fumadocs-mdx/macro` directly in `lib/source.ts`.
   - I followed the template.
 - **Biome:** `create-fumadocs-app` does offer Biome (`--linter biome`); the docs page says only the separate CLI does.
+- **Generated pages are also committed:** the prompt asked for generated notebook MDX to be committed. The converted Markdown pages are committed the same way, so `npm run build` needs no conversion step.
+- **Search index path:** `/api/search.json` instead of the template's `/api/search` (see Static search).
+- **Next 16 route-type cache:** after renaming or moving a route, `tsc` can fail on stale types in `.next/dev/types`. Run `rm -rf .next` once.
 
 ## Known warnings
 

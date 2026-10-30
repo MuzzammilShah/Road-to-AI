@@ -11,7 +11,11 @@
     "start": "serve out",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "convert:pages": "node scripts/convert-pages.mjs",
+    "notebooks": "node scripts/convert-notebooks.mjs",
+    "convert": "npm run convert:pages && npm run notebooks",
+    "check:links": "node scripts/check-links.mjs"
   },
   "dependencies": {
     "cn": "0.5.1",
@@ -20,8 +24,10 @@
     "fumadocs-ui": "npm:@fumadocs/base-ui@16.17.9",
     "lucide-react": "1.65.0",
     "next": "16.4.3",
+    "next-themes": "0.4.6",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.4",

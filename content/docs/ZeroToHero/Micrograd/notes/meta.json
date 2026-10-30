@@ -1,4 +1,13 @@
 {
   "title": "Lecture Notes",
-  "pages": ["crux-node-backpropagation"]
+  "pages": [
+    "A-main-video-lecture-notes",
+    "micrograd-functionality",
+    "value-object-creation",
+    "crux-node-backpropagation",
+    "neurons-explaination",
+    "expanding-tanh-and-adding-more-operations",
+    "pytorch-comparision",
+    "multi-layer-perceptron"
+  ]
 }

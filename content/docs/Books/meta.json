@@ -1,6 +1,8 @@
 {
   "title": "Library",
-  "description": "Book notes",
   "root": true,
-  "pages": ["index"]
+  "pages": [
+    "index",
+    "AI-Engineering"
+  ]
 }
