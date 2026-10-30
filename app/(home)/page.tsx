@@ -9,7 +9,7 @@ export default function HomePage() {
   return (
     <>
       {/* Hero: full viewport, the globe also sits behind the transparent navbar (h-14). */}
-      <section className="relative isolate -mt-14 flex h-svh min-h-[480px] items-center overflow-hidden">
+      <section className="relative isolate -mt-14 flex h-svh min-h-[480px] shrink-0 items-center overflow-hidden">
         <HeroGlobe />
         <div className="relative z-10 ml-[5%] w-[90%] p-2.5 md:ml-[10%] md:w-[min(40%,480px)] md:p-5">
           <h1 className="sr-only">Road to AI</h1>
@@ -19,7 +19,7 @@ export default function HomePage() {
             width={999}
             height={250}
             priority
-            className="mb-2.5 w-full md:w-4/5 dark:hidden"
+            className="mb-2.5 h-auto w-full md:w-4/5 dark:hidden"
           />
           <Image
             src="/assets/images/black-bg-logo.png"
@@ -27,7 +27,7 @@ export default function HomePage() {
             width={999}
             height={250}
             priority
-            className="mb-2.5 hidden w-full md:w-4/5 dark:block"
+            className="mb-2.5 hidden h-auto w-full md:w-4/5 dark:block"
           />
           <p className="text-lg text-fd-foreground md:text-xl">{appDescription}</p>
         </div>
