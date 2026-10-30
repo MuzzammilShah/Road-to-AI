@@ -12,6 +12,7 @@
       "components/**",
       "lib/**",
       "scripts/**",
+      "types/**",
       "*.mjs",
       "*.ts",
       "biome.json",
