@@ -3,6 +3,7 @@ import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 import { applyMdxPreset } from 'fumadocs-mdx/config';
 import { defineDocs } from 'fumadocs-mdx/macro';
 import { z } from 'zod';
+import { resolveIcon } from './sections';
 import { docsRoute } from './shared';
 
 const docs = defineDocs({
@@ -32,6 +33,7 @@ const docs = defineDocs({
 export const source = loader({
   baseUrl: docsRoute,
   source: docs.toFumadocsSource(),
+  icon: resolveIcon,
   plugins: [],
 });
 

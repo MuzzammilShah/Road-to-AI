@@ -1,5 +1,5 @@
 import { Card, Cards } from 'fumadocs-ui/components/card';
-import { BookOpen, Brain, ChevronDown } from 'lucide-react';
+import { Brain, ChevronDown, LibraryBig } from 'lucide-react';
 import Image from 'next/image';
 import { HeroGlobe } from '@/components/home/hero-globe';
 import { Copyright } from '@/components/site-footer';
@@ -41,11 +41,12 @@ export default function HomePage() {
       </section>
 
       {/* TODO(landing): placeholder content below the hero; replace with the final landing copy. */}
+      {/* Fills the screen below the sticky navbar on desktop; content height on mobile. */}
       <section
         id="intro"
-        className="mx-auto w-full max-w-(--fd-layout-width) scroll-mt-14 px-4 py-20"
+        className="mx-auto flex w-full max-w-(--fd-layout-width) scroll-mt-14 flex-col justify-center px-4 py-20 md:min-h-[calc(100svh-3.5rem)]"
       >
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto w-full max-w-3xl">
           {/* TODO(landing): intro text */}
           <h2 className="mb-3 text-2xl font-semibold md:text-3xl">What is this?</h2>
           <p className="mb-10 text-fd-muted-foreground">
@@ -56,13 +57,13 @@ export default function HomePage() {
           {/* TODO(landing): section cards */}
           <Cards>
             <Card
-              icon={<Brain />}
+              icon={<Brain data-section-icon="Brain" />}
               title="Neural Networks"
               description="Zero to Hero: Micrograd, Makemore, GPT-1, GPT-2, tokenizers and more."
               href="/ZeroToHero/"
             />
             <Card
-              icon={<BookOpen />}
+              icon={<LibraryBig data-section-icon="LibraryBig" />}
               title="Library"
               description="Notes from AI/ML books, starting with AI Engineering by Chip Huyen."
               href="/Books/"

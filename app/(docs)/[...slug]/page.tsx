@@ -1,4 +1,4 @@
-import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/layouts/docs/page';
+import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/layouts/spacious/page';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -34,6 +34,8 @@ export default async function Page(props: PageProps<'/[...slug]'>) {
         />
       </DocsBody>
       <Copyright className="mt-8" />
+      {/* Selects the section accent colour (body:has([data-section]) in app/global.css). */}
+      <span hidden data-section={page.slugs[0]} />
     </DocsPage>
   );
 }

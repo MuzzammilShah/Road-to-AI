@@ -20,8 +20,18 @@ import {
 } from './lib/site.mjs';
 
 const PAGE_BANNER = 'Generated from docs/';
-/** Nav sections that become Fumadocs root folders (sidebar dropdown). */
-const ROOT_SECTIONS = { 'Neural Networks': 'Neural Networks', Library: 'Library' };
+/**
+ * Nav sections that become Fumadocs root folders (the sidebar dropdown). `icon` names are resolved
+ * by lib/sections.tsx; the section accent colours are in app/global.css.
+ */
+const ROOT_SECTIONS = {
+  'Neural Networks': {
+    title: 'Neural Networks',
+    description: 'Zero to Hero: from backprop to GPT',
+    icon: 'Brain',
+  },
+  Library: { title: 'Library', description: 'Notes from AI/ML books', icon: 'LibraryBig' },
+};
 
 const nav = readNav(MKDOCS_YML);
 const labels = navLabels(nav);
@@ -141,10 +151,10 @@ function buildMetas(navTree) {
 
   for (const section of navTree) {
     if (section.path) continue; // Home
-    const title = ROOT_SECTIONS[section.label];
-    if (!title) throw new Error(`Unexpected top-level nav section "${section.label}"`);
+    const root = ROOT_SECTIONS[section.label];
+    if (!root) throw new Error(`Unexpected top-level nav section "${section.label}"`);
     const dir = commonDir(section);
-    result.set(dir, { title, root: true, pages: pagesOf(section, dir) });
+    result.set(dir, { ...root, root: true, pages: pagesOf(section, dir) });
   }
   return result;
 }

@@ -1,5 +1,7 @@
 {
   "title": "Neural Networks",
+  "description": "Zero to Hero: from backprop to GPT",
+  "icon": "Brain",
   "root": true,
   "pages": [
     "index",

@@ -39,10 +39,15 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
   - The catch-all never matches `/`.
 - **Slugs keep their case.** Verified in `fumadocs-core/dist/source/plugins/slugs.js`: `getSlugs` only `encodeURI`s path segments. So `A-Main-Notebook.mdx` → `/ZeroToHero/Makemore-part1/A-Main-Notebook/`.
 - **Section switcher:**
-  - `ZeroToHero/meta.json` and `Books/meta.json` set `"root": true`.
-  - `DocsLayout` `tabMode="auto"` gives the dropdown at the top of the sidebar.
-  - `tabMode="top"` gives navbar tabs; this is a one-line change in `app/(docs)/layout.tsx`.
-  - Valid values (from the `fumadocs-ui` types) are `'auto' | 'top'`.
+  - `ZeroToHero/meta.json` and `Books/meta.json` set `"root": true`, plus `icon` and `description` for the dropdown.
+  - **Docs layout:** since your review, the **spacious** layout (`fumadocs-ui/layouts/spacious`), the one fumadocs.dev uses.
+    - The sidebar sits flush left; the classic layout centred the whole grid in `--fd-layout-width`, which left a gap on the left.
+    - The page sits in a rounded, bordered panel.
+    - The section dropdown sits at the top of the sidebar.
+  - **Navbar tabs instead:** the spacious layout has no `tabMode`. Switch the two imports back to `fumadocs-ui/layouts/docs` and pass `tabMode="top"` (valid values `'auto' | 'top'`).
+  - **Section accents:** each docs page renders `<span hidden data-section="ZeroToHero|Books">`. `body:has(...)` in `app/global.css` then sets `--color-fd-primary` to a subtle indigo (Neural Networks) or amber (Library), with light and dark variants. This colours the active sidebar item, the TOC and similar accents. The dropdown icons (`lib/sections.tsx`) and the landing cards use the same colours.
+- **`output: 'export'` only for builds:** `next.config.mjs` checks the phase. In `next dev`, export mode made every unknown URL (`/sw.js`, Chrome's `/.well-known/appspecific/com.chrome.devtools.json`) throw "missing param in generateStaticParams()". Dev now returns 404, and `npm run build` still exports.
+- **Landing below the hero:** the whole home page uses the globe's background (`.landing-surface`: white / #121212). The intro section fills the screen below the navbar on desktop.
 - **Trailing slashes:** `trailingSlash: true` makes Next's `Link` emit `/a/b/` hrefs, and the export writes `a/b/index.html`.
 - **Static search:**
   - `app/api/search.json/route.ts` exports `staticGET`, which is written to `out/api/search.json`.

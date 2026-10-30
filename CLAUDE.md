@@ -29,7 +29,7 @@ npm run check:links    # after build: every internal href/src/#anchor in out/ mu
 
 - **Local installs only.** No global npm packages, no `sudo`, no `brew`, no edits to shell profiles or `~/.npmrc`.
 - **Pin exact versions.** `.npmrc` has `save-exact=true`, so always commit `package-lock.json`. Node version is in `.nvmrc` (24); `engines` is `>=22`.
-- **Static export only.** `output: 'export'`, `trailingSlash: true`, `images.unoptimized`. That means:
+- **Static export only.** `output: 'export'` (applied to builds only, so `next dev` answers unknown URLs with 404 instead of throwing), `trailingSlash: true`, `images.unoptimized`. That means:
   - no server runtime;
   - no route handlers that need a request;
   - every dynamic route has `generateStaticParams` (+ `dynamicParams = false`);
@@ -57,7 +57,8 @@ npm run check:links    # after build: every internal href/src/#anchor in out/ mu
   - `app/(home)/` is the landing page and `app/(docs)/[...slug]/` the docs pages.
   - `app/api/search.json/` is the search index.
   - `lib/layout.shared.tsx` holds the navbar title and links, which is where to add links.
-  - `app/(docs)/layout.tsx` has `tabMode`: `'auto'` gives the sidebar dropdown, `'top'` gives navbar tabs.
+  - The docs use the Fumadocs **spacious** layout: the sidebar is flush left with the section dropdown, and the page sits in a rounded panel. For navbar tabs instead, switch `fumadocs-ui/layouts/spacious` (+ `/page`) back to `fumadocs-ui/layouts/docs` and pass `tabMode="top"`.
+  - Section dropdown entries: `icon` and `description` come from the root `meta.json`, which `convert-pages.mjs` (`ROOT_SECTIONS`) generates until cutover. Icon names resolve in `lib/sections.tsx`. The per-section accent colours (`--section-*`, `body:has([data-section])`) are in `app/global.css`.
 - **MDX components** (`components/mdx.tsx`):
   - from Fumadocs: `Callout`, `Cards`/`Card`, `Accordions`/`Accordion`;
   - site-specific: `Icon` (Lucide), `Tweet` (X/Twitter embed), `NotebookDownload`.
