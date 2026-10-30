@@ -268,7 +268,7 @@ In the `__init__` method we are reading the dataset, tokenizing it, encoding it 
 
 In the `next_batch` method we are processing it in batches B times T. So we are loading it in batches of (B, T). So it is those chunks of batches we are processsing at the time. Therefore, even the *current_position* is being increated my B times T. 
 
-The buffers and setting of x, y (of setting inputs and tagets tensors) is the same as what we did in [section1b dataset notebook](https://github.com/MuzzammilShah/GPT-TransformerModel-2/blob/main/section-1b-dataset.ipynb).
+The buffers and setting of x, y (of setting inputs and targets tensors) is the same as what we did in [section1b dataset notebook](https://github.com/MuzzammilShah/GPT-TransformerModel-2/blob/main/section-1b-dataset.ipynb).
 
 Lastly, once we run out of data we just reset the *current_position* to 0.
 
@@ -296,13 +296,13 @@ Finally, we call the `next_batch` on x and y; and importantly move them to GPU (
 
 So, we ran our code to see what the loss is like now.
 
-What's different this time, is that, just in the previous step, we only kept training on a single batch, so overfitting occured and got like a very very low loss.
+What's different this time, is that, just in the previous step, we only kept training on a single batch, so overfitting occurred and got like a very very low loss.
 
 This time we are adding different batches. So we expect to see a different loss value at the end. Now, although it wont be as low as before, we still expect it to be less than out estimated value, 11. 
 
 This is because, as the model learns from the data, it will notice that a lot of the tokens wont be repeated, like unicodes, special characters, complex words etc. So a lot of those will be filtered out.
 
-But ofcourse, the ultimate aim is to get the loss close to 0, that is when our model is perfect. Since right now, we are doing only like 50 iterations, we don't expect it to go that low as seen in the output we recieved.
+But ofcourse, the ultimate aim is to get the loss close to 0, that is when our model is perfect. Since right now, we are doing only like 50 iterations, we don't expect it to go that low as seen in the output we received.
 
 <div style={{"display":"flex","gap":"10px"}}>
   <img src="/assets/images/gpt2/data-loader-1.png" alt="Optimizer output 1" style={{"width":"48%"}} />

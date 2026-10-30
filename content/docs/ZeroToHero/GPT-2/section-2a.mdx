@@ -10,7 +10,7 @@ title: "Section 2(a)"
 
 ## Let’s make it fast. GPUs, mixed precision, 1000ms [#lets-make-it-fast-gpus-mixed-precision-1000ms]
 
-So in these next 2 sections (including this) we are going to be focusing on increasing the speed of our training. But thus time, its not just making the code more efficient but also **understanding our hardware, what it offers and are we efficiently using it?**.
+So in these next 2 sections (including this) we are going to be focusing on increasing the speed of our training. But this time, its not just making the code more efficient but also **understanding our hardware, what it offers and are we efficiently using it?**.
 
 <div style={{"display":"flex","gap":"10px"}}>
   <img src="/assets/images/gpt2/gpu-specs-tflops.png" alt="GPU Specs TFlops" style={{"width":"50%"}} />
@@ -33,7 +33,7 @@ So, in our case, right now, **pytorch has its tensors of the type float32 by def
 
 He experiments with two: tfloat32 (156 tflops) and bfloat16 (312 tflops) - This is exactly what is going to happen in the next two sections.
 
-And why not INT8 which has like the most tflops processing? Apparently we use that duing inferencing and not training. And float is better so that we get a better match of the values duing Normal distributions (activations and weights) that occur duing training.
+And why not INT8 which has like the most tflops processing? Apparently we use that during inferencing and not training. And float is better so that we get a better match of the values during Normal distributions (activations and weights) that occur during training.
 
 Also, **why are we doing this and not just go ahead with the default dtype?** It seems float32 is a little too high for a computational workload when it comes to deeplearning. Therefore we can make it lower, to smaller precision. But it is also important to note that not all hardwares/GPU can provide such precision, and thats where top expensive GPUs come in like A100 where as shown in the image can process even the highest i.e. FP64 (which apparently is quite useful for scientific computing applications and there they really need this).
 
@@ -153,7 +153,7 @@ import sys; sys.exit(0)
 
 The other thing is by reducing the precision we are compromising the accuracy of the output but increasing the speed of the training. But sensei is saying its a ok tradeoff as we can coverup for it by running the training step for longer time.
 
-Next is, here only the logits will be in bfloat and the rest still in float32 as that is one limitation of autocast (so the normalization steps etc will sitll be in float32), the following snippet from the documentation shows that.
+Next is, here only the logits will be in bfloat and the rest still in float32 as that is one limitation of autocast (so the normalization steps etc will still be in float32), the following snippet from the documentation shows that.
 
 ![autocast limitation](/assets/images/gpt2/autocast-limitation.png)
 

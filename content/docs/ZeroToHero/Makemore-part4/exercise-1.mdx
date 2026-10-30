@@ -217,7 +217,7 @@ tensor([ 8, 14, 15, 22,  0, 19,  9, 14,  5,  1, 20,  3,  8, 14, 12,  0, 11,  0,
 
 ```python
 #simple breakdown
-#now here we know there are 32 examples, for explaination lets assume we only have 3 in total i.e. a,b,c
+#now here we know there are 32 examples, for explanation lets assume we only have 3 in total i.e. a,b,c
 
 #loss = - (a + b + c) / 3 ==> so we are basically doing the mean calculation here
 #loss = - (1/3a + 1/3b + 1/3c) ==> same equation
@@ -273,7 +273,7 @@ probs           | exact: True  | approximate: True  | maxdiff: 0.0
 # So, here just `counts` will remain -> then `dprobs` is multiplied because chain rule.
 # Finally, in order to make `dcounts_sum_inv` the same dimension as `counts_sum_inv` we sum all of them by 1 and also keepdims as true
 
-dcounts_sum_inv = (counts * dprobs).sum(1, keepdims=True) # So this is our final manually calcualted equation
+dcounts_sum_inv = (counts * dprobs).sum(1, keepdims=True) # So this is our final manually calculated equation
 
 cmp('counts_sum_inv', dcounts_sum_inv, counts_sum_inv)
 ```
@@ -378,7 +378,7 @@ logits          | exact: True  | approximate: True  | maxdiff: 0.0
 
 [41:45](https://youtu.be/q8SA3rM6ckI?si=wJvhK8v1Hj2sEhc6&t=2505) to [53:25](https://youtu.be/q8SA3rM6ckI?si=xg15htmnJE03afh5&t=3216) `cmp('h', dh, h)`, `cmp('W2', dW2, W2)` and `cmp('b2', db2, b2)` - Bckpropagation through a linear layer
 
-( Till [49:56](https://youtu.be/q8SA3rM6ckI?si=nX-tCDJWXFHTgqi3&t=2996) had theoritical proofs on the matrix multiplication )
+( Till [49:56](https://youtu.be/q8SA3rM6ckI?si=nX-tCDJWXFHTgqi3&t=2996) had theoretical proofs on the matrix multiplication )
 
 ```python
 # # Linear layer 2

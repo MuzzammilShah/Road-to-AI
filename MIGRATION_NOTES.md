@@ -161,7 +161,9 @@ Running log for the `major-update/framework-switch` branch. Kept at the repo roo
 - `GPT-1/bigram.md` has no H1, so nothing was removed there.
 - The Books chapters lose their visible "AI Engineering by Chip Huyen" heading. The chapter title and the breadcrumb now carry the context.
 
-### Typos / errors spotted in the notes (not changed)
+### Typos / errors spotted in the notes (fixed after cleanup)
+
+Fixed in prose, notebook markdown cells, code-cell comments (your approval), the "Neurons Explanation" title and two link labels. File names, URLs, link targets and heading ids are unchanged, so `neurons-explaination` and `pytorch-comparision` stay in the URLs. The `sItLL`/`SitLL` hits are model-generated names in saved outputs, not typos, and stay.
 
 | Typo | Occurrences | Where |
 |---|---|---|
@@ -260,7 +262,7 @@ The scripts and paths in "Content conversion" above describe the migration as it
 ## Status and next steps
 
 1. **Done:** setup, content conversion, landing page, UI polish, verification scripts, MkDocs cleanup.
-2. **Next:** typo fixes (see "Typos" above), then scroll-smoothness profiling.
+2. **Done:** typo fixes. **Next:** scroll-smoothness profiling.
 3. **Then:** deployment, following the plan below.
 
 ## Future deployment plan: GitHub Pages (text only, no workflow created)

@@ -103,7 +103,7 @@ For the output, we are obviously trying to achieve what we did in A-Main, where 
 
 - In NN, we cannot output integers. So we will be calculating the **Log Counts (a.k.a. logits)** instead and then **exponentiate** them.
 
-- So when we exponentiate them, the negative value numbers will turn into values \<1 and the positive value numbers will turn into more positive. So now we have values withing a specific range.
+- So when we exponentiate them, the negative value numbers will turn into values \<1 and the positive value numbers will turn into more positive. So now we have values within a specific range.
 
 - Finally, for those values we normalize them to get the probability distributions (As we had done in A-main with `keepdims=True`)
 

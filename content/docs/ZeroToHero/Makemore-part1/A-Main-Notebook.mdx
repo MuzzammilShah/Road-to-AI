@@ -116,7 +116,7 @@ for word in words[:1]:
     chs = ['<S>'] + list(word) + ['<E>']
     for ch1, ch2 in zip(chs, chs[1:]):
         bigram = (ch1, ch2) #Then we have created a set 'bigram' which is just a set of two characters - Second data structure
-        b[bigram] = b.get(bigram, 0) + 1    #Here we are adding it to the dictionary 'b', where the key is 'bigram' (which is a set of character pairs) has the value counts of the set occoured (The number of times that set has occured)
+        b[bigram] = b.get(bigram, 0) + 1    #Here we are adding it to the dictionary 'b', where the key is 'bigram' (which is a set of character pairs) has the value counts of the set occurred (The number of times that set has occurred)
         print(ch1, ch2)
 ```
 
@@ -2499,7 +2499,7 @@ Each tensor has at least one dimension.
 When iterating over the dimension sizes, starting at the trailing dimension, the dimension sizes must either be equal, one of them is 1, or one of them does not exist.
 ```
 
-So in our case, one of the dimentional sizes is one i.e 27 **1** \
+So in our case, one of the dimensional sizes is one i.e 27 **1** \
 And, the dimension sizes are equal: \
 **27**  \
 **27**
