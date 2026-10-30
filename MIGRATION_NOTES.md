@@ -2,7 +2,7 @@
 
 Running log for the `major-update/framework-switch` branch. Kept at the repo root until after deployment (your decision at cleanup); delete or archive it then.
 
-> **Do not merge this branch into `main` before the deployment task.** The MkDocs files are gone, and `.github/workflows/ci.yml` on `main` still runs `mkdocs gh-deploy`, which would fail. The deployment task replaces that workflow (plan below).
+> **Cutover order for the merge:** see "Deployment: GitHub Pages via Actions" below. In short: allow `main` in the `github-pages` environment, set Pages → Source to "GitHub Actions", then merge.
 
 ## Installed versions (exact pins, `.npmrc` has `save-exact=true`)
 
@@ -257,31 +257,99 @@ The scripts and paths in "Content conversion" above describe the migration as it
 | `.gitignore`: dropped `.cache` (MkDocs Material); kept `.venv/` (local Jupyter). | `.gitignore` |
 | New `README.md` for the Fumadocs site; `CLAUDE.md` describes the post-cleanup workflow. | |
 
-`.github/workflows/ci.yml` is unchanged on purpose; it is replaced in the deployment task.
+`.github/workflows/ci.yml` was left unchanged at cleanup and removed in the deployment task (see below).
 
 ## Status and next steps
 
 1. **Done:** setup, content conversion, landing page, UI polish, verification scripts, MkDocs cleanup.
 2. **Done:** typo fixes. **Next:** scroll-smoothness profiling.
-3. **Then:** deployment, following the plan below.
+3. **Done on the branch:** deployment workflow (below). **Next:** the cutover, done by you.
 
-## Future deployment plan: GitHub Pages (text only, no workflow created)
+## Deployment: GitHub Pages via Actions
 
-1. **Workflow:** a new workflow, e.g. `.github/workflows/deploy.yml`, triggered on push to `main` (plus `workflow_dispatch`):
-   - `actions/checkout`
-   - `actions/setup-node` with `node-version-file: .nvmrc` and `cache: npm`
-   - `npm ci`
-   - `npm run typecheck && npm run lint`
-   - `npm run build`
-   - `npm run check:links && npm run check:parity`
-   - `actions/upload-pages-artifact` with `path: out`
-   - a `deploy` job using `actions/deploy-pages`
-   - Permissions: `pages: write`, `id-token: write`, `contents: read`. Concurrency group `pages`.
-2. **Old MkDocs workflow:** remove (or disable) the current `ci.yml` (`mkdocs gh-deploy`) in the same PR, so the two deployments don't fight.
-3. **Repository setting:** Settings → Pages → Source: switch from "Deploy from a branch (gh-pages)" to **"GitHub Actions"**.
-4. **Custom domain:** `public/CNAME` (`docs.muhammedshah.com`) already exists (copied at cleanup) and lands in `out/CNAME`. Also add an empty `public/.nojekyll`. Leave the domain set in the Pages settings; DNS needs no change.
-5. **First deploy:** merge to `main`, watch the Actions run, then spot-check the old URLs on the live domain (`scripts/old-urls.txt`).
-6. **Rollback:** the `gh-pages` branch still holds the last MkDocs build. Switching Pages → Source back to "Deploy from a branch: gh-pages / root" restores the old site immediately, with no rebuild needed. Keep `gh-pages` until the new site has been stable for a while.
+### Workflow
+
+**`.github/workflows/deploy.yml`** replaces the MkDocs `ci.yml` (`mkdocs gh-deploy --force`), which was removed in the same branch so the two deployments never run together.
+
+**Triggers:**
+- `push` to `main`;
+- `pull_request` to `main`;
+- `workflow_dispatch`.
+
+**`build` job** (every run):
+1. checkout;
+2. setup-node with `node-version-file: .nvmrc` and `cache: npm`;
+3. `npm ci`;
+4. typecheck → lint → build → check:links → check:parity, one step each (same order as the `&&` chain), so a failure points at its step;
+5. `upload-pages-artifact` with `path: out` and `include-hidden-files: true`. It also runs on PRs, which exercises the step; the artifact expires after a day.
+
+**`deploy` job:**
+- runs only if `github.event_name != 'pull_request' && github.ref == 'refs/heads/main'`, so PRs and manual runs on other branches only build;
+- `actions/deploy-pages` into the `github-pages` environment.
+
+**Permissions:**
+- `contents: read` at workflow level;
+- `pages: write` + `id-token: write` only on the deploy job.
+
+**Concurrency:**
+- Main/manual runs share the group `pages` with `cancel-in-progress: false`. They run one after another, so an older build never deploys over a newer one, and an in-progress deploy is never cancelled.
+- PR runs use a per-PR group, where a new push cancels the superseded build. A shared group would let a pending PR run replace a pending main deploy.
+
+**Action versions** (latest releases checked on 2026-10-31 with `gh api repos/<action>/releases/latest`):
+
+| Action | Pinned major | Latest release | Note |
+|---|---|---|---|
+| `actions/checkout` | `v7` | v7.0.1 | |
+| `actions/setup-node` | `v7` | v7.1.0 | |
+| `actions/upload-pages-artifact` | `v5` | v5.0.0 | since v4 dotfiles are excluded unless `include-hidden-files: true` (input added in v5) |
+| `actions/deploy-pages` | `v5` | v5.0.1 | |
+
+`actions/configure-pages` is not used: there is no `basePath` and Pages is already enabled.
+
+### Files
+
+- **`public/.nojekyll`** (empty) → `out/.nojekyll`. Actions deploys never run Jekyll, so `_next/` is served regardless; the file matters only for a branch deploy of `out/`. It is the only dotfile in `out/`.
+- **`public/CNAME`** → `out/CNAME`. With Actions deploys, Pages takes the domain from the settings and ignores the file; it is kept as documentation and for branch deploys.
+
+### How Pages serves the export (checked on `out/` and against `npx serve out`)
+
+| Item | Check | Result |
+|---|---|---|
+| Directory URLs | All 73 URLs in `scripts/old-urls.txt` exist as `<dir>/index.html`. Pages serves `/a/b/` from `index.html` and 301-redirects `/a/b` → `/a/b/`. | ✅ |
+| Unknown URLs | `out/404.html` exists and loads only root-absolute `/_next/static/…` assets, so it renders at any depth. Pages uses the top-level `404.html` (`custom_404` is already true). | ✅ |
+| `/api/search.json` | 3.0 MB, parses as JSON. Served as `application/json` by extension, which is compressible. | ✅ |
+| `/_next/` | `out/_next/static/` exists. Not affected by Jekyll (no Jekyll run, plus `.nojekyll`). | ✅ |
+| PWA | `manifest.webmanifest` (served as `application/manifest+json`), both manifest icons, the favicon and the apple-touch-icon all exist in `out/`. | ✅ |
+
+### Repository state found before the cutover (read-only API)
+
+- **Pages:**
+  - `build_type: legacy`, source `gh-pages` / root;
+  - cname `docs.muhammedshah.com`;
+  - HTTPS certificate approved (expires 2026-12-07) and enforced.
+- **`github-pages` environment:** the deployment-branch policy allows **only `gh-pages`**. A deploy from `main` is rejected until `main` is added.
+
+### Cutover checklist (you do these)
+
+1. **Settings → Environments → `github-pages` → Deployment branches and tags:** add `main` and keep `gh-pages` (rollback needs it).
+2. **Settings → Pages → Source: "GitHub Actions"**, right before merging. The current site stays up until the first Actions deployment replaces it. Check that the custom domain still reads `docs.muhammedshah.com` and "Enforce HTTPS" is on.
+3. **Merge the PR.**
+4. **Watch the "Deploy to GitHub Pages" run on `main`.** If it fails on a setting, fix the setting, then "Re-run failed jobs" or "Run workflow". No new commit is needed.
+5. **Spot-check the live site:**
+   - a few URLs from `scripts/old-urls.txt`, including a deep `#anchor`;
+   - search;
+   - a notebook page and its `.ipynb` download;
+   - dark/light mode;
+   - mobile;
+   - HTTPS on the custom domain;
+   - an unknown URL, which should show the 404 page.
+
+### Rollback
+
+1. **Settings → Pages → Source:** "Deploy from a branch", `gh-pages` / `(root)`. That branch still holds the last MkDocs build, so the old site is back within about a minute. No rebuild of the new site is needed.
+2. **While rolled back, disable the workflow** (Actions → "Deploy to GitHub Pages" → Disable, or `gh workflow disable deploy.yml`), so pushes to `main` don't try to deploy.
+3. **To go forward again:** set Source back to "GitHub Actions", enable the workflow, and run it with "Run workflow".
+4. **Keep the `gh-pages` branch** and its entry in the environment policy until the new site has been stable for a while. Nothing writes to `gh-pages` any more.
 
 ## Deviations from the prompt
 

@@ -2,7 +2,10 @@
 
 Personal documentation site (notes, Jupyter notebooks, book notes on AI), served at docs.muhammedshah.com. It was migrated from MkDocs Material; `MIGRATION_NOTES.md` has the history and decisions. The MkDocs files are gone: `content/docs/` and `notebooks/` are the only sources.
 
-> **Do not merge this branch into `main` before the deployment task.** `.github/workflows/ci.yml` on `main` still runs `mkdocs gh-deploy`, which fails without `mkdocs.yml`. The deployment task replaces that workflow (plan in `MIGRATION_NOTES.md`). Don't edit `ci.yml` before then.
+> **Cutover order for merging this branch into `main`** (the owner does these; details in "Deployment" below):
+> 1. Settings → Environments → `github-pages` → add `main` to the allowed deployment branches (keep `gh-pages`).
+> 2. Settings → Pages → Source: "GitHub Actions".
+> 3. Merge, then watch the deploy run and spot-check the live site.
 
 ## Stack
 
@@ -65,7 +68,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - `notebook-outputs/` holds the generated notebook output images;
   - `notebooks/` holds the `.ipynb` download copies;
   - `manifest.webmanifest` and the icons are for the PWA / iOS home-screen;
-  - `CNAME` is the custom domain for GitHub Pages (exported as `out/CNAME`).
+  - `CNAME` is the custom domain for GitHub Pages (exported as `out/CNAME`), and `.nojekyll` is the empty Jekyll opt-out (see "Deployment").
 - **`scripts/`:** `convert-notebooks.mjs` (+ `lib/mdx.mjs`, `lib/site.mjs`), `check-links.mjs`, `check-parity.mjs`, `old-urls.txt`.
 
 ## App code map
@@ -96,6 +99,23 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - from Fumadocs: `Callout`, `Cards`/`Card`, `Accordions`/`Accordion`;
   - site-specific: `Icon` (Lucide), `Tweet` (X/Twitter embed), `NotebookDownload`.
 - **Escaping in MDX:** `{`, `}` and `<` in prose must be escaped (`\{`, `\}`, `\<`). HTML must be JSX (`className`, `style={{...}}`, self-closing `<img />`).
+
+## Deployment
+
+- **Workflow:** `.github/workflows/deploy.yml` (GitHub Actions → GitHub Pages, custom domain docs.muhammedshah.com).
+  - Every run: `npm ci`, then the full verification chain below, then `actions/upload-pages-artifact` with `out/`.
+  - PRs to `main`: build and checks only, never a deploy.
+  - Push to `main` (or a manual run on `main`): the `deploy` job runs `actions/deploy-pages`.
+  - Concurrency group `pages` for main/manual runs, without cancelling an in-progress deploy; PR runs get their own group per PR.
+- **Repository settings:**
+  - Pages → Source is "GitHub Actions".
+  - The domain comes from the Pages settings; with Actions deploys, `public/CNAME` is kept but ignored.
+  - The `github-pages` environment must allow `main` (and keeps `gh-pages` for rollback).
+- **`public/.nojekyll`** is exported as `out/.nojekyll`. Actions deploys don't run Jekyll anyway, but a branch deploy of `out/` would need it for `_next/`. The upload step sets `include-hidden-files: true`, otherwise dotfiles are dropped.
+- **Rollback:**
+  1. Settings → Pages → Source: "Deploy from a branch: `gh-pages` / (root)". That branch holds the last MkDocs build, so the old site is back within about a minute.
+  2. While rolled back, disable the workflow (`gh workflow disable deploy.yml`) so pushes to `main` don't try to deploy.
+  3. **Never delete or push to `gh-pages`**: it is the rollback.
 
 ## Performance notes
 
@@ -133,6 +153,8 @@ To edit a notebook's prose, change only the affected markdown-cell `source` stri
 ```bash
 npm run typecheck && npm run lint && npm run build && npm run check:links && npm run check:parity
 ```
+
+CI (`.github/workflows/deploy.yml`) runs the same chain on every PR and before every deploy.
 
 Then run `npx serve out -l 4173` and look at the changed pages in light and dark mode.
 

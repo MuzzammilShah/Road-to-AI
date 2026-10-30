@@ -1,0 +1,63 @@
+name: Deploy to GitHub Pages
+
+# PRs to main: build + checks only. Push to main / manual run on main: build + checks + deploy.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# main/dispatch runs share "pages": they run one at a time (an older build can never deploy
+# after a newer one) and an in-progress deploy is never cancelled.
+# PR runs get their own group per PR, where a new push cancels the superseded build.
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.ref) || 'pages' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - run: npm run check:links
+      - run: npm run check:parity
+
+      # Also runs on PRs (the artifact expires after a day); only the deploy job publishes it.
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: out
+          include-hidden-files: true # keep out/.nojekyll (dotfiles are dropped by default)
+
+  deploy:
+    # Never on PRs, and only from main (a manual run on another branch only builds).
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
