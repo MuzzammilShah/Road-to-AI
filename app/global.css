@@ -41,6 +41,11 @@
   background-color: #121212;
 }
 
+/* The default light card grey reads too dark on the white landing surface. */
+:root:not(.dark) .landing-cards {
+  --color-fd-card: hsl(0, 0%, 98.5%);
+}
+
 html {
   scrollbar-gutter: stable;
 }
@@ -53,11 +58,8 @@ html > body[data-scroll-locked] {
   --removed-body-scroll-bar-size: 0px !important;
 }
 
-/* Wide tables and images inside notes scroll/shrink instead of breaking the layout. */
-.prose table {
-  display: block;
-  overflow-x: auto;
-}
+/* Wide images inside notes shrink instead of breaking the layout. Wide tables already scroll:
+   Fumadocs wraps each one in an overflow-auto div (`display: block` here broke the header row). */
 .prose img {
   max-width: 100%;
   height: auto;

@@ -3,15 +3,16 @@ import { Brain, ChevronDown, LibraryBig } from 'lucide-react';
 import Image from 'next/image';
 import { HeroGlobe } from '@/components/home/hero-globe';
 import { Copyright } from '@/components/site-footer';
-import { appDescription, githubUrl } from '@/lib/shared';
+import { appDescription, websiteUrl } from '@/lib/shared';
 
 export default function HomePage() {
   return (
     <>
-      {/* Hero: full viewport, the globe also sits behind the transparent navbar (h-14). */}
-      <section className="relative isolate -mt-14 flex h-svh min-h-[480px] shrink-0 items-center overflow-hidden">
+      {/* Hero: full viewport, the globe also sits behind the transparent navbar (h-14).
+          Mobile: the text sits at the bottom left, below the globe; desktop: vertically centred. */}
+      <section className="relative isolate -mt-14 flex h-svh min-h-[480px] shrink-0 items-end overflow-hidden md:items-center">
         <HeroGlobe />
-        <div className="relative z-10 ml-[5%] w-[90%] p-2.5 md:ml-[10%] md:w-[min(40%,480px)] md:p-5">
+        <div className="relative z-10 mb-24 ml-[5%] w-[90%] p-2.5 md:mb-0 md:ml-[10%] md:w-[min(40%,480px)] md:p-5">
           <h1 className="sr-only">Road to AI</h1>
           <Image
             src="/assets/images/white-bg-logo.png"
@@ -34,9 +35,10 @@ export default function HomePage() {
         <a
           href="#intro"
           aria-label="Scroll to content"
-          className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 rounded-full border bg-fd-background/70 p-2 text-fd-muted-foreground backdrop-blur transition-colors hover:text-fd-foreground"
+          className="absolute bottom-6 left-1/2 z-10 flex size-10 -translate-x-1/2 items-center justify-center rounded-full border bg-fd-background/70 text-fd-muted-foreground backdrop-blur transition-colors hover:text-fd-foreground"
         >
-          <ChevronDown className="size-5 motion-safe:animate-bounce" />
+          {/* animate-bounce moves between -25% and 0; translate-y-1/8 centres that range in the circle. */}
+          <ChevronDown className="size-5 motion-safe:translate-y-1/8 motion-safe:animate-bounce" />
         </a>
       </section>
 
@@ -55,7 +57,7 @@ export default function HomePage() {
           </p>
 
           {/* TODO(landing): section cards */}
-          <Cards>
+          <Cards className="landing-cards">
             <Card
               icon={<Brain data-section-icon="Brain" />}
               title="Neural Networks"
@@ -77,10 +79,10 @@ export default function HomePage() {
         <div className="mx-auto flex w-full max-w-(--fd-layout-width) flex-col items-center justify-between gap-2 px-4 py-6 sm:flex-row">
           <Copyright />
           <a
-            href={githubUrl}
+            href={websiteUrl}
             className="text-xs text-fd-muted-foreground transition-colors hover:text-fd-foreground"
           >
-            GitHub
+            Website
           </a>
         </div>
       </footer>

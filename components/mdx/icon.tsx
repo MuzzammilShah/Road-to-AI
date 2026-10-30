@@ -3,6 +3,7 @@ import {
   CircleAlert,
   CircleCheckBig,
   CornerDownRight,
+  Feather,
   LibraryBig,
   type LucideIcon,
   Sparkle,
@@ -15,6 +16,7 @@ const icons = {
   CircleAlert,
   CircleCheckBig,
   CornerDownRight,
+  Feather,
   LibraryBig,
   Sparkle,
 } satisfies Record<string, LucideIcon>;

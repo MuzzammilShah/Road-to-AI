@@ -1,6 +1,7 @@
 export const appName = 'Road to AI';
 export const appDescription = 'Documenting My Journey in Artificial Intelligence.';
 export const siteUrl = 'https://docs.muhammedshah.com';
+export const websiteUrl = 'https://muhammedshah.com';
 export const docsRoute = '/';
 
 export const gitConfig = {

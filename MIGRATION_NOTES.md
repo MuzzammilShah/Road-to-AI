@@ -107,7 +107,7 @@ Running log for the `major-update/framework-switch` branch. Kept at the repo roo
 - **Grid cards** (Books index) → `<Cards><Card>`. The whole card is the link, so the "View my notes" link text is gone.
 - **Icons:**
   - `:material-…:` / `:fontawesome-…:` → `<Icon name="…"/>` (Lucide: CircleCheckBig, CircleAlert, Sparkle, CornerDownRight, LibraryBig, Bird).
-  - `:material-owl:` → 🦉, because Lucide has no owl.
+  - `:material-owl:` → 🦉 at first, because Lucide has no owl; later replaced by the Lucide `Feather` icon for consistency (`Bird` is already the other book's icon).
   - Inside headings the star becomes "✦" text: JSX in a heading would land in the module-level TOC export and fail.
   - The icons that were only in H1s went away with the H1s.
 - **Raw HTML → JSX:** `style` strings become objects, `class` becomes `className`, `align`/`width` become style, and void tags are self-closed. This includes the GPT-2 `display:flex` side-by-side images, which keep the same inline layout as before.

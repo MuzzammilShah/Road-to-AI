@@ -17,8 +17,8 @@ const ICONS = {
   'material-subdirectory-arrow-right': { lucide: 'CornerDownRight' },
   'material-bookshelf': { lucide: 'LibraryBig' },
   'fontawesome-solid-kiwi-bird': { lucide: 'Bird' },
-  // Lucide has no owl.
-  'material-owl': { emoji: '🦉' },
+  // Lucide has no owl; Feather is the closest bird-like icon not already used (Bird is).
+  'material-owl': { lucide: 'Feather' },
 };
 
 const ADMONITION_TYPES = {
