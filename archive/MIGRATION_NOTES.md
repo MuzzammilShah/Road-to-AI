@@ -1,8 +1,8 @@
 # Migration notes: MkDocs Material → Fumadocs
 
-Running log for the `major-update/framework-switch` branch. Kept at the repo root until after deployment (your decision at cleanup); delete or archive it then.
+Running log for the `major-update/framework-switch` branch (merged as PR #38). **Archived** after the launch: moved from the repo root to `archive/`. It describes the migration as it happened. For day-to-day work see `MAINTAINING.md` and `CLAUDE.md`; for an overview see `archive/README.md`.
 
-> **Cutover order for the merge:** see "Deployment: GitHub Pages via Actions" below. In short: allow `main` in the `github-pages` environment, set Pages → Source to "GitHub Actions", then merge.
+> **Deployed on 2026-10-31.** The cutover below was completed and the first Actions deploy (run 41114813097) succeeded. The site is live from GitHub Actions.
 
 ## Installed versions (exact pins, `.npmrc` has `save-exact=true`)
 
@@ -263,7 +263,9 @@ The scripts and paths in "Content conversion" above describe the migration as it
 
 1. **Done:** setup, content conversion, landing page, UI polish, verification scripts, MkDocs cleanup.
 2. **Done:** typo fixes. **Next:** scroll-smoothness profiling.
-3. **Done on the branch:** deployment workflow (below). **Next:** the cutover, done by you.
+3. **Done:** deployment workflow and cutover (below); PR #38 merged, first deploy green.
+4. **Done:** post-launch wrap-up: this file and the MkDocs config moved to `archive/`, `MAINTAINING.md` added.
+5. **Open:** scroll-smoothness profiling.
 
 ## Deployment: GitHub Pages via Actions
 
@@ -329,7 +331,7 @@ The scripts and paths in "Content conversion" above describe the migration as it
   - HTTPS certificate approved (expires 2026-12-07) and enforced.
 - **`github-pages` environment:** the deployment-branch policy allows **only `gh-pages`**. A deploy from `main` is rejected until `main` is added.
 
-### Cutover checklist (you do these)
+### Cutover checklist (completed 2026-10-31)
 
 1. **Settings → Environments → `github-pages` → Deployment branches and tags:** add `main` and keep `gh-pages` (rollback needs it).
 2. **Settings → Pages → Source: "GitHub Actions"**, right before merging. The current site stays up until the first Actions deployment replaces it. Check that the custom domain still reads `docs.muhammedshah.com` and "Enforce HTTPS" is on.

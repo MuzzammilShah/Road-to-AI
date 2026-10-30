@@ -71,6 +71,10 @@ Where things live:
 - `notebooks/`: the executed notebooks; `npm run notebooks` turns them into pages
 - `public/assets/images/`: images used by the pages
 
+Every merge to `main` is built, checked and deployed to GitHub Pages by GitHub Actions (`.github/workflows/deploy.yml`).
+
+**[MAINTAINING.md](MAINTAINING.md)** is the step-by-step guide to adding pages, notebooks and sections, deploying and rolling back. The site moved from MkDocs Material to Fumadocs in October 2026; the old config and the migration log are in [archive/](archive/).
+
 &nbsp;
 
 ### ❗Reflections and Usage Guidelines

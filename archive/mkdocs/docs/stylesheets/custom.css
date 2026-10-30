@@ -1,0 +1,279 @@
+@import url("./macros-utils/x-twitter-link-card.css");
+
+/* Light theme: Header and navbar are white */
+body[data-md-color-scheme="default"] .md-header,
+body[data-md-color-scheme="default"] .md-tabs {
+  background-color: white;
+  color: black;
+}
+body[data-md-color-scheme="default"] .md-header a,
+body[data-md-color-scheme="default"] .md-tabs a {
+  color: black; /* Text and links */
+}
+body[data-md-color-scheme="default"] .md-tabs a.md-tabs__link--active {
+  border-bottom: 2px solid black; /* Active tab indicator */
+  font-weight: bold;
+}
+
+/* Dark theme: Header and navbar are black */
+body[data-md-color-scheme="slate"] {
+  background-color: #121212;
+}
+body[data-md-color-scheme="slate"] .md-header,
+body[data-md-color-scheme="slate"] .md-tabs {
+  background-color: #121212;
+  color: white;
+}
+body[data-md-color-scheme="slate"] .md-header a,
+body[data-md-color-scheme="slate"] .md-tabs a {
+  color: white; /* Text and links */
+}
+body[data-md-color-scheme="slate"] .md-tabs a.md-tabs__link--active {
+  border-bottom: 2px solid white; /* Active tab indicator */
+}
+
+/* Remove gradient in dark theme for both primary and secondary sidebars */
+body[data-md-color-scheme="slate"] .md-sidebar--primary,
+body[data-md-color-scheme="slate"] .md-sidebar--secondary,
+body[data-md-color-scheme="slate"] .md-sidebar--primary .md-sidebar__inner,
+body[data-md-color-scheme="slate"] .md-sidebar--secondary .md-sidebar__inner,
+body[data-md-color-scheme="slate"] .md-nav,
+body[data-md-color-scheme="slate"] .md-nav__list,
+body[data-md-color-scheme="slate"] .md-nav__item,
+body[data-md-color-scheme="slate"] .md-nav__source,
+body[data-md-color-scheme="slate"] .md-nav__title {
+  background: #121212 !important;
+  background-color: #121212 !important;
+  background-image: none !important;
+  box-shadow: none !important; /* Remove any shadow that might mimic gradient */
+}
+
+/* Remove gradient from pseudo-elements */
+body[data-md-color-scheme="slate"] .md-sidebar--primary::before,
+body[data-md-color-scheme="slate"] .md-sidebar--primary::after,
+body[data-md-color-scheme="slate"] .md-sidebar--primary .md-sidebar__inner::before,
+body[data-md-color-scheme="slate"] .md-sidebar--primary .md-sidebar__inner::after,
+body[data-md-color-scheme="slate"] .md-nav::before,
+body[data-md-color-scheme="slate"] .md-nav::after {
+  background: #121212 !important;
+  background-image: none !important;
+}
+
+/* Override nested elements within the primary sidebar */
+body[data-md-color-scheme="slate"] .md-sidebar--primary *,
+body[data-md-color-scheme="slate"] .md-nav__item * {
+  background: #121212 !important;
+  background-image: none !important;
+}
+
+/* Override CSS variables that might be applying the gradient */
+body[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #121212 !important;
+  --md-primary-bg-color: #121212 !important;
+  --md-primary-fg-color: white !important;
+}
+
+/* Ensure text remains readable */
+/* body[data-md-color-scheme="slate"] .md-nav a,
+body[data-md-color-scheme="slate"] .md-nav__title {
+  color: white !important;
+} */
+
+/* Shadow effect for header and navbar */
+.md-tabs {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Consistent shadow */
+}
+
+/* Light theme: Match footer and bottom navigation bar to header (white) */
+body[data-md-color-scheme="default"] .md-footer-nav,
+body[data-md-color-scheme="default"] .md-footer {
+  background-color: white !important;
+  color: black !important;
+}
+body[data-md-color-scheme="default"] .md-footer-meta.md-typeset,
+body[data-md-color-scheme="default"] .md-footer-copyright,
+body[data-md-color-scheme="default"] .md-footer-social a,
+body[data-md-color-scheme="default"] .md-footer-nav__link {
+  background-color: rgb(0, 0, 0) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Dark theme: Match footer and bottom navigation bar to header (#121212) */
+body[data-md-color-scheme="slate"] .md-footer-nav,
+body[data-md-color-scheme="slate"] .md-footer {
+  background-color: #121212 !important;
+  color: white !important;
+}
+body[data-md-color-scheme="slate"] .md-footer-meta.md-typeset,
+body[data-md-color-scheme="slate"] .md-footer-copyright,
+body[data-md-color-scheme="slate"] .md-footer-social a,
+body[data-md-color-scheme="slate"] .md-footer-nav__link {
+  background-color: black !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+
+/* Hero Section Container */
+/* Center the hero section horizontally */
+/* .centered-hero {
+  display: flex;
+  justify-content: center;
+} */
+
+/* Hero Content */
+/* .hero-content {
+  text-align: center;
+} */
+
+.hero-logo {
+  width: 80% !important;
+  margin-bottom: 10px !important;
+}
+
+.hero-content h1 {
+  font-size: 0.1em !important;
+}
+
+.hero-content p {
+  font-size: 1.2em !important;
+}
+
+.hero-button {
+  display: inline-block !important;
+  padding: 8px 18px !important;
+  border-radius: 20px !important;
+  text-decoration: none !important;
+  text-transform: uppercase !important;
+  transition: background-color 0.3s, color 0.3s !important;
+}
+
+/* Light Theme Styles */
+body[data-md-color-scheme="default"] .hero-content h1,
+body[data-md-color-scheme="default"] .hero-content p {
+  color: #000000;
+}
+
+body[data-md-color-scheme="default"] .hero-button {
+  background-color: #191919;
+  color: #ffffff;
+}
+
+body[data-md-color-scheme="default"] .hero-button:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Dark Theme Styles */
+body[data-md-color-scheme="slate"] .hero-content h1,
+body[data-md-color-scheme="slate"] .hero-content p {
+  color: #ffffff;
+}
+
+body[data-md-color-scheme="slate"] .hero-button {
+  background-color: #f0f0f0;
+  color: #000000;
+}
+
+body[data-md-color-scheme="slate"] .hero-button:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.home .md-sidebar--secondary {
+  display: none;
+}
+
+
+/* Logo theme toggle */
+body[data-md-color-scheme="default"] .hero-logo {
+  content: url('../assets/images/white-bg-3.png');
+}
+body[data-md-color-scheme="slate"] .hero-logo {
+  content: url('../assets/images/dark-bg-3.png');
+}
+
+
+
+/* Reset theme container margins and padding */
+.landing-page ~ .md-main__inner.md-grid,
+.landing-page ~ .md-content__inner.md-typeset {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Vanta.js background container */
+#vanta-background {
+  position: fixed !important; /* Use fixed positioning to cover the entire viewport */
+  top: 0 !important;
+  left: 0 !important;
+  min-height: 100vh !important; /* Minimum height of the viewport */
+  width: 100vw !important; /* Full viewport width */
+  overflow: hidden !important; /* Prevents content overflow */
+  z-index: -1 !important; /* Send to back so content stays on top */
+}
+
+/* Hide secondary sidebar (Table of Contents) on landing page */
+.landing-page ~ .md-sidebar--secondary {
+  display: none !important;
+}
+
+/* Hero content positioning and alignment */
+.hero-content {
+  position: absolute !important;
+  top: 50% !important;
+  left: 10% !important;
+  transform: translateY(-50%) !important;
+  width: 40% !important; /* Default width for desktop */
+  /* text-align: left; */
+  padding: 20px !important; /* Add padding for better spacing */
+  z-index: 1 !important; /* Ensure content stays above the background */
+  align-items: flex-start !important;
+}
+
+/* Logo styling and theme toggle */
+.hero-logo {
+  display: none !important;
+  width: 80% !important;
+  margin-bottom: 10px !important;
+}
+
+body[data-md-color-scheme="default"] .light-logo {
+  display: block !important;
+}
+
+body[data-md-color-scheme="slate"] .dark-logo {
+  display: block !important;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .hero-content {
+    left: calc(10% + (100% - 40%) * (768px - 100vw) / (768px - 320px)) !important; /* Dynamic left adjustment */
+    width: 40% !important; /* Maintain original width */
+    padding: 10px !important; /* Reduced padding for mobile */
+  }
+
+  .hero-logo {
+    width: 100% !important; /* Maintain original logo size */
+  }
+
+  .hero-content h1 {
+    font-size: inherit !important; /* Maintain original size */
+  }
+
+  .hero-content p {
+    font-size: 1.2em !important; /* Maintain original size */
+  }
+
+  .hero-button {
+    padding: 5px 15px !important; /* Maintain original padding */
+    font-size: 0.8 !important;
+  }
+}
+
+/* Ensure text remains readable over the animation */
+.hero-content h1,
+.hero-content p {
+  color: inherit !important; /* Inherits theme color from body */
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important; /* Optional: Add shadow for readability */
+}
