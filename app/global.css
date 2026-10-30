@@ -11,8 +11,8 @@
 
 /*
  * Section accents (sidebar dropdown icons + a subtle primary colour per section).
- * The docs page renders <span hidden data-section="ZeroToHero|Books">; set on <body> so portals
- * (dropdown, search) pick it up too. Icons: lib/sections.tsx.
+ * Each docs page emits `body { --color-fd-primary: var(--section-…) }` (SectionAccent in
+ * lib/sections.tsx); on <body> so portals (dropdown, search) pick it up too.
  */
 :root {
   --section-neural-networks: oklch(0.52 0.19 268);
@@ -22,14 +22,6 @@
 .dark {
   --section-neural-networks: oklch(0.76 0.12 268);
   --section-library: oklch(0.8 0.13 70);
-}
-
-body:has([data-section="ZeroToHero"]) {
-  --color-fd-primary: var(--section-neural-networks);
-}
-
-body:has([data-section="Books"]) {
-  --color-fd-primary: var(--section-library);
 }
 
 [data-section-icon="Brain"] {
@@ -127,20 +119,5 @@ html > body[data-scroll-locked] {
 @media screen and (max-width: 400px) {
   .x-twitter-embed {
     margin: 1rem 0.25rem;
-  }
-}
-
-/*
- * Collapsed sidebar (spacious layout): components/collapsed-sidebar-controls.tsx shows the classic
- * "open sidebar + search" pill at the top-left, so hide the layout's own expand button (the first
- * button in the page header, only rendered while collapsed) and start the breadcrumb after the pill.
- */
-@media (min-width: 768px) {
-  #fd-spacious-layout:has([data-collapsed="true"]) #nd-page-panel > header > button:first-child {
-    display: none;
-  }
-
-  #fd-spacious-layout:has([data-collapsed="true"]) #nd-page-panel > header {
-    padding-inline-start: 5.5rem;
   }
 }

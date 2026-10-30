@@ -7,9 +7,15 @@ const button =
   'inline-flex items-center justify-center rounded-lg p-1.5 text-fd-muted-foreground transition-colors hover:bg-fd-accent hover:text-fd-accent-foreground [&_svg]:size-4.5';
 
 /**
+ * While collapsed (desktop): hide the spacious layout's own expand button (the first button in the
+ * page header, only rendered while collapsed) and start the breadcrumb after the pill.
+ */
+const collapsedCss =
+  '@media (min-width:768px){#nd-page-panel>header>button:first-child{display:none}#nd-page-panel>header{padding-inline-start:5.5rem}}';
+
+/**
  * The floating "open sidebar + search" pill of Fumadocs' classic docs layout, shown while the
- * spacious layout's sidebar is collapsed (desktop only; mobile uses the drawer). The spacious
- * layout's own expand button is hidden in app/global.css so there is only one.
+ * spacious layout's sidebar is collapsed (desktop only; mobile uses the drawer).
  */
 export function CollapsedSidebarControls() {
   const { collapsed } = useSidebar();
@@ -24,6 +30,7 @@ export function CollapsedSidebarControls() {
         collapsed ? 'opacity-100' : 'pointer-events-none opacity-0',
       ].join(' ')}
     >
+      {collapsed && <style>{collapsedCss}</style>}
       <SidebarCollapseTrigger className={button} aria-label="Open sidebar">
         <SidebarIcon />
       </SidebarCollapseTrigger>

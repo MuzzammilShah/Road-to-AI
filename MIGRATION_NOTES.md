@@ -45,7 +45,7 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
     - The page sits in a rounded, bordered panel.
     - The section dropdown sits at the top of the sidebar.
   - **Navbar tabs instead:** the spacious layout has no `tabMode`. Switch the two imports back to `fumadocs-ui/layouts/docs` and pass `tabMode="top"` (valid values `'auto' | 'top'`).
-  - **Section accents:** each docs page renders `<span hidden data-section="ZeroToHero|Books">`. `body:has(...)` in `app/global.css` then sets `--color-fd-primary` to a subtle indigo (Neural Networks) or amber (Library), with light and dark variants. This colours the active sidebar item, the TOC and similar accents. The dropdown icons (`lib/sections.tsx`) and the landing cards use the same colours.
+  - **Section accents:** each docs page emits `<style>body{--color-fd-primary:var(--section-…)}</style>` (`SectionAccent` in `lib/sections.tsx`). That gives a subtle indigo (Neural Networks) or amber (Library), with light and dark variants. It colours the active sidebar item, the TOC and similar accents. The dropdown icons and the landing cards use the same colours.
 - **`output: 'export'` only for builds:** `next.config.mjs` checks the phase. In `next dev`, export mode made every unknown URL (`/sw.js`, Chrome's `/.well-known/appspecific/com.chrome.devtools.json`) throw "missing param in generateStaticParams()". Dev now returns 404, and `npm run build` still exports.
 - **Landing below the hero:** the whole home page uses the globe's background (`.landing-surface`: white / #121212). The intro section fills the screen below the navbar on desktop.
 - **Trailing slashes:** `trailingSlash: true` makes Next's `Link` emit `/a/b/` hrefs, and the export writes `a/b/index.html`.
@@ -204,7 +204,7 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
   - a placeholder intro with two Cards linking `/ZeroToHero/` and `/Books/`;
   - a footer with the copyright and GitHub.
   - Every placeholder is marked `TODO(landing)`.
-- **Not verified in a browser:** I could not test that the WebGL globe actually animates; the headless-browser attempt was stopped. Please check `/` in both themes, on mobile, and with "Reduce motion" turned on.
+- **Browser check:** reviewed by you after a hard refresh. The globe, the logo and the intro section all render as intended.
 
 ## Verification (Phase 4)
 
@@ -219,7 +219,30 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
 | Structure vs `gh-pages` HTML | ✅ 66/72 pages identical in code blocks/images/tables/headings/lists; the 6 differences are explained above |
 | Search (static index) | ✅ queried `out/api/search.json` with Fumadocs' own static-search code. "tfloat32" / "bfloat16" (only in the GPT-2 2a notebook), "wavenet", "retrieval augmented" and "manual gradient descent" all find the right pages |
 | Rendered features (in HTML) | ✅ callouts, accordions, cards, tweet containers, GPT-2 flex image rows, notebook download link + output blocks, code-copy buttons, TOC (and hidden on the 4 chapters), prev/next links |
-| Dark/light, mobile, dropdown, globe | ⏳ need a visual check in a browser (see the review list in the final report) |
+| Dark/light, mobile, dropdown, globe | ✅ reviewed by you in the browser (after the UI round below) |
+| Nested links | ✅ 0 `<a>` inside `<a>` across all 76 exported HTML files |
+
+## UI round after your review
+
+| Change | Where |
+|---|---|
+| **Docs layout:** switched to Fumadocs **spacious** (as on fumadocs.dev). The sidebar is flush left (no gap), the page sits in a rounded panel, and the section dropdown is on top. | `app/(docs)/layout.tsx`, `app/(docs)/[...slug]/page.tsx` |
+| **Spacious styles:** `preset.css` doesn't include the spacious layout's class list, so `app/global.css` imports `fumadocs-ui/css/generated/spacious.css`. Without it the docs rendered unstyled. | `app/global.css` |
+| **Dropdown entries:** an icon plus a one-line description per section (Neural Networks → Brain, "Zero to Hero: from backprop to GPT"; Library → LibraryBig, "Notes from AI/ML books"). | root `meta.json` (generated from `ROOT_SECTIONS` in `convert-pages.mjs`), `lib/sections.tsx` |
+| **Section accents:** a subtle `--color-fd-primary` per section (indigo / amber, light and dark variants). It is set by a small `<style>` that each page emits (`SectionAccent`). An earlier `body:has()` version was replaced because it is re-evaluated while scrolling. | `lib/sections.tsx`, `app/global.css` |
+| **Collapsed sidebar:** the classic layout's floating "open sidebar + search" pill is back. While collapsed, it hides spacious's own expand button and pads the breadcrumb. | `components/collapsed-sidebar-controls.tsx` |
+| **TOC:** the classic style `'normal'` (thin line with a sliding indicator) instead of spacious's `'block'`. | `app/(docs)/[...slug]/page.tsx` |
+| **Nested links fixed** (hydration warning). Headings that contain a link skip Fumadocs' self-link wrapper, and TOC entries get their links stripped. This covers the 80 "Timestamp: [..](youtube)" headings. | `components/mdx/heading.tsx` |
+| **Landing:** the whole page uses the globe background (white / #121212), the intro section fills the viewport on desktop, and the cards use the section icons and colours. | `app/(home)/*`, `.landing-surface` |
+| **Dev server:** `output: 'export'` only for builds, so `/sw.js` and Chrome's DevTools probe return 404 in dev instead of "missing param" errors. | `next.config.mjs` |
+
+- **Performance:** if scrolling feels laggy, compare on the export (`npm run build && npx serve out -l 4173`); dev mode is always heavier. Vanta already stops rendering when the globe is off-screen.
+
+## Status and next steps
+
+1. **Done:** setup, content conversion, landing page, UI polish, verification scripts.
+2. **Next (fresh session):** MkDocs cleanup + typo fixes + notebook move. See "Notebook source location" and "Typos" above.
+3. **Then:** deployment, following the plan below.
 
 ## Future deployment plan: GitHub Pages (text only, no workflow created)
 

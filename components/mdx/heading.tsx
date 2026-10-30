@@ -1,13 +1,33 @@
+import type { TOCItemType } from 'fumadocs-core/toc';
 import { Heading } from 'fumadocs-ui/components/heading';
-import { Children, type ComponentProps, isValidElement, type ReactNode } from 'react';
+import { Children, type ComponentProps, cloneElement, isValidElement, type ReactNode } from 'react';
 
 type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+type WithChildren = { href?: string; children?: ReactNode };
 
 function containsLink(node: ReactNode): boolean {
   return Children.toArray(node).some((child) => {
-    if (!isValidElement<{ href?: string; children?: ReactNode }>(child)) return false;
+    if (!isValidElement<WithChildren>(child)) return false;
     return child.props.href !== undefined || containsLink(child.props.children);
   });
+}
+
+/** Replace links by their text (keeps bold/code etc.). */
+function stripLinks(node: ReactNode): ReactNode {
+  if (!containsLink(node)) return node;
+  return Children.map(node, (child) => {
+    if (!isValidElement<WithChildren>(child)) return child;
+    if (child.props.href !== undefined) return stripLinks(child.props.children);
+    return cloneElement(child, undefined, stripLinks(child.props.children));
+  });
+}
+
+/**
+ * TOC entries are links to their heading, so a heading's own link (the YouTube timestamps) must not
+ * be repeated inside them: `<a>` in `<a>`. The link stays clickable in the heading itself.
+ */
+export function tocWithoutLinks(toc: TOCItemType[]): TOCItemType[] {
+  return toc.map((item) => ({ ...item, title: stripLinks(item.title) }));
 }
 
 /**
