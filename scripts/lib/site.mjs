@@ -8,8 +8,6 @@ export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const NOTEBOOKS_DIR = join(ROOT, 'notebooks');
 /** Notebook path (relative to notebooks/) -> page title. */
 export const NOTEBOOK_TITLES = join(NOTEBOOKS_DIR, 'titles.json');
-/** TODO(cleanup): only check-parity still reads the old nav; removed in the next step. */
-export const MKDOCS_YML = join(ROOT, 'mkdocs.yml');
 export const CONTENT_DIR = join(ROOT, 'content', 'docs');
 export const PUBLIC_DIR = join(ROOT, 'public');
 

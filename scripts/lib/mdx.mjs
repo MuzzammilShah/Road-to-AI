@@ -67,23 +67,6 @@ export function convertMarkdown(markdown, ctx) {
   return renderChunks(blockPass(stripComments(lines), ctx), ctx).join('\n');
 }
 
-/**
- * Split off MkDocs front matter. Only `hide:` is used in this site (`hide: [toc]`).
- * @returns {[string, { hide: string[] }]}
- */
-export function splitFrontmatter(markdown) {
-  const m = /^---\r?\n([\s\S]*?)\r?\n---\r?\n/.exec(markdown);
-  if (!m) return [markdown, { hide: [] }];
-  const hide = [];
-  let inHide = false;
-  for (const line of m[1].split(/\r?\n/)) {
-    if (/^hide:\s*$/.test(line)) inHide = true;
-    else if (inHide && /^\s+-\s+(\S+)/.test(line)) hide.push(/^\s+-\s+(\S+)/.exec(line)[1]);
-    else if (line.trim()) throw new Error(`Unsupported front matter line: ${line}`);
-  }
-  return [markdown.slice(m[0].length), { hide }];
-}
-
 /** Remove the first line (ignoring HTML comments) if it is an H1 (`# Title`), returning [rest, h1Text]. */
 export function dropLeadingH1(markdown) {
   const lines = stripComments(markdown.replace(/\r\n?/g, '\n').split('\n'));

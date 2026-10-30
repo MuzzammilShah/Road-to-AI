@@ -1,15 +1,23 @@
 #!/usr/bin/env node
-// Migration checks against the old MkDocs site. Run after `npm run build`.
+// Site consistency checks. Run after `npm run build`.
 //
 //   npm run check:parity
 //
-// 1. every URL in scripts/old-urls.txt (except `/`, now the landing page) exists in out/
-// 2. every page in the mkdocs.yml nav has an MDX page that is listed in its folder's meta.json
-// 3. no MkDocs leftovers in content/ (.md/.ipynb links, !!!, ???, grid cards, icon shortcodes)
-import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join, posix } from 'node:path';
-import { navLabels, readNav } from './lib/nav.mjs';
-import { CONTENT_DIR, listFiles, MKDOCS_YML, ROOT, sourceStem } from './lib/site.mjs';
+// 1. every URL in scripts/old-urls.txt (the old MkDocs site, except `/`) exists in out/
+// 2. every MDX page and folder is listed in its folder's meta.json, and every meta.json entry exists
+// 3. every notebook has a generated page, a title and an up-to-date download copy
+// 4. no MkDocs leftovers in content/ (.md/.ipynb links, !!!, ???, grid cards, icon shortcodes)
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { join, posix } from 'node:path';
+import {
+  CONTENT_DIR,
+  listFiles,
+  NOTEBOOK_TITLES,
+  NOTEBOOKS_DIR,
+  PUBLIC_DIR,
+  ROOT,
+  sourceStem,
+} from './lib/site.mjs';
 
 const OUT = join(ROOT, 'out');
 const problems = [];
@@ -29,32 +37,84 @@ console.log(
 );
 console.log(`Extra exported pages (not in the old site): ${extra.join(', ') || 'none'}`);
 
-// 2. nav pages -> MDX pages -> meta.json
-const labels = navLabels(readNav(MKDOCS_YML));
-const navPages = [...labels.keys()].filter((p) => p !== 'index.md');
-const mdx = new Set(
-  listFiles(CONTENT_DIR, (f) => f.endsWith('.mdx')).map((f) => f.replace(/\.mdx$/, '')),
-);
-let listed = 0;
-for (const src of navPages) {
-  const stem = sourceStem(src);
-  if (!mdx.has(stem)) {
-    problems.push(`no MDX page for docs/${src}`);
-    continue;
-  }
-  const metaFile = join(CONTENT_DIR, dirname(stem), 'meta.json');
-  const pages = existsSync(metaFile) ? JSON.parse(readFileSync(metaFile, 'utf8')).pages : [];
-  if (pages?.includes(posix.basename(stem))) listed++;
-  else problems.push(`${stem} is not listed in ${posix.join(dirname(stem), 'meta.json')}`);
+// 2. MDX pages and folders <-> meta.json
+const mdxFiles = listFiles(CONTENT_DIR, (f) => f.endsWith('.mdx'));
+const pages = mdxFiles.map((f) => f.replace(/\.mdx$/, ''));
+const folders = new Set();
+for (const page of pages) {
+  for (let dir = posix.dirname(page); dir !== '.'; dir = posix.dirname(dir)) folders.add(dir);
 }
-const notebooks = navPages.filter((p) => p.endsWith('.ipynb')).length;
-console.log(
-  `Pages: ${navPages.length} in the old nav (${navPages.length - notebooks} Markdown + ${notebooks} notebooks), ${mdx.size} MDX pages, ${listed} listed in the sidebar.`,
-);
-if (mdx.size !== navPages.length)
-  problems.push(`MDX page count ${mdx.size} != nav page count ${navPages.length}`);
+const metas = new Map();
+for (const dir of folders) {
+  const file = join(CONTENT_DIR, dir, 'meta.json');
+  if (existsSync(file)) metas.set(dir, JSON.parse(readFileSync(file, 'utf8')));
+  else problems.push(`${dir}/ has no meta.json`);
+}
 
-// 3. leftovers
+/** Is `name` listed in the meta.json of `dir`? Top-level folders must be roots instead. */
+const isListed = (dir, name) => metas.get(dir)?.pages?.includes(name) ?? false;
+let listed = 0;
+for (const page of pages) {
+  const dir = posix.dirname(page);
+  if (dir === '.') problems.push(`${page}.mdx is outside a section folder`);
+  else if (isListed(dir, posix.basename(page))) listed++;
+  else problems.push(`${page} is not listed in ${dir}/meta.json`);
+}
+for (const dir of folders) {
+  const parent = posix.dirname(dir);
+  if (parent === '.') {
+    if (metas.get(dir)?.root !== true)
+      problems.push(`${dir}/meta.json: top level needs "root": true`);
+  } else if (!isListed(parent, posix.basename(dir))) {
+    problems.push(`${dir}/ is not listed in ${parent}/meta.json`);
+  }
+}
+// Fumadocs syntax that is not a page: ---Separator---, ..., !excluded, [Link](url), external:...
+const NOT_A_PAGE = /^(---.*---|z?\.\.\.a?|!.*|\[.*\]\(.*\)|external:.*)$/;
+for (const [dir, meta] of metas) {
+  for (const entry of meta.pages ?? []) {
+    if (NOT_A_PAGE.test(entry)) continue;
+    const target = join(CONTENT_DIR, dir, entry);
+    if (!existsSync(`${target}.mdx`) && !(existsSync(target) && statSync(target).isDirectory())) {
+      problems.push(`${dir}/meta.json lists "${entry}", which does not exist`);
+    }
+  }
+}
+console.log(
+  `Sidebar: ${pages.length} MDX pages, ${listed} listed in meta.json; ${metas.size} meta.json files.`,
+);
+
+// 3. notebooks -> generated pages, titles and download copies
+const notebooks = listFiles(NOTEBOOKS_DIR, (f) => f.endsWith('.ipynb'));
+const titles = JSON.parse(readFileSync(NOTEBOOK_TITLES, 'utf8'));
+const BANNER = /\{\/\* Generated from notebooks\/(\S+\.ipynb) /;
+const generated = new Map();
+for (const file of mdxFiles) {
+  const m = BANNER.exec(readFileSync(join(CONTENT_DIR, file), 'utf8'));
+  if (m) generated.set(m[1], file);
+}
+for (const nb of notebooks) {
+  const stem = sourceStem(nb);
+  if (generated.get(nb) !== `${stem}.mdx`) {
+    problems.push(`notebooks/${nb} has no generated page: run \`npm run notebooks\``);
+  }
+  if (!titles[nb]) problems.push(`notebooks/${nb} has no title in notebooks/titles.json`);
+  const copy = join(PUBLIC_DIR, 'notebooks', `${stem}.ipynb`);
+  if (!existsSync(copy) || !readFileSync(copy).equals(readFileSync(join(NOTEBOOKS_DIR, nb)))) {
+    problems.push(`public/notebooks/${stem}.ipynb is out of date: run \`npm run notebooks\``);
+  }
+}
+for (const [nb, file] of generated) {
+  if (!notebooks.includes(nb)) problems.push(`${file} was generated from a missing notebook ${nb}`);
+}
+for (const nb of Object.keys(titles)) {
+  if (!notebooks.includes(nb)) problems.push(`notebooks/titles.json: no notebook ${nb}`);
+}
+console.log(
+  `Notebooks: ${notebooks.length} notebooks, ${generated.size} generated pages, ${Object.keys(titles).length} titles.`,
+);
+
+// 4. leftovers
 const LEFTOVERS = [
   [/\]\((?!https?:)[^)]*\.(?:md|ipynb)(?:#[^)]*)?\)/, 'relative .md/.ipynb link'],
   [/^\s*!!!/m, '!!! admonition'],
@@ -62,12 +122,19 @@ const LEFTOVERS = [
   [/class="grid cards"/, 'grid cards'],
   [/:(?:material|fontawesome|simple|octicons)-[a-z0-9-]+:/, 'icon shortcode'],
   [/<!--/, 'HTML comment'],
+  [/Generated from docs\//, 'old docs/ banner'],
 ];
-for (const file of listFiles(CONTENT_DIR, (f) => f.endsWith('.mdx'))) {
+let leftovers = 0;
+for (const file of mdxFiles) {
   const text = readFileSync(join(CONTENT_DIR, file), 'utf8');
-  for (const [re, what] of LEFTOVERS) if (re.test(text)) problems.push(`${file}: ${what}`);
+  for (const [re, what] of LEFTOVERS) {
+    if (re.test(text)) {
+      problems.push(`${file}: ${what}`);
+      leftovers++;
+    }
+  }
 }
-console.log(`Leftover MkDocs syntax: ${problems.filter((p) => p.includes('.mdx:')).length} found.`);
+console.log(`Leftover MkDocs syntax: ${leftovers} found.`);
 
 if (problems.length) {
   console.log(`\n${problems.length} problem(s):\n- ${problems.join('\n- ')}`);
