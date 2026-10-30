@@ -1,8 +1,10 @@
-## Road-to-GPT Documentation site
+## Road to AI: documentation site
 
 <div align="center">
-<img src="docs/assets/images/thumbnail-3.png" alt="Thumbnail" width="80%">
+<img src="public/assets/images/thumbnail-3.png" alt="Thumbnail" width="80%">
 </div>
+
+**Live site: [docs.muhammedshah.com](https://docs.muhammedshah.com)**
 
 ### 🎯About This Site
 This platform serves as a structured documentation hub for my journey in understanding and implementing artificial intelligence and machine learning concepts, with a primary focus on building a GPT model. The content is heavily based on [Andrej Karpathy](https://karpathy.ai)'s Neural Networks: Zero to Hero series and aims to provide well-organized insights, implementations, and notes for anyone following a similar path.
@@ -18,7 +20,9 @@ This site is designed for:
 &nbsp;
 
 ### 🗃️Documentation structure
-The learning resources are divided into two primary sections: **Set-1** and **Set-2**.
+The site has two sections: **Neural Networks** (the Zero to Hero series) and the **Library** (notes from AI/ML books, starting with *AI Engineering* by Chip Huyen).
+
+The Neural Networks lectures are grouped into two sets: **Set-1** and **Set-2**.
 
 **Set-1: Language Modeling Framework**
 
@@ -41,6 +45,34 @@ The learning resources are divided into two primary sections: **Set-1** and **Se
 
 &nbsp;
 
+### 🛠️Built with
+
+- [Next.js](https://nextjs.org) 16 (App Router), exported as a fully static site
+- [Fumadocs](https://fumadocs.dev) for the docs layout, MDX and the static [Orama](https://orama.com) search
+- Tailwind CSS 4, TypeScript and [Biome](https://biomejs.dev)
+- Jupyter notebooks are converted to pages from their saved outputs (they are never executed)
+
+### 💻Running it locally
+
+Requires Node.js 22 or newer (`.nvmrc` pins 24).
+
+```bash
+npm ci                    # install the exact versions from package-lock.json
+npm run dev               # http://localhost:3000
+npm run build             # static export into out/
+npx serve out -l 4173     # preview the export
+```
+
+Checks: `npm run typecheck && npm run lint && npm run build && npm run check:links && npm run check:parity`.
+
+Where things live:
+
+- `content/docs/`: the pages (MDX) and the sidebar order (`meta.json`)
+- `notebooks/`: the executed notebooks; `npm run notebooks` turns them into pages
+- `public/assets/images/`: images used by the pages
+
+&nbsp;
+
 ### ❗Reflections and Usage Guidelines
 
 > [!NOTE]  
@@ -55,5 +87,5 @@ The learning resources are divided into two primary sections: **Set-1** and **Se
 &nbsp;
 
 <div align="center">
-<img src="docs/assets/images/main-page-logo-1.png" alt="Road to AI" width="50%">
+<img src="public/assets/images/main-page-logo-1.png" alt="Road to AI" width="50%">
 </div>

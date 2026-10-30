@@ -1,6 +1,8 @@
 # Road to AI: docs site
 
-Personal documentation site (notes, Jupyter notebooks, book notes on AI), served at docs.muhammedshah.com. It was migrated from MkDocs Material; `MIGRATION_NOTES.md` has the history and decisions.
+Personal documentation site (notes, Jupyter notebooks, book notes on AI), served at docs.muhammedshah.com. It was migrated from MkDocs Material; `MIGRATION_NOTES.md` has the history and decisions. The MkDocs files are gone: `content/docs/` and `notebooks/` are the only sources.
+
+> **Do not merge this branch into `main` before the deployment task.** `.github/workflows/ci.yml` on `main` still runs `mkdocs gh-deploy`, which fails without `mkdocs.yml`. The deployment task replaces that workflow (plan in `MIGRATION_NOTES.md`). Don't edit `ci.yml` before then.
 
 ## Stack
 
@@ -23,11 +25,10 @@ npm run build             # static export into out/
 npx serve out -l 4173     # preview the export (serve is a local devDependency)
 npm run typecheck         # next typegen && tsc --noEmit
 npm run lint              # biome check (npm run format to fix formatting)
-npm run notebooks         # re-convert docs/**/*.ipynb -> content/docs/**/*.mdx
-npm run convert:pages     # re-convert docs/**/*.md -> content/docs/**/*.mdx + meta.json (until cutover)
-npm run convert           # both converters
+npm run notebooks         # re-convert notebooks/**/*.ipynb -> content/docs/**/*.mdx
 npm run check:links       # after build: every internal href/src/#anchor in out/ must resolve
-npm run check:parity      # after build: old MkDocs URLs exist, nav = pages = sidebar, no MkDocs leftovers
+npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = meta.json entries,
+                          # notebooks converted and up to date, no MkDocs leftovers
 ```
 
 ## Hard constraints
@@ -41,7 +42,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, nav = pages = si
   - route handlers set `dynamic = 'force-static'`.
 - **URL parity with the old MkDocs site.** Docs are served at the site root (`baseUrl: '/'`), and folder and file names, including their case, are the URLs. Never rename content files or folders without adding redirects. `scripts/old-urls.txt` lists the URLs that must keep working. Headings carry explicit MkDocs-style ids (`## Title [#id]`), so old `#anchor` links keep working too.
 - **Notebooks are never executed.** The converter only reads the saved outputs.
-- **Biome is limited by an allow-list** in `biome.json`. It also formats YAML and Markdown, so keep `docs/`, `mkdocs.yml` and `.github/` out of its scope.
+- **Biome is limited by an allow-list** in `biome.json`. It also formats YAML and Markdown, so keep `content/`, `notebooks/`, `*.md` and `.github/` out of its scope.
 - **Read the versioned docs before using framework APIs:**
   - Next.js docs ship in `node_modules/next/dist/docs/` (see `AGENTS.md`).
   - Fumadocs: https://www.fumadocs.dev/docs, but trust the installed package source and types in `node_modules/fumadocs-*` when they differ.
@@ -51,18 +52,21 @@ npm run check:parity      # after build: old MkDocs URLs exist, nav = pages = si
 - **`content/docs/`** holds the docs content, with one root folder per sidebar section. Root folders show up in the section dropdown at the top of the sidebar.
   - `ZeroToHero/` is "Neural Networks". It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`.
   - `Books/` is "Library". It contains `AI-Engineering/`.
-- **`meta.json`** in each folder controls the sidebar:
+- **`meta.json`** in each folder controls the sidebar. They are all hand-maintained (no generator any more):
   - `title` and `pages` set order and labels;
   - `"---Label---"` adds a separator;
   - listing `"index"` makes the folder's index a child item;
   - `"root": true` marks a section;
   - root folders also have `icon` and `description` for the dropdown.
 - **Page front matter:** `title`, optional `description`, and `hideToc: true` to hide the table of contents.
+- **`notebooks/`** holds the executed `.ipynb` files at the same relative paths as their pages (`notebooks/ZeroToHero/GPT-1/gpt-dev.ipynb` → `content/docs/ZeroToHero/GPT-1/gpt-dev.mdx`). `notebooks/titles.json` maps each notebook path to its page title. The generated MDX carries a "Generated from notebooks/…" banner: never edit those pages by hand, edit the notebook and re-run the converter.
 - **`public/`:**
   - `assets/images/` holds images referenced by pages;
   - `notebook-outputs/` holds the generated notebook output images;
   - `notebooks/` holds the `.ipynb` download copies;
-  - `manifest.webmanifest` and the icons are for the PWA / iOS home-screen.
+  - `manifest.webmanifest` and the icons are for the PWA / iOS home-screen;
+  - `CNAME` is the custom domain for GitHub Pages (exported as `out/CNAME`).
+- **`scripts/`:** `convert-notebooks.mjs` (+ `lib/mdx.mjs`, `lib/site.mjs`), `check-links.mjs`, `check-parity.mjs`, `old-urls.txt`.
 
 ## App code map
 
@@ -106,14 +110,23 @@ npm run check:parity      # after build: old MkDocs URLs exist, nav = pages = si
 3. Put images in `public/assets/images/...` and reference them as `/assets/images/...`.
 4. Run the verification below.
 
-> Until the MkDocs cleanup, pages generated from `docs/*.md` carry a "Generated from docs/…" banner. For those, edit `docs/` and run `npm run convert:pages` instead.
+A new sub-folder needs its own `meta.json` (`title`, `pages`) and must be listed in its parent's `pages`.
+
+## How to add a section
+
+1. Create `content/docs/<Section>/meta.json` with `"root": true`, `title`, `description`, `icon` and `pages`.
+2. In `lib/sections.tsx`, add the Lucide icon to `sectionIcons` and map the folder name to its accent colour (used by `SectionAccent`). In `app/global.css`, define the `--section-*` colour (light and dark) and its `[data-section-icon]` rule.
+3. Optionally add a navbar link in `lib/layout.shared.tsx`.
 
 ## How to add a notebook
 
-1. Save the executed notebook (outputs included) next to the other notebooks of that topic (currently under `docs/`).
-2. Add it to the nav in `mkdocs.yml` until cutover, which is where its sidebar title comes from. After cutover, add it to the folder's `meta.json`.
-3. Run `npm run notebooks`. This writes `content/docs/<path>.mdx`, output images to `public/notebook-outputs/<path>/` and a download copy to `public/notebooks/`.
-4. Commit the generated files too. The build does not run the converter.
+1. Save the executed notebook (outputs included) as `notebooks/<Section>/<path>/<name>.ipynb`. The path becomes the URL `/<Section>/<path>/<name>/`.
+2. Add `"<Section>/<path>/<name>.ipynb": "<Sidebar title>"` to `notebooks/titles.json`.
+3. Add `<name>` to the `pages` array of `content/docs/<Section>/<path>/meta.json`.
+4. Run `npm run notebooks`. This writes `content/docs/<path>.mdx`, output images to `public/notebook-outputs/<path>/` and a download copy to `public/notebooks/`. Images referenced from markdown cells resolve against the page URL and must already exist in `public/` (the converter fails otherwise).
+5. Commit the generated files too. The build does not run the converter, and `check:parity` fails if a notebook changed without re-converting.
+
+To edit a notebook's prose, change only the affected markdown-cell `source` strings in the `.ipynb` JSON, then re-run `npm run notebooks`.
 
 ## Verification before calling something done
 

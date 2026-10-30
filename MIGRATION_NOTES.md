@@ -1,6 +1,8 @@
 # Migration notes: MkDocs Material → Fumadocs
 
-Running log for the `major-update/framework-switch` branch. Delete or archive at cleanup.
+Running log for the `major-update/framework-switch` branch. Kept at the repo root until after deployment (your decision at cleanup); delete or archive it then.
+
+> **Do not merge this branch into `main` before the deployment task.** The MkDocs files are gone, and `.github/workflows/ci.yml` on `main` still runs `mkdocs gh-deploy`, which would fail. The deployment task replaces that workflow (plan below).
 
 ## Installed versions (exact pins, `.npmrc` has `save-exact=true`)
 
@@ -133,10 +135,7 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
 
 **Repaired:** 14 nested links in `ZeroToHero/General-MISC/deepdive-llms.md` of the form `[text]([url](url))`. MkDocs rendered them with a broken `href="[url](url)"`, so they were dead links on the live site. The converter unwraps them to `[text](url)`. The source is unchanged.
 
-**Notebook source location (suggestion):**
-- Keep the `.ipynb` files in `docs/` until cleanup.
-- At cleanup, move them to `notebooks/` with the same relative paths (e.g. `notebooks/ZeroToHero/Micrograd/notebooks/x.ipynb`) and point `scripts/lib/site.mjs` there.
-- The Markdown pages then stop being generated: `content/docs/*.mdx` becomes the source, and `convert-pages.mjs` plus the page banners are removed.
+**Notebook source location:** done at cleanup (see "MkDocs cleanup" below).
 
 ### Nav label vs old H1 (nav label is now the title)
 
@@ -228,7 +227,7 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
 |---|---|
 | **Docs layout:** switched to Fumadocs **spacious** (as on fumadocs.dev). The sidebar is flush left (no gap), the page sits in a rounded panel, and the section dropdown is on top. | `app/(docs)/layout.tsx`, `app/(docs)/[...slug]/page.tsx` |
 | **Spacious styles:** `preset.css` doesn't include the spacious layout's class list, so `app/global.css` imports `fumadocs-ui/css/generated/spacious.css`. Without it the docs rendered unstyled. | `app/global.css` |
-| **Dropdown entries:** an icon plus a one-line description per section (Neural Networks → Brain, "Zero to Hero: from backprop to GPT"; Library → LibraryBig, "Notes from AI/ML books"). | root `meta.json` (generated from `ROOT_SECTIONS` in `convert-pages.mjs`), `lib/sections.tsx` |
+| **Dropdown entries:** an icon plus a one-line description per section (Neural Networks → Brain, "Zero to Hero: from backprop to GPT"; Library → LibraryBig, "Notes from AI/ML books"). | root `meta.json` (hand-maintained since the cleanup; first generated from `ROOT_SECTIONS` in the removed `convert-pages.mjs`), `lib/sections.tsx` |
 | **Section accents:** a subtle `--color-fd-primary` per section (indigo / amber, light and dark variants). It is set by a small `<style>` that each page emits (`SectionAccent`). An earlier `body:has()` version was replaced because it is re-evaluated while scrolling. | `lib/sections.tsx`, `app/global.css` |
 | **Collapsed sidebar:** the classic layout's floating "open sidebar + search" pill is back. While collapsed, it hides spacious's own expand button and pads the breadcrumb. | `components/collapsed-sidebar-controls.tsx` |
 | **TOC:** the classic style `'normal'` (thin line with a sliding indicator) instead of spacious's `'block'`. | `app/(docs)/[...slug]/page.tsx` |
@@ -238,10 +237,30 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
 
 - **Performance:** if scrolling feels laggy, compare on the export (`npm run build && npx serve out -l 4173`); dev mode is always heavier. Vanta already stops rendering when the globe is off-screen.
 
+## MkDocs cleanup
+
+The scripts and paths in "Content conversion" above describe the migration as it happened. Since the cleanup:
+
+| Change | Where |
+|---|---|
+| Notebooks moved with `git mv` from `docs/` to `notebooks/` (same relative paths). | `notebooks/` |
+| Notebook titles come from `notebooks/titles.json` (path → title), built once from the frontmatter titles, instead of the `mkdocs.yml` nav. The converter fails on a missing or orphaned title. | `notebooks/titles.json`, `scripts/convert-notebooks.mjs` |
+| Notebook images are no longer copied from `docs/assets`; the converter checks they exist in `public/`. | `scripts/lib/site.mjs` (`assertAsset`) |
+| Notebook banner: "Generated from notebooks/…". Re-running `npm run notebooks` changed only that line. | 38 notebook MDX files |
+| Page MDX files and every `meta.json` are hand-maintained. The "Generated from docs/…" banners are removed from the 34 pages. | `content/docs/` |
+| Removed `scripts/convert-pages.mjs`, `scripts/lib/nav.mjs`, the `convert:pages` / `convert` npm scripts. | `scripts/`, `package.json` |
+| `check:parity` no longer reads `mkdocs.yml`. It checks: old URLs exist; every MDX page and folder is listed in `meta.json`, and every `meta.json` entry exists; every notebook has a generated page, a title and an up-to-date `public/notebooks/` copy; no MkDocs leftovers (incl. old banners). | `scripts/check-parity.mjs` |
+| `docs/CNAME` → `public/CNAME` (exported as `out/CNAME`). The README logo `main-page-logo-1.png` → `public/assets/images/`. | `public/` |
+| Deleted `mkdocs.yml`, `overrides/`, `instructions.md` and the rest of `docs/` (stylesheets, javascripts, manifest, all of `docs/assets/` incl. unreferenced images and `blog-assets/`). They remain on `main` and in history. | |
+| `.gitignore`: dropped `.cache` (MkDocs Material); kept `.venv/` (local Jupyter). | `.gitignore` |
+| New `README.md` for the Fumadocs site; `CLAUDE.md` describes the post-cleanup workflow. | |
+
+`.github/workflows/ci.yml` is unchanged on purpose; it is replaced in the deployment task.
+
 ## Status and next steps
 
-1. **Done:** setup, content conversion, landing page, UI polish, verification scripts.
-2. **Next (fresh session):** MkDocs cleanup + typo fixes + notebook move. See "Notebook source location" and "Typos" above.
+1. **Done:** setup, content conversion, landing page, UI polish, verification scripts, MkDocs cleanup.
+2. **Next:** typo fixes (see "Typos" above), then scroll-smoothness profiling.
 3. **Then:** deployment, following the plan below.
 
 ## Future deployment plan: GitHub Pages (text only, no workflow created)
@@ -258,7 +277,7 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
    - Permissions: `pages: write`, `id-token: write`, `contents: read`. Concurrency group `pages`.
 2. **Old MkDocs workflow:** remove (or disable) the current `ci.yml` (`mkdocs gh-deploy`) in the same PR, so the two deployments don't fight.
 3. **Repository setting:** Settings → Pages → Source: switch from "Deploy from a branch (gh-pages)" to **"GitHub Actions"**.
-4. **Custom domain:** copy `docs/CNAME` to `public/CNAME` (`docs.muhammedshah.com`) so it lands in `out/CNAME`. Also add an empty `public/.nojekyll`. Leave the domain set in the Pages settings; DNS needs no change.
+4. **Custom domain:** `public/CNAME` (`docs.muhammedshah.com`) already exists (copied at cleanup) and lands in `out/CNAME`. Also add an empty `public/.nojekyll`. Leave the domain set in the Pages settings; DNS needs no change.
 5. **First deploy:** merge to `main`, watch the Actions run, then spot-check the old URLs on the live domain (`scripts/old-urls.txt`).
 6. **Rollback:** the `gh-pages` branch still holds the last MkDocs build. Switching Pages → Source back to "Deploy from a branch: gh-pages / root" restores the old site immediately, with no rebuild needed. Keep `gh-pages` until the new site has been stable for a while.
 
