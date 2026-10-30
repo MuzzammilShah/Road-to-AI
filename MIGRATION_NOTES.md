@@ -180,6 +180,60 @@ Running log for the `major-update/framework-switch` branch. Delete or archive at
 - The nested-link problem in `deepdive-llms.md` is described above.
 - External image URLs in Micrograd notebooks 6_0/6_1 (`imgs.search.brave.com/...` proxy links) may stop working at any time; consider copying those images locally.
 
+## Landing page (Phase 3)
+
+- **Route:** `app/(home)/page.tsx` in the Fumadocs `HomeLayout`.
+- **Navbar:**
+  - Transparent while it is over the hero (`transparentMode: 'top'`).
+  - Contents: logo + "Road to AI" (→ `/`), Neural Networks, Library, search, theme toggle and GitHub.
+  - Navbar links live in `lib/layout.shared.tsx`.
+- **Globe** (`components/home/globe.tsx`):
+  - Packages: `vanta@0.5.24` (the latest release, 2022, and what `vanta@latest` resolved to on the old site) and `three@0.134.0`, the same r134 the old page loaded from cdnjs. Both come from npm and are pinned.
+  - Loading: `next/dynamic` with `ssr: false` (`hero-globe.tsx`), so it is client-only. three.js + Vanta are one 622 KB chunk, loaded only on `/`.
+  - Colours follow `useTheme().resolvedTheme` live via `setOptions`: dark is white on #121212, light is #121212 on white. The effect is destroyed on unmount.
+  - With `prefers-reduced-motion: reduce`, no animation runs and the hero keeps a plain background.
+  - Uses `touchControls` + `scaleMobile: 1`, as before.
+- **Hero layout:** reproduces the old one. Content sits at 10% from the left with width `min(40%, 480px)`; on mobile it is 5% / 90%. It shows the light or dark logo and the tagline.
+- **Below the hero:**
+  - a scroll cue;
+  - a placeholder intro with two Cards linking `/ZeroToHero/` and `/Books/`;
+  - a footer with the copyright and GitHub.
+  - Every placeholder is marked `TODO(landing)`.
+- **Not verified in a browser:** I could not test that the WebGL globe actually animates; the headless-browser attempt was stopped. Please check `/` in both themes, on mobile, and with "Reduce motion" turned on.
+
+## Verification (Phase 4)
+
+| Check | Result |
+|---|---|
+| `npm run typecheck` | ✅ no errors |
+| `npm run lint` (Biome) | ✅ 33 files, no diagnostics |
+| `npm run build` | ✅ 75 HTML pages exported; warnings: only the 2 known Fumadocs CSS `::highlight` warnings |
+| `npm run check:links` | ✅ 3,481 internal href/src/#anchor on 76 HTML files, 0 broken |
+| `npm run check:parity` | ✅ 72/72 old URLs exist. Extra pages: only `/404/` and `/_not-found/`. 72 nav pages = 72 MDX pages = 72 sidebar entries. 0 MkDocs leftovers |
+| Heading anchors | ✅ all 302 non-H1 heading ids of the old site exist (43 removed page-H1 ids land on the page top) |
+| Structure vs `gh-pages` HTML | ✅ 66/72 pages identical in code blocks/images/tables/headings/lists; the 6 differences are explained above |
+| Search (static index) | ✅ queried `out/api/search.json` with Fumadocs' own static-search code. "tfloat32" / "bfloat16" (only in the GPT-2 2a notebook), "wavenet", "retrieval augmented" and "manual gradient descent" all find the right pages |
+| Rendered features (in HTML) | ✅ callouts, accordions, cards, tweet containers, GPT-2 flex image rows, notebook download link + output blocks, code-copy buttons, TOC (and hidden on the 4 chapters), prev/next links |
+| Dark/light, mobile, dropdown, globe | ⏳ need a visual check in a browser (see the review list in the final report) |
+
+## Future deployment plan: GitHub Pages (text only, no workflow created)
+
+1. **Workflow:** a new workflow, e.g. `.github/workflows/deploy.yml`, triggered on push to `main` (plus `workflow_dispatch`):
+   - `actions/checkout`
+   - `actions/setup-node` with `node-version-file: .nvmrc` and `cache: npm`
+   - `npm ci`
+   - `npm run typecheck && npm run lint`
+   - `npm run build`
+   - `npm run check:links && npm run check:parity`
+   - `actions/upload-pages-artifact` with `path: out`
+   - a `deploy` job using `actions/deploy-pages`
+   - Permissions: `pages: write`, `id-token: write`, `contents: read`. Concurrency group `pages`.
+2. **Old MkDocs workflow:** remove (or disable) the current `ci.yml` (`mkdocs gh-deploy`) in the same PR, so the two deployments don't fight.
+3. **Repository setting:** Settings → Pages → Source: switch from "Deploy from a branch (gh-pages)" to **"GitHub Actions"**.
+4. **Custom domain:** copy `docs/CNAME` to `public/CNAME` (`docs.muhammedshah.com`) so it lands in `out/CNAME`. Also add an empty `public/.nojekyll`. Leave the domain set in the Pages settings; DNS needs no change.
+5. **First deploy:** merge to `main`, watch the Actions run, then spot-check the old URLs on the live domain (`scripts/old-urls.txt`).
+6. **Rollback:** the `gh-pages` branch still holds the last MkDocs build. Switching Pages → Source back to "Deploy from a branch: gh-pages / root" restores the old site immediately, with no rebuild needed. Keep `gh-pages` until the new site has been stable for a while.
+
 ## Deviations from the prompt
 
 - **Fumadocs docs vs installed template:**
