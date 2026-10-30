@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
+/* preset.css only lists the classes of the docs/flux/home/notebook layouts; add the spacious one. */
+@import "fumadocs-ui/css/generated/spacious.css";
 
 /* Match the old MkDocs dark theme background. */
 .dark {
