@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-// Converts the executed Jupyter notebooks (docs/**/*.ipynb) into Fumadocs MDX pages.
+// Converts the executed Jupyter notebooks (notebooks/**/*.ipynb) into Fumadocs MDX pages.
 // Pure Node: it only reads the saved notebook JSON and never executes any code.
 //
 //   npm run notebooks
 //
-// - markdown cells -> MDX (same sanitising as the Markdown pages)
+// - title          -> notebooks/titles.json (notebook path -> title)
+// - markdown cells -> MDX (same sanitising as the old Markdown pages)
 // - code cells     -> ```python blocks
 // - outputs        -> ```text title="Output" blocks; image/png and image/svg+xml are written to
 //                     public/notebook-outputs/<notebook path>/cell-<n>-<k>.<ext>
@@ -12,14 +13,13 @@
 import { readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { convertMarkdown, dropLeadingH1, uniqueSlug } from './lib/mdx.mjs';
-import { navLabels, readNav } from './lib/nav.mjs';
 import {
+  assertAsset,
   CONTENT_DIR,
-  copyAsset,
-  DOCS_DIR,
   ensureDir,
   listFiles,
-  MKDOCS_YML,
+  NOTEBOOK_TITLES,
+  NOTEBOOKS_DIR,
   PUBLIC_DIR,
   removeDir,
   sourceStem,
@@ -29,16 +29,23 @@ import {
 const OUTPUTS_DIR = join(PUBLIC_DIR, 'notebook-outputs');
 const DOWNLOADS_DIR = join(PUBLIC_DIR, 'notebooks');
 
-const labels = navLabels(readNav(MKDOCS_YML));
-const knownSources = new Set(listFiles(DOCS_DIR, (f) => /\.(md|ipynb)$/.test(f)));
-const notebooks = [...knownSources].filter((f) => f.endsWith('.ipynb'));
+const titles = JSON.parse(readFileSync(NOTEBOOK_TITLES, 'utf8'));
+const notebooks = listFiles(NOTEBOOKS_DIR, (f) => f.endsWith('.ipynb'));
+for (const src of Object.keys(titles)) {
+  if (!notebooks.includes(src)) throw new Error(`notebooks/titles.json: no notebook ${src}`);
+}
+// Pages a notebook cell may link to: the other notebooks and every MDX page (as `<stem>.md`).
+const knownSources = new Set([
+  ...notebooks,
+  ...listFiles(CONTENT_DIR, (f) => f.endsWith('.mdx')).map((f) => f.replace(/\.mdx$/, '.md')),
+]);
 
 // Clean previous output of this script.
 removeDir(OUTPUTS_DIR);
 removeDir(DOWNLOADS_DIR);
 for (const file of listFiles(CONTENT_DIR, (f) => f.endsWith('.mdx'))) {
   const full = join(CONTENT_DIR, file);
-  if (/\{\/\* Generated from docs\/\S+\.ipynb /.test(readFileSync(full, 'utf8'))) rmSync(full);
+  if (/\{\/\* Generated from notebooks\/\S+\.ipynb /.test(readFileSync(full, 'utf8'))) rmSync(full);
 }
 
 const assets = new Set();
@@ -46,9 +53,9 @@ const warnings = [];
 const stats = { notebooks: 0, cells: 0, images: 0, texts: 0, errors: 0 };
 
 for (const src of notebooks) {
-  const title = labels.get(src);
-  if (!title) throw new Error(`docs/${src} is not in the mkdocs.yml nav`);
-  const nb = JSON.parse(readFileSync(join(DOCS_DIR, src), 'utf8'));
+  const title = titles[src];
+  if (!title) throw new Error(`notebooks/${src} has no title in notebooks/titles.json`);
+  const nb = JSON.parse(readFileSync(join(NOTEBOOKS_DIR, src), 'utf8'));
   const stem = sourceStem(src);
   const language =
     nb.metadata?.kernelspec?.language ?? nb.metadata?.language_info?.name ?? 'python';
@@ -61,8 +68,8 @@ for (const src of notebooks) {
     let text = joinSource(cell.source);
     if (cell.cell_type === 'markdown') {
       if (cell.attachments) throw new Error(`${src} cell ${n}: cell attachments are not supported`);
-      // mkdocs-jupyter used `ignore_h1_titles`; the page title comes from the nav, so the notebook's
-      // own leading H1 would be a second title.
+      // mkdocs-jupyter used `ignore_h1_titles`; the page title comes from titles.json, so the
+      // notebook's own leading H1 would be a second title.
       if (firstMarkdown && n === 0) {
         let h1;
         [text, h1] = dropLeadingH1(text);
@@ -87,21 +94,21 @@ for (const src of notebooks) {
   const download = `/notebooks/${stem}.ipynb`;
   const to = join(DOWNLOADS_DIR, `${stem}.ipynb`);
   ensureDir(to);
-  writeFileSync(to, readFileSync(join(DOCS_DIR, src)));
+  writeFileSync(to, readFileSync(join(NOTEBOOKS_DIR, src)));
 
   const out = sourceToContentFile(src);
   ensureDir(out);
   writeFileSync(
     out,
-    `---\ntitle: ${JSON.stringify(title)}\n---\n\n{/* Generated from docs/${src} by scripts/convert-notebooks.mjs. Do not edit: edit the notebook and run \`npm run notebooks\`. */}\n\n<NotebookDownload href="${download}" />\n\n${parts.join('\n\n')}\n`,
+    `---\ntitle: ${JSON.stringify(title)}\n---\n\n{/* Generated from notebooks/${src} by scripts/convert-notebooks.mjs. Do not edit: edit the notebook and run \`npm run notebooks\`. */}\n\n<NotebookDownload href="${download}" />\n\n${parts.join('\n\n')}\n`,
   );
   stats.notebooks++;
 }
 
-for (const asset of assets) copyAsset(asset);
+for (const asset of assets) assertAsset(asset);
 
 console.log(
-  `Converted ${stats.notebooks} notebooks (${stats.cells} cells): ${stats.texts} text outputs, ${stats.images} images, ${stats.errors} error outputs; copied ${assets.size} assets.`,
+  `Converted ${stats.notebooks} notebooks (${stats.cells} cells): ${stats.texts} text outputs, ${stats.images} images, ${stats.errors} error outputs; ${assets.size} referenced assets exist in public/.`,
 );
 if (warnings.length) console.log(`\nWarnings:\n- ${warnings.join('\n- ')}`);
 

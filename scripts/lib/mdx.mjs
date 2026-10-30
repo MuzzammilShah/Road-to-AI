@@ -53,11 +53,11 @@ const FENCE_RE = /^(\s*)(`{3,}|~{3,})/;
 
 /**
  * @typedef {object} ConvertContext
- * @property {string} source       Source path relative to docs/ (for messages and link resolution).
+ * @property {string} source       Source path relative to notebooks/ (for messages and link resolution).
  * @property {'file' | 'url'} markdownBase  Resolve Markdown links against the source file (MkDocs pages)
  *   or the rendered page URL (notebook cells, which mkdocs-jupyter does not rewrite).
- * @property {Set<string>} knownSources  All source files that have a page (relative to docs/).
- * @property {Set<string>} assets  Collects referenced asset paths (relative to docs/).
+ * @property {Set<string>} knownSources  All source paths that have a page (`<stem>.ipynb` / `<stem>.md`).
+ * @property {Set<string>} assets  Collects referenced asset paths (relative to public/).
  * @property {string[]} warnings   Collects messages for the conversion report.
  */
 
@@ -446,7 +446,7 @@ function parseStyle(css) {
 }
 
 /**
- * Resolve a relative reference to a docs/-relative path.
+ * Resolve a relative reference to a site-root-relative path.
  * - 'file': relative to the source file (how MkDocs resolves Markdown links/images)
  * - 'url' : relative to the rendered directory URL (raw HTML, notebook cells)
  */
@@ -462,7 +462,7 @@ function resolveImage(src, ctx, base) {
     return src;
   }
   const rel = src.startsWith('/') ? src.slice(1) : resolveRelative(src, ctx, base);
-  if (rel.startsWith('..')) throw new Error(`${ctx.source}: image outside docs/: ${src}`);
+  if (rel.startsWith('..')) throw new Error(`${ctx.source}: image outside the site root: ${src}`);
   ctx.assets.add(decodeURI(rel));
   return `/${rel}`;
 }
@@ -488,7 +488,7 @@ function resolveHref(href, ctx, base) {
   }
   if (path.endsWith('/') || rel === '')
     return `/${rel ? `${rel.replace(/\/$/, '')}/` : ''}${anchor}`;
-  // Other files (images, downloads) under docs/.
+  // Other files (images, downloads) under public/.
   ctx.assets.add(rel);
   return `/${rel}${anchor}`;
 }

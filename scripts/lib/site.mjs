@@ -1,27 +1,20 @@
-// Shared paths and URL helpers for the conversion scripts.
-import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
+// Shared paths and URL helpers for the notebook converter and the checks.
+import { existsSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-/** MkDocs source (read-only). */
-export const DOCS_DIR = join(ROOT, 'docs');
+/** Executed Jupyter notebooks (read-only), with the same relative paths as their pages. */
+export const NOTEBOOKS_DIR = join(ROOT, 'notebooks');
+/** Notebook path (relative to notebooks/) -> page title. */
+export const NOTEBOOK_TITLES = join(NOTEBOOKS_DIR, 'titles.json');
+/** TODO(cleanup): only check-parity still reads the old nav; removed in the next step. */
 export const MKDOCS_YML = join(ROOT, 'mkdocs.yml');
 export const CONTENT_DIR = join(ROOT, 'content', 'docs');
 export const PUBLIC_DIR = join(ROOT, 'public');
 
-/** Images that are used by the app itself rather than by a page. */
-export const APP_ASSETS = [
-  'assets/images/docs-logo.png',
-  'assets/images/white-bg-logo.png',
-  'assets/images/black-bg-logo.png',
-  'assets/images/icons/apple-touch-icon.png',
-  'assets/images/icons/icon-192.png',
-  'assets/images/icons/icon-512.png',
-];
-
 /**
- * MkDocs directory URL of a source file (relative to docs/):
+ * Directory URL of a source path (relative to notebooks/ or content/docs/):
  * `a/index.md` -> `/a/`, `a/b.md` -> `/a/b/`, `a/nb.ipynb` -> `/a/nb/`.
  */
 export function sourceToUrl(rel) {
@@ -30,7 +23,7 @@ export function sourceToUrl(rel) {
   return path ? `/${path}/` : '/';
 }
 
-/** Path (relative to docs/) without extension, used for generated file names. */
+/** Path without extension, used for generated file names. */
 export function sourceStem(rel) {
   return rel.replace(/\.(md|ipynb)$/, '');
 }
@@ -64,13 +57,11 @@ export function ensureDir(file) {
   mkdirSync(dirname(file), { recursive: true });
 }
 
-/** Copy `docs/<rel>` to `public/<rel>` (rel like `assets/images/x.png`). */
-export function copyAsset(rel) {
-  const from = join(DOCS_DIR, rel);
-  if (!existsSync(from)) throw new Error(`Referenced asset is missing: docs/${rel}`);
-  const to = join(PUBLIC_DIR, rel);
-  ensureDir(to);
-  copyFileSync(from, to);
+/** Fail unless `public/<rel>` exists (rel like `assets/images/x.png`). */
+export function assertAsset(rel) {
+  if (!existsSync(join(PUBLIC_DIR, rel))) {
+    throw new Error(`Referenced asset is missing: public/${rel}`);
+  }
 }
 
 export function removeDir(dir) {

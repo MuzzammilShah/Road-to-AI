@@ -12,9 +12,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "biome check",
     "format": "biome format --write",
-    "convert:pages": "node scripts/convert-pages.mjs",
     "notebooks": "node scripts/convert-notebooks.mjs",
-    "convert": "npm run convert:pages && npm run notebooks",
     "check:links": "node scripts/check-links.mjs",
     "check:parity": "node scripts/check-parity.mjs"
   },
