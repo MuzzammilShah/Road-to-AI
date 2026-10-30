@@ -1,0 +1,6 @@
+{
+  "title": "Neural Networks",
+  "description": "Zero to Hero series",
+  "root": true,
+  "pages": ["index", "Micrograd"]
+}

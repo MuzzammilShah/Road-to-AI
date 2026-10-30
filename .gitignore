@@ -14,3 +14,11 @@ Desktop.ini
 # Editor/IDE temporary files
 *~ 
 *.swp
+# Next.js / Fumadocs
+node_modules/
+.next/
+out/
+.source/
+next-env.d.ts
+*.tsbuildinfo
+.env*

@@ -1,0 +1,6 @@
+{
+  "title": "Library",
+  "description": "Book notes",
+  "root": true,
+  "pages": ["index"]
+}
