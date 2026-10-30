@@ -58,6 +58,9 @@ npm run check:links    # after build: every internal href/src/#anchor in out/ mu
   - `app/api/search.json/` is the search index.
   - `lib/layout.shared.tsx` holds the navbar title and links, which is where to add links.
   - The docs use the Fumadocs **spacious** layout: the sidebar is flush left with the section dropdown, and the page sits in a rounded panel. For navbar tabs instead, switch `fumadocs-ui/layouts/spacious` (+ `/page`) back to `fumadocs-ui/layouts/docs` and pass `tabMode="top"`. Fumadocs' `preset.css` doesn't include the spacious layout's classes, so `app/global.css` imports `fumadocs-ui/css/generated/spacious.css`. Any other layout from `fumadocs-ui/css/generated/` that preset.css doesn't list needs the same import, otherwise its pages render unstyled.
+  - Two pieces come from the classic layout:
+    - the collapsed-sidebar pill (`components/collapsed-sidebar-controls.tsx`, plus a little CSS in `app/global.css` that hides spacious's own expand button);
+    - the TOC style `'normal'` (set in `app/(docs)/[...slug]/page.tsx`; spacious defaults to `'block'`).
   - Section dropdown entries: `icon` and `description` come from the root `meta.json`, which `convert-pages.mjs` (`ROOT_SECTIONS`) generates until cutover. Icon names resolve in `lib/sections.tsx`. The per-section accent colours (`--section-*`, `body:has([data-section])`) are in `app/global.css`.
 - **MDX components** (`components/mdx.tsx`):
   - from Fumadocs: `Callout`, `Cards`/`Card`, `Accordions`/`Accordion`;
