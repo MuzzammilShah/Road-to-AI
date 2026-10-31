@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<style>
+    .pretty-card{
+      font-family: ui-sans-serif, system-ui;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 10px 0;
+      background: linear-gradient(#fff, #fff) padding-box,
+                  linear-gradient(135deg, #3b82f6, #9333ea) border-box;
+      color: #111;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+    .pretty-title{
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:14px;
+      color:#111;
+    }
+    /* 🔒 Only affects INSIDE the card */
+    .pretty-card pre, 
+    .pretty-card code {
+      background: #f3f4f6;
+      color: #111;
+      padding: 8px;
+      border-radius: 8px;
+      display: block;
+      overflow-x: auto;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .pretty-card img { max-width: 100%; height: auto; border-radius: 8px; }
+    .pretty-card table.pretty-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+      color: #111;
+    }
+    .pretty-card table.pretty-table th, 
+    .pretty-card table.pretty-table td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .pretty-card table.pretty-table th { background: #f9fafb; font-weight: 600; }
+    </style>
+    <div class="pretty-card"><div class="pretty-title">Random Sample of Dataset</div><table class="dataframe pretty-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>date</th>
+      <th>time</th>
+      <th>cash_type</th>
+      <th>card</th>
+      <th>price</th>
+      <th>coffee_name</th>
+      <th>quarter</th>
+      <th>month</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2024-09-29</td>
+      <td>06:08</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0467</td>
+      <td>2.596</td>
+      <td>Americano</td>
+      <td>3</td>
+      <td>9</td>
+      <td>2024</td>
+    </tr>
+    <tr>
+      <td>2024-03-12</td>
+      <td>17:03</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0050</td>
+      <td>2.890</td>
+      <td>Americano</td>
+      <td>1</td>
+      <td>3</td>
+      <td>2024</td>
+    </tr>
+    <tr>
+      <td>2024-03-16</td>
+      <td>11:05</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0061</td>
+      <td>2.890</td>
+      <td>Americano</td>
+      <td>1</td>
+      <td>3</td>
+      <td>2024</td>
+    </tr>
+    <tr>
+      <td>2025-03-13</td>
+      <td>09:58</td>
+      <td>card</td>
+      <td>ANON-0000-0000-1283</td>
+      <td>2.596</td>
+      <td>Americano</td>
+      <td>1</td>
+      <td>3</td>
+      <td>2025</td>
+    </tr>
+    <tr>
+      <td>2024-09-06</td>
+      <td>14:57</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0283</td>
+      <td>3.282</td>
+      <td>Latte</td>
+      <td>3</td>
+      <td>9</td>
+      <td>2024</td>
+    </tr>
+  </tbody>
+</table></div>
+</body>
+</html>

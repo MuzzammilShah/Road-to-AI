@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<div style="border-left: 4px solid #444; margin: 10px 0; padding: 10px; background: #f0f0f0;">
+                    <strong style="color:#222;">🧠 LLM Action:</strong> <code>search_unread_from_sender</code>
+                    <pre style="color:#000; font-size:13px;">{
+  "sender": "boss@email.com"
+}</pre>
+                </div>
+                
+            <div style="border-left: 4px solid #007bff; margin: 10px 0; padding: 10px; background: #eef6ff;">
+                <strong style="color:#222;">🔧 Tool Response:</strong> <code>search_unread_from_sender</code>
+                <pre style="color:#000; font-size:13px;">[
+  {
+    "id": 2,
+    "sender": "boss@email.com",
+    "recipient": "you@email.com",
+    "subject": "Quarterly Report",
+    "body": "Please finalize the report ASAP.",
+    "timestamp": "2025-10-31T00:39:25.091698",
+    "read": false
+  }
+]</pre>
+            </div>
+            
+                <div style="border-left: 4px solid #444; margin: 10px 0; padding: 10px; background: #f0f0f0;">
+                    <strong style="color:#222;">🧠 LLM Action:</strong> <code>mark_email_as_read</code>
+                    <pre style="color:#000; font-size:13px;">{
+  "email_id": 2
+}</pre>
+                </div>
+                
+                <div style="border-left: 4px solid #444; margin: 10px 0; padding: 10px; background: #f0f0f0;">
+                    <strong style="color:#222;">🧠 LLM Action:</strong> <code>send_email</code>
+                    <pre style="color:#000; font-size:13px;">{
+  "recipient": "boss@email.com",
+  "subject": "Re: Quarterly Report",
+  "body": "Hello,\n\nThank you for your email. I have received your message regarding the quarterly report and will address it promptly. Please let me know if there is any additional information you need.\n\nBest regards,\n\n[Your Name]"
+}</pre>
+                </div>
+                
+            <div style="border-left: 4px solid #007bff; margin: 10px 0; padding: 10px; background: #eef6ff;">
+                <strong style="color:#222;">🔧 Tool Response:</strong> <code>mark_email_as_read</code>
+                <pre style="color:#000; font-size:13px;">{
+  "id": 2,
+  "sender": "boss@email.com",
+  "recipient": "you@email.com",
+  "subject": "Quarterly Report",
+  "body": "Please finalize the report ASAP.",
+  "timestamp": "2025-10-31T00:39:25.091698",
+  "read": true
+}</pre>
+            </div>
+            
+            <div style="border-left: 4px solid #007bff; margin: 10px 0; padding: 10px; background: #eef6ff;">
+                <strong style="color:#222;">🔧 Tool Response:</strong> <code>send_email</code>
+                <pre style="color:#000; font-size:13px;">{
+  "id": 7,
+  "sender": "you@mail.com",
+  "recipient": "boss@email.com",
+  "subject": "Re: Quarterly Report",
+  "body": "Hello,\n\nThank you for your email. I have received your message regarding the quarterly report and will address it promptly. Please let me know if there is any additional information you need.\n\nBest regards,\n\n[Your Name]",
+  "timestamp": "2025-10-31T00:40:27.008277",
+  "read": false
+}</pre>
+            </div>
+            
+    <div style="border-left: 4px solid #28a745; margin: 20px 0; padding: 10px; background: #eafbe7;">
+        <strong style="color:#222;">✅ Final Assistant Message:</strong>
+        <p style="color:#000;">You had an unread email from boss@email.com regarding the quarterly report. I have marked it as read and sent a polite follow-up message acknowledging receipt and confirming you will address the request promptly. 
+
+If you need further assistance or want to review the correspondence, let me know!</p>
+    </div>
+    
+        <div style="border-left: 4px solid #666; margin: 20px 0; padding: 10px; background: #f8f9fa;">
+            <strong style="color:#222;">🧭 Tool Sequence:</strong>
+            <p style="color:#000;">search_unread_from_sender → mark_email_as_read → send_email</p>
+        </div>
+</body>
+</html>

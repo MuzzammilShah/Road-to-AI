@@ -58,7 +58,7 @@ Then:
 | What | Where |
 |---|---|
 | Pages (MDX) | `content/docs/<Section>/…/<name>.mdx` → URL `/<Section>/…/<name>/` |
-| Sidebar order and labels | `meta.json` in each folder of `content/docs/` |
+| Sidebar order and labels | `meta.json` in each folder of `content/docs/` (section order: `content/docs/meta.json`) |
 | Notebooks (source) | `notebooks/<Section>/…/<name>.ipynb` (+ title in `notebooks/titles.json`) |
 | Images for pages | `public/assets/images/…` → referenced as `/assets/images/…` |
 | Section icons and colours | `lib/sections.tsx` + `app/global.css` |
@@ -66,7 +66,7 @@ Then:
 | Landing page | `app/(home)/page.tsx` |
 | Deploy workflow | `.github/workflows/deploy.yml` |
 
-The two current sections are `ZeroToHero/` ("Neural Networks") and `Books/` ("Library").
+The three current sections, in dropdown order, are `ZeroToHero/` ("Neural Networks"), `Books/` ("Library") and `Academy/` ("Academy", course notes).
 
 ## 4. Add a page
 
@@ -118,6 +118,28 @@ Example: a second book, `content/docs/Books/Designing-ML-Systems/`.
 3. To make the folder itself clickable, add an `index.mdx` in it and list `"index"` first in its `pages`. Without one, the folder is a collapsible group.
 4. The Books overview (`content/docs/Books/index.mdx`) has a card per book. Add an `href` to the "Designing ML Systems" card once its notes exist.
 
+**A new course in Academy** works the same way: a folder such as `content/docs/Academy/<Course>/` with `index`, `notes/` and `notebooks/` (see `Agentic-AI/`), listed in `content/docs/Academy/meta.json`. Then add a course card to `content/docs/Academy/index.mdx`:
+
+```mdx
+<CourseCards>
+  <CourseCard
+    href="/Academy/<Course>/"
+    title="Course name"
+    description="One line about the course."
+    thumbnail="/assets/images/academy/<course>/thumbnail.jpg"
+    duration="Oct 28 – Nov 5, 2025"
+    provider="DeepLearning.AI"
+    providerLogo="/assets/images/academy/providers/deeplearning-ai.png"
+    providerLogoDark="…"   {/* optional, see below */}
+  />
+</CourseCards>
+```
+
+- **Thumbnail:** landscape 16:9 (e.g. 1280×720), saved as JPEG to keep it small. On macOS: `sips -s format jpeg -s formatOptions 80 in.png --out thumbnail.jpg`.
+- **Provider logo:** in `public/assets/images/academy/providers/`, reused for every course from the same provider. Crop it to the logo itself (no empty margins) at about 96px tall, so they size consistently: up to 16px tall on mobile, and on desktop up to 20px tall and 128px wide (very wide logos stop at the width cap). If it has black text, also add a white-text `<name>-dark.png` and pass it as `providerLogoDark` (see Udemy).
+- **No notes yet:** leave out `href` and the card is shown without a link.
+- **Large slide screenshots:** shrink them before committing: `sips -Z 1920 *.png --out <folder>/`.
+
 **More `meta.json` tricks:**
 - **Separators:** add an entry like `"---Set 2: Transformers---"` to the `pages` array.
 - **Order:** the order of `pages` is the sidebar order.
@@ -143,13 +165,18 @@ Notebooks are never run by the site. It converts their **saved outputs**, so run
 
 **Changing a notebook later:** edit it in Jupyter (or edit only the markdown cell text in the `.ipynb`), then re-run `npm run notebooks`. **Never edit the generated `.mdx`.** It says "Generated from notebooks/…" at the top and would be overwritten.
 
-**Images inside markdown cells** must already exist in `public/` (e.g. `/assets/images/...`), or the converter stops with an error.
+**Images inside markdown cells** must already exist in `public/` (e.g. `/assets/images/...`), or the converter stops with an error. If an image isn't available (e.g. course material that wasn't downloaded), replace it in the markdown cell with a short italic note, as the Agentic AI notebooks do.
+
+**Rich outputs:**
+- `text/html` outputs (styled cards, tables, charts as `data:` images) are saved as standalone pages in `public/notebook-outputs/…/cell-<n>-<k>.html`. They are shown in a sandboxed iframe that sizes itself to the content (`NotebookHtmlOutput`), so their CSS can't affect the site and their scripts never run.
+- `text/markdown` outputs are converted like markdown cells, inside a bordered box. Their headings become bold lines, so they don't fill the page's table of contents. Local images they reference were never saved with the notebook, so they become a note.
+- Any other output type stops the converter with "unsupported output type".
 
 ## 7. Add a section (a new category)
 
 Example: a "Papers" section next to Neural Networks and Library. It shows up in the sidebar's section dropdown with its own icon and accent colour.
 
-**1. Content:** create `content/docs/Papers/meta.json`:
+**1. Content:** add the folder name to the root `content/docs/meta.json` at the position it should have in the dropdown (`"pages": ["ZeroToHero", "Books", "Academy", "Papers"]`). Then create `content/docs/Papers/meta.json`:
 
 ```json
 {
@@ -188,12 +215,12 @@ The build fails with "Unknown icon" if the `meta.json` icon isn't registered her
 ```css
 :root {
   /* … */
-  --section-papers: oklch(0.55 0.14 160);   /* light mode */
+  --section-papers: oklch(0.55 0.14 25);   /* light mode */
 }
 
 .dark {
   /* … */
-  --section-papers: oklch(0.78 0.12 160);   /* dark mode: lighter */
+  --section-papers: oklch(0.78 0.12 25);   /* dark mode: lighter */
 }
 
 [data-section-icon="ScrollText"] {
@@ -201,7 +228,7 @@ The build fails with "Unknown icon" if the `meta.json` icon isn't registered her
 }
 ```
 
-In `oklch(lightness chroma hue)`, the last number is the hue: 268 is indigo, 55–70 is amber, 160 is green, 25 is red. Keep chroma low (around 0.12–0.19) for a subtle accent.
+In `oklch(lightness chroma hue)`, the last number is the hue: 268 is indigo (Neural Networks), 55–70 is amber (Library), 152 is green (Academy), 25 is red. Keep chroma low (around 0.12–0.19) for a subtle accent.
 
 **4. Optional:**
 - **Navbar link:** add `{ text: 'Papers', url: '/Papers/', icon: <ScrollText />, active: 'nested-url' }` to `links` in `lib/layout.shared.tsx`.
@@ -244,9 +271,14 @@ MDX is Markdown plus components. Everything normal works: headings, lists, table
   <Card title="AI Engineering" href="/Books/AI-Engineering/chapter-1/">Short description</Card>
 </Cards>
 
-<Icon name="Sparkle" />   {/* Sparkle, CircleCheckBig, CircleAlert, CornerDownRight, LibraryBig, Bird, Feather */}
+<Icon name="Sparkle" />   {/* Sparkle, CircleCheckBig, CircleAlert, CornerDownRight, LibraryBig, Bird, Feather, FileText */}
 
 <Tweet url="https://twitter.com/<user>/status/<id>" />
+
+<GithubRepo owner="MuzzammilShah" repo="Agentic-AI" description="Optional one line" />
+{/* repo card; stars/forks are fetched at build time and left out if GitHub can't be reached */}
+
+<CourseCards><CourseCard … /></CourseCards>   {/* course cards, see "A new course in Academy" */}
 ```
 
 `<Icon>` only knows the icons listed above. To use another Lucide icon, import it and add it to the `icons` map in `components/mdx/icon.tsx`.

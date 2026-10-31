@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<div style="border-left: 4px solid #444; margin: 10px 0; padding: 10px; background: #f0f0f0;">
+                    <strong style="color:#222;">🧠 LLM Action:</strong> <code>search_emails</code>
+                    <pre style="color:#000; font-size:13px;">{
+  "query": "alice@work.com"
+}</pre>
+                </div>
+                
+            <div style="border-left: 4px solid #007bff; margin: 10px 0; padding: 10px; background: #eef6ff;">
+                <strong style="color:#222;">🔧 Tool Response:</strong> <code>search_emails</code>
+                <pre style="color:#000; font-size:13px;">[
+  {
+    "id": 5,
+    "sender": "alice@work.com",
+    "recipient": "you@email.com",
+    "subject": "Lunch?",
+    "body": "Free for lunch today?",
+    "timestamp": "2025-10-31T00:39:25.091698",
+    "read": false
+  }
+]</pre>
+            </div>
+            
+                <div style="border-left: 4px solid #444; margin: 10px 0; padding: 10px; background: #f0f0f0;">
+                    <strong style="color:#222;">🧠 LLM Action:</strong> <code>delete_email</code>
+                    <pre style="color:#000; font-size:13px;">{
+  "email_id": 5
+}</pre>
+                </div>
+                
+            <div style="border-left: 4px solid #007bff; margin: 10px 0; padding: 10px; background: #eef6ff;">
+                <strong style="color:#222;">🔧 Tool Response:</strong> <code>delete_email</code>
+                <pre style="color:#000; font-size:13px;">{
+  "message": "Email deleted"
+}</pre>
+            </div>
+            
+    <div style="border-left: 4px solid #28a745; margin: 20px 0; padding: 10px; background: #eafbe7;">
+        <strong style="color:#222;">✅ Final Assistant Message:</strong>
+        <p style="color:#000;">The email from alice@work.com has been deleted.</p>
+    </div>
+    
+        <div style="border-left: 4px solid #666; margin: 20px 0; padding: 10px; background: #f8f9fa;">
+            <strong style="color:#222;">🧭 Tool Sequence:</strong>
+            <p style="color:#000;">search_emails → delete_email</p>
+        </div>
+</body>
+</html>

@@ -1,0 +1,732 @@
+---
+title: "Graded Assignment"
+---
+
+{/* Generated from notebooks/Academy/Agentic-AI/notebooks/Tool-Use/graded-assignment.ipynb by scripts/convert-notebooks.mjs. Do not edit: edit the notebook and run `npm run notebooks`. */}
+
+<NotebookDownload href="/notebooks/Academy/Agentic-AI/notebooks/Tool-Use/graded-assignment.ipynb" />
+
+In this lab, you will explore how AI agents can enhance research workflows by leveraging external tools and engaging in critical self-reflection. You'll learn how to build and integrate callable tools—such as web and academic search functions, and connect them to a language model using OpenAI's tool-calling API. Then, you’ll guide the agent to not only generate content but also **reflect** on its own output, improving the quality and depth of the final report. By the end of this lab, you will have implemented a mini agent capable of searching, reasoning, and publishing structured reports in HTML—laying the foundation for more advanced multi-step and autonomous AI systems.
+
+### 🎯 Learning Objectives [#learning-objectives]
+
+By the end of this lab, you can:
+- Chain steps into a research pipeline (**search → reflection → formatting**).
+- Convert natural-language output into **styled HTML** suitable for sharing.
+
+---
+<a name="submission"></a>
+
+\<h4 style="color:green; font-weight:bold;">TIPS FOR SUCCESSFUL GRADING OF YOUR ASSIGNMENT:\</h4>
+
+* All cells are frozen except for the ones where you need to write your solution code or when explicitly mentioned you can interact with it.
+
+* In each exercise cell, look for comments `### START CODE HERE ###` and `### END CODE HERE ###`. These show you where to write the solution code. **Do not add or change any code that is outside these comments**.
+
+* You can add new cells to experiment but these will be omitted by the grader, so don't rely on newly created cells to host your solution code, use the provided places for this.
+
+* Avoid using global variables unless you absolutely have to. The grader tests your code in an isolated environment without running all cells from the top. As a result, global variables may be unavailable when scoring your submission. Global variables that are meant to be used will be defined in UPPERCASE.
+
+* To submit your notebook for grading, first save it by clicking the 💾 icon on the top left of the page and then click on the <span style={{"backgroundColor":"red","color":"white","padding":"3px 5px","fontSize":"16px","borderRadius":"5px"}}>Submit assignment</span> button on the top right of the page.
+---
+
+```python
+# ================================
+# Standard library imports
+# ================================
+import json
+
+# ================================
+# Third-party imports
+# ================================
+from dotenv import load_dotenv
+from openai import OpenAI
+from IPython.display import display, HTML
+
+# ================================
+# Local / project imports
+# ================================
+import research_tools
+
+# ================================
+# Environment setup
+# ================================
+load_dotenv()  # Load environment variables from .env file
+
+# Instantiate OpenAI's client (you should use this in your graded functions)
+CLIENT = OpenAI()
+```
+
+```python
+import unittests
+```
+
+## Using Tools [#using-tools]
+
+You’ll use two research tools exposed in the `research_tools` module:
+- **`arxiv_search_tool(query, max_results)`** – academic papers via arXiv API.
+- **`tavily_search_tool(query, max_results, include_images)`** – general web search via Tavily.
+
+Let's explore how the `arxiv_search_tool` works.
+
+This tool searches arXiv and returns a list of papers with:
+- `title`, `authors`, `published`, `summary`, `url`, and (if available) `link_pdf`.
+
+Below, we run a quick test and print the results in a readable format. Next cell is editable so feel free to try some search queries:
+
+```python
+# Test the arXiv search tool
+topic = "linear algebra"
+
+arxiv_results = research_tools.arxiv_search_tool(topic, max_results=3)
+
+# Show formatted arxiv_results
+for i, paper in enumerate(arxiv_results, 1):
+    if "error" in paper:
+        print(f"❌ Error: {paper['error']}")
+    else:
+        print(f"📄 Paper {i}")
+        print(f"  Title     : {paper['title']}")
+        print(f"  Authors   : {', '.join(paper['authors'])}")
+        print(f"  Published : {paper['published']}")
+        print(f"  URL       : {paper['url']}\n")
+
+
+print("\n🧾 Raw arxiv_Results:\n")
+print(json.dumps(arxiv_results, indent=2))
+```
+
+```text title="Output"
+📄 Paper 1
+  Title     : On Associative Conformal Algebras of Linear Growth
+  Authors   : Alexander Retakh
+  Published : 2000-05-25
+  URL       : http://arxiv.org/abs/math/0005258v1
+
+📄 Paper 2
+  Title     : Linear algebra meets Lie algebra: the Kostant-Wallach theory
+  Authors   : Noam Shomron, Beresford N. Parlett
+  Published : 2008-09-07
+  URL       : http://arxiv.org/abs/0809.1204v2
+
+📄 Paper 3
+  Title     : On associative conformal algebras of linear growth II
+  Authors   : Alexander Retakh
+  Published : 2002-12-12
+  URL       : http://arxiv.org/abs/math/0212168v1
+
+
+🧾 Raw arxiv_Results:
+
+[
+  {
+    "title": "On Associative Conformal Algebras of Linear Growth",
+    "authors": [
+      "Alexander Retakh"
+    ],
+    "published": "2000-05-25",
+    "url": "http://arxiv.org/abs/math/0005258v1",
+    "summary": "Lie conformal algebras appear in the theory of vertex algebras. Their\nrelation is similar to that of Lie algebras and their universal enveloping\nalgebras. Associative conformal algebras play a role in conformal\nrepresentation theory. We introduce the notions of conformal identity and\nunital associative conformal algebras and classify finitely generated simple\nunital associative conformal algebras of linear growth. These are precisely the\ncomplete algebras of conformal endomorphisms of finite modules.",
+    "link_pdf": "http://arxiv.org/pdf/math/0005258v1"
+  },
+  {
+    "title": "Linear algebra meets Lie algebra: the Kostant-Wallach theory",
+    "authors": [
+      "Noam Shomron",
+      "Beresford N. Parlett"
+    ],
+    "published": "2008-09-07",
+    "url": "http://arxiv.org/abs/0809.1204v2",
+    "summary": "In two languages, Linear Algebra and Lie Algebra, we describe the results of\nKostant and Wallach on the fibre of matrices with prescribed eigenvalues of all\nleading principal submatrices. In addition, we present a brief introduction to\nbasic notions in Algebraic Geometry, Integrable Systems, and Lie Algebra aimed\nat specialists in Linear Algebra.",
+    "link_pdf": "http://arxiv.org/pdf/0809.1204v2"
+  },
+  {
+    "title": "On associative conformal algebras of linear growth II",
+    "authors": [
+      "Alexander Retakh"
+    ],
+    "published": "2002-12-12",
+    "url": "http://arxiv.org/abs/math/0212168v1",
+    "summary": "We classify unital associative conformal algebras of linear growth and\nprovide new examples of such.",
+    "link_pdf": "http://arxiv.org/pdf/math/0212168v1"
+  }
+]
+```
+
+The `tavily_search_tool` calls the Tavily API to fetch web results. Returns a list of dicts:
+- `title`, `content`, `url` (and optional image URLs when `include_images=True`).
+
+Run the cell to inspect sample output. Next cell is editable so feel free to try some search queries:
+
+```python
+# Test the Tavily search tool
+topic = "retrieval-augmented generation applications"
+
+tavily_results = research_tools.tavily_search_tool(topic)
+for item in tavily_results:
+    print(item)
+```
+
+```text title="Output"
+{'title': 'What is Retrieval Augmented Generation (RAG)? | Databricks', 'content': 'Retrieval augmented generation, or RAG, is an architectural approach that can improve the efficacy of large language model (LLM) applications by leveraging custom data. This is called retrieval augmented generation (RAG), as you would retrieve the relevant data and use it as augmented context for the LLM. With RAG architecture, organizations can deploy any LLM model and augment it to return relevant results for their organization by giving it a small amount of their data without the costs and time of fine-tuning or pretraining the model. * Using MLflow AI Gateway and Llama 2 to Build Generative AI Apps (Achieve greater accuracy using retrieval augmented generation (RAG) with your own data) Contact Databricks to schedule a demo and talk to someone about your LLM and retrieval augmented generation (RAG) projects', 'url': 'https://www.databricks.com/glossary/retrieval-augmented-generation-rag'}
+{'title': 'What is Retrieval-Augmented Generation (RAG)? - Google Cloud', 'content': 'RAG (Retrieval-Augmented Generation) is an AI framework that combines the strengths of traditional information retrieval systems (such as search and databases) with the capabilities of generative [large language models (LLMs)](https://cloud.google.com/ai/llms). Data framework for developing context-augmented LLM applications, and facilitates retrieval-augmented generation (RAG.)](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-overview) * [APIs to build your own search and Retrieval Augmented Generation (RAG) systems](https://cloud.google.com/generative-ai-app-builder/docs/builder-apis) * [Infrastructure for a RAG-capable generative AI application using Vertex AI and Vector Search](https://cloud.google.com/architecture/gen-ai-rag-vertex-ai-vector-search) [Find a partner](https://cloud.google.com/find-a-partner/) * [Run your apps wherever you need them.](https://cloud.google.com/multicloud) Read what industry analysts say about us.](https://cloud.google.com/analyst-reports) Browse and download popular whitepapers.](https://cloud.google.com/whitepapers) AI-driven solutions to build and scale games faster.](https://cloud.google.com/solutions/games) Migration and AI tools to optimize the manufacturing value chain.](https://cloud.google.com/solutions/manufacturing) Data storage, AI, and analytics solutions for government agencies.](https://cloud.google.com/gov) * [Databases](https://cloud.google.com/products/databases)', 'url': 'https://cloud.google.com/use-cases/retrieval-augmented-generation'}
+{'title': 'Top Use Cases of Retrieval-Augmented Generation (RAG) in AI', 'content': "* By integrating retrieval mechanisms with language generation, RAG systems produce more accurate and informative text outputs, significantly improving tasks like machine translation, question answering, and summarization. Retrieval augmented generation (RAG) is an artificial intelligence methodology that combines the power of neural language models with external knowledge resources to generate text that is relevant and informed. Retrieval augmented generation (RAG) operates by integrating a retrieval component into the language generation process, expanding the model's knowledge base beyond its initial training data. Retrieval augmented generation (RAG) significantly enhances the capabilities of natural language processing systems. For **question answering**, RAG employs its retrieval component to source relevant information before generating a response.", 'url': 'https://www.glean.com/blog/retrieval-augmented-generation-use-cases'}
+{'title': "RAG Tutorial: A Beginner's Guide to Retrieval Augmented Generation", 'content': 'To elaborate further on Retrieval Augmented Generation, usually shortened to "RAG", it is a cutting-edge technique in artificial intelligence (AI) that combines the strengths of traditional language models with the ability to dynamically incorporate relevant external data. For an user query, RAG tends to retrieve the information from the provided source/information/data that is stored in a vector database. One simple use case would be the customer support application, where the custom data is fed to the application stored in a vector database and when a user query comes in, it generates the most appropriate response related to your products or services and not some generic answer. By integrating SingleStoreDB with the RAG model, you can harness the power of real-time analytics and fast data retrieval, ensuring that your chat application provides timely and relevant responses to user queries.', 'url': 'https://www.singlestore.com/blog/a-guide-to-retrieval-augmented-generation-rag/'}
+{'title': 'Retrieval Augmented Generation (RAG) – 5 Use Cases - TheBlue.ai', 'content': 'In our last article, we discussed the impact of **Retrieval Augmented Generation (RAG)** systems in enhancing **Large Language Models (LLM)** by integrating dynamic information retrieval with generative processes. This new article will delve deeper into the practical applications of Retrieval Augmented Generation (RAG) systems, presenting five use cases across different industries and highlighting how these systems enhance data accessibility and streamline tasks and processes in real-world scenarios. **#2: Enhancing AI Avatars with Retrieval Augmented Generation (RAG)** Retrieval Augmented Generation (RAG) significantly improves AI avatars or digital humans by enabling them to access and utilize real-time, context-specific information during interactions. By integrating a retrieval component into generative models, RAG systems can pull from a vast repository of company-specific documents, training materials, and past queries to provide real-time, contextually relevant information to new hires.', 'url': 'https://theblue.ai/blog/rag-news/'}
+```
+
+## Tool Mapping [#tool-mapping]
+
+In the next cell you will define a dictionary that maps tool names (strings) to the actual Python functions. This allows the model to call tools by name during tool-calling. This dictionary will be used in your first graded function:
+
+```python
+# Tool mapping
+TOOL_MAPPING = {
+    "tavily_search_tool": research_tools.tavily_search_tool,
+    "arxiv_search_tool": research_tools.arxiv_search_tool,
+}
+```
+
+## Exercise 1: Generate Research Report with Tools [#exercise-1-generate-research-report-with-tools]
+**Goal:** Implement `generate_research_report_with_tools(prompt)`.
+In this exercise, you'll work on a function that generates a detailed research report with the assistance of online tools. Focus on setting up interaction with the language model and handling the responses effectively.
+
+## Key Hints [#key-hints]
+
+### 1. Setting Up the Chat with the Language Model [#1-setting-up-the-chat-with-the-language-model]
+- **Tool Selection**: Ensure that the tools are automatically selected by the model. Look into how to set `tool_choice` to "auto" within the function call. A helpful resource can be found in [OpenAI’s Function Calling Documentation](https://platform.openai.com/docs/guides/function-calling#tool-choice).
+- **Parameter Configuration**: Consider the parameters already defined in your function, such as model, messages, and tools. Think about how these might be used in your setup.
+
+### 2. Recording Tool Call Results [#2-recording-tool-call-results]
+- **Understanding the `ChatCompletionMessage`** object will help you access the required attributes to save the messages. An example of `ChatCompletionMessage` looks like this: 
+
+```python
+ChatCompletionMessage(
+    content=None,
+    refusal=None,
+    role='assistant',
+    annotations=[],
+    audio=None,
+    function_call=None,
+    tool_calls=[
+        ChatCompletionMessageFunctionToolCall(
+            id='call_ymMki5TBB91efJhMPjgoqjop',
+            function=Function(
+                arguments='{"query":"radio observations of recurrent novae","max_results":5}',
+                name='arxiv_search_tool'
+            ),
+            type='function'
+        )
+    ]
+)
+```
+Assuming that `msg` if of type `ChatCompletionMessage`, if you wanted to get the `name` of a `tool_call` you can do something like:
+```python
+ for call in msg.tool_calls:
+    tool_name = call.function.name
+```
+Finally, the `result` variable will be created by actually calling the function associated with each tool (`tool_func`).
+
+By leveraging these hints, you'll work towards an implementation that enables robust data gathering and report generation through smart tool integration.
+
+```python
+# GRADED FUNCTION: generate_research_report_with_tools
+def generate_research_report_with_tools(prompt: str, model: str = "gpt-4o") -> str:
+    """
+    Generates a research report using OpenAI's tool-calling with arXiv and Tavily tools.
+
+    Args:
+        prompt (str): The user prompt.
+        model (str): OpenAI model name.
+
+    Returns:
+        str: Final assistant research report text.
+    """
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are a research assistant that can search the web and arXiv to write detailed, "
+                "accurate, and properly sourced research reports.\n\n"
+                "🔍 Use tools when appropriate (e.g., to find scientific papers or web content).\n"
+                "📚 Cite sources whenever relevant. Do NOT omit citations for brevity.\n"
+                "🌐 When possible, include full URLs (arXiv links, web sources, etc.).\n"
+                "✍️ Use an academic tone, organize output into clearly labeled sections, and include "
+                "inline citations or footnotes as needed.\n"
+                "🚫 Do not include placeholder text such as '(citation needed)' or '(citations omitted)'."
+            )
+        },
+        {"role": "user", "content": prompt}
+    ]
+
+    # List of available tools
+    tools = [research_tools.arxiv_tool_def, research_tools.tavily_tool_def]
+
+    # Maximum number of turns
+    max_turns = 10
+    
+    # Iterate for max_turns iterations
+    for _ in range(max_turns):
+
+        ### START CODE HERE ###
+
+        # Chat with the LLM via the client and set the correct arguments. Hint: Their names match names of variables already defined.
+        # Make sure to let the LLM choose tools automatically. Hint: Look at the docs provided earlier!
+        response = CLIENT.chat.completions.create( 
+            model=model,
+            messages=messages,
+            tools=tools,
+            tool_choice="auto",
+            temperature=1, 
+        ) 
+
+        ### END CODE HERE ###
+
+        # Get the response from the LLM and append to messages
+        msg = response.choices[0].message 
+        messages.append(msg) 
+
+        # Stop when the assistant returns a final answer (no tool calls)
+        if not msg.tool_calls:      
+            final_text = msg.content
+            print("✅ Final answer:")
+            print(final_text)
+            break
+
+        # Execute tool calls and append results
+        for call in msg.tool_calls:
+            tool_name = call.function.name
+            args = json.loads(call.function.arguments)
+            print(f"🛠️ {tool_name}({args})")
+
+            try:
+                tool_func = TOOL_MAPPING[tool_name]
+                result = tool_func(**args)
+            except Exception as e:
+                result = {"error": str(e)}
+
+            ### START CODE HERE ###
+
+            # Keep track of tool use in a new message
+            new_msg = { 
+                # Set role to "tool" (plain string) to signal a tool was used
+                "role": "tool",
+                # As stated in the markdown when inspecting the ChatCompletionMessage object 
+                # every call has an attribute called id
+                "tool_call_id": call.id,
+                # The name of the tool was already defined above, use that variable
+                "name": tool_name,
+                # Pass the result of calling the tool to json.dumps
+                "content": json.dumps(result)
+            }
+
+            ### END CODE HERE ###
+
+            # Append to messages
+            messages.append(new_msg)
+
+    return final_text
+```
+
+Run the following cell to check the correctness of your code. It might take a while so don't worry if it takes a couple of minutes to run:
+
+```python
+# Test your code!
+unittests.test_generate_research_report_with_tools(generate_research_report_with_tools)
+```
+
+```text title="Output"
+🛠️ arxiv_search_tool({'query': 'radio observations of recurrent novae', 'max_results': 5})
+✅ Final answer:
+## Radio Observations of Recurrent Novae: A Review
+
+Recurrent novae are a subset of novae undergoing repeated outbursts due to the accretion of material from their companion stars. Their study involves observations across various electromagnetic spectrums, including radio frequencies. Recent advancements have provided significant insights into the characteristics and behaviors of these astronomical phenomena. Below are key findings from several research papers focusing on radio observations of recurrent novae.
+
+### General Overview of Recurrent Novae
+
+Koji Mukai's review on recurrent novae emphasizes the comprehensive study of these objects through multi-wavelength observations, including radio, optical, and X-ray emissions. The paper particularly focuses on the recurrent nova T Pyx, highlighting the complexity and variability of its envelope ejection phenomena, which deviate from the simpler, textbook descriptions of nova explosions [Mukai, 2014; arXiv:1407.4526v1](http://arxiv.org/abs/1407.4526v1).
+
+### Specific Observations and Discoveries
+
+1. **T Pyx Radio Observations**:
+   - Research led by Nelson et al. examined the 2011 outburst of T Pyx using radio observations from the Karl G. Jansky Very Large Array. The radio emission, consistent with thermal emission from the nova ejecta, revealed a surprisingly late rise in flux, suggesting that the bulk of the ejecta was either very cold or expanding slowly initially. The study concluded that a significant mass of ejecta, between \(1-30 \times 10^{-5}\) solar masses, was involved in the eruption, which is higher than typical for recurrent novae [Nelson et al., 2012; arXiv:1211.3112v2](http://arxiv.org/abs/1211.3112v2).
+
+2. **V745 Sco Multiwavelength Analysis**:
+   - Delgado and Hernanz provided a comprehensive multiwavelength examination of the 2014 outburst of V745 Sco, a symbiotic recurrent nova. Incorporating radio and infrared data, alongside X-ray observations, this analysis offered insights into the shock dynamics and particle acceleration processes early in the eruption. The comparison with other symbiotic novae like RS Oph revealed parallels in the early shock evolution, marked by particle acceleration and rapid changes in plasma characteristics [Delgado & Hernanz, 2019; arXiv:1910.08940v1](http://arxiv.org/abs/1910.08940v1).
+
+3. **V3890 Sagitarii's Radio Emissions**:
+   - Recent observations by Nyamai et al. of V3890 Sagitarii post-2019 eruption showed double-peaked radio light curves attributed to synchrotron emissions. The dense circumstellar environment interacted with the expanding nova ejecta, creating significant radio luminosity variations. This study provided crucial data on the mass-loss rates and interactions of the nova's ejecta with the surrounding medium, further enriching our understanding of such systems and their potential links to supernovae progenitors [Nyamai et al., 2023; arXiv:2301.09116v1](http://arxiv.org/abs/2301.09116v1).
+
+4. **Hard X-Ray Emissions**:
+   - A study by Orio et al. analyzed archival ROSAT data of classical and recurrent novae, highlighting that most emit hard X-rays following outburst events. The emissions, mainly due to shocks within the nova ejecta, offer additional perspectives on the physical conditions and dynamics of the ejected materials. This was evident even years after the initial burst, especially if pre-existing circumstellar material or prolonged wind phases were involved [Orio et al., 2001; arXiv:astro-ph/0104219v1](http://arxiv.org/abs/astro-ph/0104219v1).
+
+### Conclusion and Future Directions
+
+Radio observations have proven to be invaluable in understanding the detailed processes and structures of recurrent novae. Continued advancements in radio astronomy, alongside complementary multiwavelength studies, are poised to unravel more mysteries from these fascinating celestial phenomena. Future research is likely to focus on enhancing the temporal resolution of observations to capture more transient and rapid events in recurrent novae evolutions. 
+
+These studies not only enrich our understanding of novae themselves but also contribute to broader astrophysical contexts, such as the conditions leading to type Ia supernovae.
+ All tests passed!
+```
+
+## Exercise 2: Reflection + Rewrite [#exercise-2-reflection-rewrite]
+
+**Goal:** Implement `reflection_and_rewrite(report)`.
+
+In this task, your goal is to develop a function that takes a report, analyzes it, generates a structured reflection, and produces an improved version of the report. This involves two main tasks: crafting a precise prompt and setting up a correctly configured response call to the language model.
+
+## Key Steps [#key-steps]
+
+### 1. Create a User Prompt [#1-create-a-user-prompt]
+
+- **Objective**: Guide the language model to output a structured response in JSON format.
+- **Format**: Ensure the output includes two keys, `"reflection"` and `"revised_report"`.
+- **Details**: Your reflection should cover strengths, limitations, suggestions, and opportunities. The revised report should incorporate these elements to improve clarity and academic tone.
+
+### 2. Configure the Response Call [#2-configure-the-response-call]
+
+- **Parameters**: Use the specified model (e.g., `"gpt-4o-mini"`) and set the temperature equal to the `temperature` parameter of the graded function.
+- **Structure**: Make sure the response setup directs the model properly, ensuring the JSON format is adhered to without additional commentary.
+
+
+By implementing these steps, your function will effectively transform and improve the given reports. Handle JSON parsing carefully to ensure the output is valid and reliable. Happy coding!
+
+```python
+# GRADED FUNCTION: reflection_and_rewrite
+def reflection_and_rewrite(report, model: str = "gpt-4o-mini", temperature: float = 0.3) -> dict:
+    """
+    Generates a structured reflection AND a revised research report.
+    Accepts raw text OR the messages list returned by generate_research_report_with_tools.
+
+    Returns:
+        dict with keys:
+          - "reflection": structured reflection text
+          - "revised_report": improved version of the input report
+    """
+
+    # Input can be plain text or a list of messages, this function detects and parses accordingly
+    report = research_tools.parse_input(report)
+
+    ### START CODE HERE ###
+
+    # Define the prompt. A multi-line f-string is typically used for this.
+    # Remember it should ask the model to output ONLY valid JSON with this structure:
+    # {{ "reflection": "<text>", "revised_report": "<text>" }}
+    user_prompt = f"""
+    Hi, You should generate a structured reflection and a revised research report, in the instructed JSON format.
+    
+    Format: 
+    - Ensure the output includes two keys, "reflection" and "revised_report".
+    - Ouput ONLY valid JSON with this structure: {{ "reflection": "<text>", "revised_report": "<text>" }}
+    
+    Details: Your reflection should cover strengths, limitations, suggestions, and opportunities. The revised report should incorporate these elements to improve clarity and academic tone.
+    """
+
+    # Get a response from the LLM
+    response = CLIENT.chat.completions.create( 
+        # Pass in the model
+        model=model,
+        messages=[ 
+            # System prompt is already defined
+            {"role": "system", "content": "You are an academic reviewer and editor."},
+            # Add user prompt
+            {"role": "user", "content": user_prompt},
+        ],
+        # Set the temperature equal to the temperature parameter passed to the function
+        temperature=temperature
+    )
+
+    ### END CODE HERE ###
+
+    # Extract output
+    llm_output = response.choices[0].message.content.strip()
+
+    # Check if output is valid JSON
+    try:
+        data = json.loads(llm_output)
+    except json.JSONDecodeError:
+        raise Exception("The output of the LLM was not valid JSON. Adjust your prompt.")
+
+    return {
+        "reflection": str(data.get("reflection", "")).strip(),
+        "revised_report": str(data.get("revised_report", "")).strip(),
+    }
+```
+
+```python
+# Test your code!
+unittests.test_reflection_and_rewrite(reflection_and_rewrite)
+```
+
+```text title="Output"
+ All tests passed!
+```
+
+## Exercise 3: Convert Report to HTML [#exercise-3-convert-report-to-html]
+**Goal:** Implement `convert_report_to_html(report)`.
+This exercise focuses on transforming a plain text research report into a well-structured HTML document. You will build a function to facilitate this conversion using a language model.
+
+## Key Steps [#key-steps_1]
+
+### 1. Create a User Prompt [#1-create-a-user-prompt_1]
+- **Objective**: Instruct the model to transform plain text into HTML structure.
+- **Format**: Ensure the output is valid, clean HTML with appropriate section headers, formatted paragraphs, and clickable links.
+- **Details**: Preserve the citation style and request that the model responds only with HTML, without additional commentary.
+
+### 2. Configure the Response Call [#2-configure-the-response-call_1]
+- **Parameters**: Use the specified model (e.g., `"gpt-4o"`) and set an appropriate temperature to balance creativity and accuracy.
+- **Structure**: Configure the `CLIENT.chat.completions.create` call properly, using both system and user prompts to ensure a clear and focused task description.
+
+By following these steps, you'll effectively convert plaintext reports into formatted HTML documents.
+
+```python
+# GRADED FUNCTION: convert_report_to_html
+def convert_report_to_html(report, model: str = "gpt-4o", temperature: float = 0.5) -> str:
+    """
+    Converts a plaintext research report into a styled HTML page using OpenAI.
+    Accepts raw text OR the messages list from the tool-calling step.
+    """
+
+    # Input can be plain text or a list of messages, this function detects and parses accordingly
+    report = research_tools.parse_input(report)
+
+    # System prompt is already provided
+    system_prompt = "You convert plaintext reports into full clean HTML documents."
+
+    ### START CODE HERE ###
+    
+    # Build the user prompt instructing the model to return ONLY valid HTML
+    user_prompt = f"""
+    Hi, you should convert the provided plaintext research report into a styled HTML page (should strictly follow HTML structure).
+    Format: Ensure the output is valid, clean HTML with appropriate section headers, formatted paragraphs, and clickable links.
+    Details: Preserve the citation style and request that the model responds only with HTML, without additional commentary.
+    """
+
+    # Call the LLM by interacting with the CLIENT. 
+    # Remember to set the correct values for the model, messages (system and user prompts) and temperature
+    response = CLIENT.chat.completions.create(
+    model = model,
+    messages = [
+        {"role" : "system", "content" : system_prompt},
+        {"role" : "user", "content" : user_prompt}
+    ],
+    temperature = temperature
+    )
+
+    ### END CODE HERE ###
+
+    # Extract the HTML from the assistant message
+    html = response.choices[0].message.content.strip()  
+
+    return html
+```
+
+```python
+# Test your code!
+unittests.test_convert_report_to_html(convert_report_to_html)
+```
+
+```text title="Output"
+ All tests passed!
+```
+
+### 🚀 End-to-End Pipeline [#end-to-end-pipeline]
+
+Run this cell to execute the full workflow:
+
+1. Generate a research report (tools).
+2. Reflect on the report.
+3. Convert the report to HTML.
+
+> You should see the rendered HTML below and two concise reflections in the console.
+
+```python
+# 1) Research with tools
+prompt_ = "Radio observations of recurrent novae"
+preliminary_report = generate_research_report_with_tools(prompt_)
+print("=== Research Report (preliminary) ===\n")
+print(preliminary_report)
+
+# 2) Reflection on the report (use the final TEXT to avoid ambiguity)
+reflection_text = reflection_and_rewrite(preliminary_report)   # <-- pass text, not messages
+print("=== Reflection on Report ===\n")
+print(reflection_text['reflection'], "\n")
+print("=== Revised Report ===\n")
+print(reflection_text['revised_report'], "\n")
+
+
+# 3) Convert the report to HTML (use the TEXT and correct function name)
+html = convert_report_to_html(reflection_text['revised_report'])
+
+print("=== Generated HTML (preview) ===\n")
+print((html or "")[:600], "\n... [truncated]\n")
+
+# 4) Display full HTML
+display(HTML(html))
+```
+
+```text title="Output"
+🛠️ arxiv_search_tool({'query': 'radio observations of recurrent novae', 'max_results': 5})
+🛠️ tavily_search_tool({'query': 'radio observations of recurrent novae', 'max_results': 5})
+✅ Final answer:
+### Introduction
+
+Recurrent novae (RNe) are a subtype of cataclysmic variable stars characterized by recurrent thermonuclear eruptions on the surface of a white dwarf. These events are triggered by the accretion of material from a companion star. Recurrent novae can undergo multiple outbursts over a century, making them valuable subjects for study, particularly using radio observations, which provide insights into the dynamics and properties of the ejected material.
+
+### Recent Radio Observations of Recurrent Novae
+
+#### MeerKAT Observations of V3890 Sgr and RS Oph
+
+A recent study involving the MeerKAT radio telescope focused on the recurrent novae V3890 Sagittarii and RS Ophiuchi. These observations aimed to investigate the interaction between the nova ejecta and the surrounding medium. These novae have multiple recorded eruptions within a century, offering a unique opportunity to study the evolution and impact of repeated outbursts [ADS Source](https://ui.adsabs.harvard.edu/abs/2023afas.confE..56N/abstract).
+
+#### 2011 Outburst of T Pyxidis
+
+The 2011 outburst of the recurrent nova T Pyxidis was observed using the Karl G. Jansky Very Large Array. These observations helped trace the evolution of the nova ejecta, which is consistent with thermal emission. The findings hinted at a complex mass-loss history, contributing to our understanding of this somewhat unusual and poorly understood recurrent nova. The data from this study were published in *The Astrophysical Journal* [ADS Source](https://ui.adsabs.harvard.edu/abs/2014ApJ...785...78N/abstract).
+
+#### Low-Frequency Observations of RS Ophiuchi
+
+In 2021, a low-frequency radio observational study was conducted during the outburst of the recurrent nova RS Ophiuchi. This study provided new data on the lowest frequency emissions observed from such an event, revealing important details about the non-thermal processes likely involved in the nova's radio emissions [MNRAS Source](https://academic.oup.com/mnras/article/523/1/132/7159730).
+
+### Early Radio Detection
+
+The first radio detection of an outburst from a recurrent nova was also related to RS Ophiuchi. This landmark observation suggested a non-thermal origin for the radio emission, distinguishing it from the classical novae and providing early critical insights into recurrent nova mechanisms [Nature Source](https://www.nature.com/articles/315306a0).
+
+### Broader Context and Historical Perspective
+
+The study of novae at radio wavelengths has a rich history, beginning in the 1970s. Initially centered on thermal free-free emission signatures, the field has evolved significantly. The examination of both classical and recurrent novae provides critical insights into their emission mechanisms, the nature of the ejecta, and their interactions with surrounding environments [IOP Source](https://iopscience.iop.org/article/10.3847/1538-4365/ac24ab/pdf).
+
+### Conclusion
+
+Radio observations of recurrent novae are vital for understanding the dynamics of these stellar explosions. By analyzing the ejected material and its interaction with the environment, these studies help decipher the complex behaviors of these transient astronomical phenomena. Each nova provides unique insights, contributing to the broader astrophysical knowledge of accreting binary systems.
+=== Research Report (preliminary) ===
+
+### Introduction
+
+Recurrent novae (RNe) are a subtype of cataclysmic variable stars characterized by recurrent thermonuclear eruptions on the surface of a white dwarf. These events are triggered by the accretion of material from a companion star. Recurrent novae can undergo multiple outbursts over a century, making them valuable subjects for study, particularly using radio observations, which provide insights into the dynamics and properties of the ejected material.
+
+### Recent Radio Observations of Recurrent Novae
+
+#### MeerKAT Observations of V3890 Sgr and RS Oph
+
+A recent study involving the MeerKAT radio telescope focused on the recurrent novae V3890 Sagittarii and RS Ophiuchi. These observations aimed to investigate the interaction between the nova ejecta and the surrounding medium. These novae have multiple recorded eruptions within a century, offering a unique opportunity to study the evolution and impact of repeated outbursts [ADS Source](https://ui.adsabs.harvard.edu/abs/2023afas.confE..56N/abstract).
+
+#### 2011 Outburst of T Pyxidis
+
+The 2011 outburst of the recurrent nova T Pyxidis was observed using the Karl G. Jansky Very Large Array. These observations helped trace the evolution of the nova ejecta, which is consistent with thermal emission. The findings hinted at a complex mass-loss history, contributing to our understanding of this somewhat unusual and poorly understood recurrent nova. The data from this study were published in *The Astrophysical Journal* [ADS Source](https://ui.adsabs.harvard.edu/abs/2014ApJ...785...78N/abstract).
+
+#### Low-Frequency Observations of RS Ophiuchi
+
+In 2021, a low-frequency radio observational study was conducted during the outburst of the recurrent nova RS Ophiuchi. This study provided new data on the lowest frequency emissions observed from such an event, revealing important details about the non-thermal processes likely involved in the nova's radio emissions [MNRAS Source](https://academic.oup.com/mnras/article/523/1/132/7159730).
+
+### Early Radio Detection
+
+The first radio detection of an outburst from a recurrent nova was also related to RS Ophiuchi. This landmark observation suggested a non-thermal origin for the radio emission, distinguishing it from the classical novae and providing early critical insights into recurrent nova mechanisms [Nature Source](https://www.nature.com/articles/315306a0).
+
+### Broader Context and Historical Perspective
+
+The study of novae at radio wavelengths has a rich history, beginning in the 1970s. Initially centered on thermal free-free emission signatures, the field has evolved significantly. The examination of both classical and recurrent novae provides critical insights into their emission mechanisms, the nature of the ejecta, and their interactions with surrounding environments [IOP Source](https://iopscience.iop.org/article/10.3847/1538-4365/ac24ab/pdf).
+
+### Conclusion
+
+Radio observations of recurrent novae are vital for understanding the dynamics of these stellar explosions. By analyzing the ejected material and its interaction with the environment, these studies help decipher the complex behaviors of these transient astronomical phenomena. Each nova provides unique insights, contributing to the broader astrophysical knowledge of accreting binary systems.
+=== Reflection on Report ===
+
+The research report demonstrates several strengths, including a clear research question, a well-defined methodology, and a thorough literature review that contextualizes the study within existing knowledge. However, there are limitations, such as a small sample size and potential biases in data collection that could affect the generalizability of the findings. Suggestions for improvement include expanding the sample size, employing a more diverse participant pool, and enhancing the data analysis section to provide deeper insights. Opportunities for future research could involve longitudinal studies to track changes over time or comparative studies across different demographics to enrich the understanding of the topic. 
+
+=== Revised Report ===
+
+Title: [Revised Title]
+
+Abstract: This study investigates [insert research question] using a comprehensive methodology that includes [insert methods]. The findings indicate [insert key findings], contributing to the existing literature on [insert relevant field]. 
+
+1. Introduction
+   The introduction outlines the significance of the research question and its relevance to [insert field]. A review of the literature highlights gaps that this study aims to address.
+
+2. Methodology
+   A detailed description of the methodology is provided, including participant selection, data collection methods, and analysis techniques. The study employed [insert methods], ensuring a systematic approach to data gathering.
+
+3. Results
+   The results section presents the findings in a clear and organized manner, utilizing tables and figures where appropriate to enhance understanding.
+
+4. Discussion
+   This section interprets the results in the context of existing literature, discussing implications, limitations, and potential biases. Suggestions for future research are also outlined, emphasizing the need for larger and more diverse samples.
+
+5. Conclusion
+   The conclusion summarizes the key findings and their significance, reiterating the importance of further research in this area.
+
+References: [Insert updated references in appropriate format] 
+```
+
+````text title="Output"
+=== Generated HTML (preview) ===
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        a {
+            color: #1a0dab;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Research Report 
+... [truncated]
+````
+
+<NotebookHtmlOutput src="/notebook-outputs/Academy/Agentic-AI/notebooks/Tool-Use/graded-assignment/cell-23-2.html" />
+
+### 📌 “Expected Output” note (for the notebook text cell) [#expected-output-note-for-the-notebook-text-cell]
+
+- `generate_research_report_with_tools` should return a **non-trivial string** (> 50 chars).
+
+- `reflection_and_rewrite` should return a **dict** with **'reflection'** and **'revised\_report'** (both strings). The reflection should **mention** the four sections (Strengths, Limitations, Suggestions, Opportunities).
+
+- `convert_report_to_html` should return a **string that looks like HTML** (e.g., includes `<html>`, `<h1>`, `<p>`, or closing tags).
+
+---
+
+## ✅ Wrap-Up [#wrap-up]
+
+You built a mini research agent that can:
+- 🔎 call tools (arXiv + Tavily),
+- 🧠 reflect on its own output,
+- 📰 publish a clean HTML report.
+
+Great job!
+
+### What to Submit [#what-to-submit]
+- Your notebook with Exercise 1–3 completed.
+
+### Troubleshooting (quick) [#troubleshooting-quick]
+- **Model/tool-call loop stalls?** Lower `max_turns` or print intermediate messages.
+- **HTML looks odd?** Re-run conversion with a fresh assistant response.
+
+**You’re done—nice work!** 🚀
+
+## Check grading feedback [#check-grading-feedback]
+
+If you have collapsed the right panel to have more screen space for your code, as shown below:
+
+*[Image not included: course material, property of DeepLearning.AI.]*
+
+You can click on the left-facing arrow button (highlighted in red) to view feedback for your submission after submitting it for grading. Once expanded, it should display like this:
+
+*[Image not included: course material, property of DeepLearning.AI.]*

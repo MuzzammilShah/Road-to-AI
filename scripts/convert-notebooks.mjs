@@ -8,7 +8,9 @@
 // - markdown cells -> MDX (same sanitising as the old Markdown pages)
 // - code cells     -> ```python blocks
 // - outputs        -> ```text title="Output" blocks; image/png and image/svg+xml are written to
-//                     public/notebook-outputs/<notebook path>/cell-<n>-<k>.<ext>
+//                     public/notebook-outputs/<notebook path>/cell-<n>-<k>.<ext>; text/html is
+//                     written there as a standalone .html page, shown in a sandboxed iframe
+//                     (<NotebookHtmlOutput>); text/markdown is converted like a markdown cell
 // - the .ipynb is copied to public/notebooks/<notebook path>.ipynb for the download link
 import { readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -50,7 +52,7 @@ for (const file of listFiles(CONTENT_DIR, (f) => f.endsWith('.mdx'))) {
 
 const assets = new Set();
 const warnings = [];
-const stats = { notebooks: 0, cells: 0, images: 0, texts: 0, errors: 0 };
+const stats = { notebooks: 0, cells: 0, images: 0, html: 0, texts: 0, errors: 0 };
 
 for (const src of notebooks) {
   const title = titles[src];
@@ -81,7 +83,7 @@ for (const src of notebooks) {
     } else if (cell.cell_type === 'code') {
       if (text.trim()) parts.push(fence(text, language));
       cell.outputs?.forEach((output, k) => {
-        const rendered = renderOutput(output, { src, stem, n, k });
+        const rendered = renderOutput(output, { src, stem, n, k, ctx });
         if (rendered) parts.push(rendered);
       });
     } else if (cell.cell_type === 'raw') {
@@ -108,7 +110,7 @@ for (const src of notebooks) {
 for (const asset of assets) assertAsset(asset);
 
 console.log(
-  `Converted ${stats.notebooks} notebooks (${stats.cells} cells): ${stats.texts} text outputs, ${stats.images} images, ${stats.errors} error outputs; ${assets.size} referenced assets exist in public/.`,
+  `Converted ${stats.notebooks} notebooks (${stats.cells} cells): ${stats.texts} text outputs, ${stats.images} images, ${stats.html} HTML outputs, ${stats.errors} error outputs; ${assets.size} referenced assets exist in public/.`,
 );
 if (warnings.length) console.log(`\nWarnings:\n- ${warnings.join('\n- ')}`);
 
@@ -123,6 +125,31 @@ function fence(text, lang, meta = '') {
   return `${marker}${lang}${meta ? ` ${meta}` : ''}\n${text.replace(/\n+$/, '')}\n${marker}`;
 }
 
+/**
+ * Standalone page for an HTML output. `display: flow-root` on the body keeps the children's margins
+ * inside it, so NotebookHtmlOutput can size the iframe from the body's height.
+ */
+function htmlPage(html) {
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+${html.trim()}
+</body>
+</html>
+`;
+}
+
 function stripAnsi(text) {
   // biome-ignore lint/suspicious/noControlCharactersInRegex: matching ANSI escape sequences
   return text.replace(/\u001b\[[0-9;?]*[A-Za-z]/g, '');
@@ -135,7 +162,7 @@ function textOutput(text) {
   return fence(clean, 'text', 'title="Output"');
 }
 
-function renderOutput(output, { src, stem, n, k }) {
+function renderOutput(output, { src, stem, n, k, ctx }) {
   switch (output.output_type) {
     case 'stream':
       return textOutput(joinSource(output.text));
@@ -149,7 +176,13 @@ function renderOutput(output, { src, stem, n, k }) {
     case 'execute_result':
     case 'display_data': {
       const data = output.data ?? {};
-      const known = new Set(['image/png', 'image/svg+xml', 'text/plain']);
+      const known = new Set([
+        'image/png',
+        'image/svg+xml',
+        'text/html',
+        'text/markdown',
+        'text/plain',
+      ]);
       for (const mime of Object.keys(data)) {
         if (!known.has(mime)) throw new Error(`${src} cell ${n}: unsupported output type ${mime}`);
       }
@@ -171,6 +204,28 @@ function renderOutput(output, { src, stem, n, k }) {
         // so the SVG keeps its own size.
         writeFileSync(to, joinSource(data['image/svg+xml']));
         return `<img src="${url}" alt="Cell ${n} output" loading="lazy" />`;
+      }
+      if (data['text/html']) {
+        const file = `cell-${n}-${k}.html`;
+        const to = join(OUTPUTS_DIR, stem, file);
+        ensureDir(to);
+        writeFileSync(to, htmlPage(joinSource(data['text/html'])));
+        stats.html++;
+        return `<NotebookHtmlOutput src="/notebook-outputs/${stem}/${file}" />`;
+      }
+      if (data['text/markdown']) {
+        // Output headings would end up in the page's TOC: render them as bold lines. Images the
+        // code wrote next to the notebook were not saved with it: replace them with a note.
+        const markdown = joinSource(data['text/markdown'])
+          .replace(/^#{1,6}\s+(.+?)\s*#*$/gm, '**$1**')
+          .replace(
+            /!\[[^\]]*\]\((?!https?:|data:)([^)\s]+)\)/g,
+            (_, file) => `*[Generated image not saved with the notebook: ${file}]*`,
+          );
+        const mdx = convertMarkdown(markdown, ctx).trim();
+        if (!mdx) return null;
+        stats.texts++;
+        return `<div className="notebook-markdown-output">\n\n${mdx}\n\n</div>`;
       }
       return data['text/plain'] ? textOutput(joinSource(data['text/plain'])) : null;
     }

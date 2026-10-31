@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<style>
+    .pretty-card{
+      font-family: ui-sans-serif, system-ui;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 10px 0;
+      background: linear-gradient(#fff, #fff) padding-box,
+                  linear-gradient(135deg, #3b82f6, #9333ea) border-box;
+      color: #111;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+    .pretty-title{
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:14px;
+      color:#111;
+    }
+    /* 🔒 Solo afecta lo DENTRO de la tarjeta */
+    .pretty-card pre, 
+    .pretty-card code {
+      background: #f3f4f6;
+      color: #111;
+      padding: 8px;
+      border-radius: 8px;
+      display: block;
+      overflow-x: auto;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .pretty-card img { max-width: 100%; height: auto; border-radius: 8px; }
+    .pretty-card table.pretty-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+      color: #111;
+    }
+    .pretty-card table.pretty-table th, 
+    .pretty-card table.pretty-table td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .pretty-card table.pretty-table th { background: #f9fafb; font-weight: 600; }
+    </style>
+    <div class="pretty-card"><div class="pretty-title">Inventory Table · After</div><pre><code>[
+  {
+    &quot;item_id&quot;: &quot;SG001&quot;,
+    &quot;name&quot;: &quot;Aviator&quot;,
+    &quot;description&quot;: &quot;Originally designed for pilots, these teardrop-shaped lenses with thin metal frames offer timeless appeal. The large lenses provide excellent coverage while the lightweight construction ensures comfort during long wear.&quot;,
+    &quot;quantity_in_stock&quot;: 22,
+    &quot;price&quot;: 80
+  },
+  {
+    &quot;item_id&quot;: &quot;SG002&quot;,
+    &quot;name&quot;: &quot;Wayfarer&quot;,
+    &quot;description&quot;: &quot;Featuring thick, angular frames that make a statement, these sunglasses combine retro charm with modern edge. The rectangular lenses and sturdy acetate construction create a confident look.&quot;,
+    &quot;quantity_in_stock&quot;: 6,
+    &quot;price&quot;: 95
+  },
+  {
+    &quot;item_id&quot;: &quot;SG003&quot;,
+    &quot;name&quot;: &quot;Mystique&quot;,
+    &quot;description&quot;: &quot;Inspired by 1950s glamour, these frames sweep upward at the outer corners to create an elegant, feminine silhouette. The subtle curves and often embellished temples add sophistication to any outfit.&quot;,
+    &quot;quantity_in_stock&quot;: 3,
+    &quot;price&quot;: 70
+  },
+  {
+    &quot;item_id&quot;: &quot;SG004&quot;,
+    &quot;name&quot;: &quot;Sport&quot;,
+    &quot;description&quot;: &quot;Designed for active lifestyles, these wraparound sunglasses feature a single curved lens that provides maximum coverage and wind protection. The lightweight, flexible frames include rubber grips.&quot;,
+    &quot;quantity_in_stock&quot;: 11,
+    &quot;price&quot;: 110
+  },
+  {
+    &quot;item_id&quot;: &quot;SG005&quot;,
+    &quot;name&quot;: &quot;Classic&quot;,
+    &quot;description&quot;: &quot;Classic round profile with minimalist metal frames, offering a timeless and versatile style that fits both casual and formal wear.&quot;,
+    &quot;quantity_in_stock&quot;: 7,
+    &quot;price&quot;: 60
+  },
+  {
+    &quot;item_id&quot;: &quot;SG006&quot;,
+    &quot;name&quot;: &quot;Moon&quot;,
+    &quot;description&quot;: &quot;Oversized round style with bold plastic frames, evoking retro aesthetics with a modern twist.&quot;,
+    &quot;quantity_in_stock&quot;: 10,
+    &quot;price&quot;: 120
+  }
+]</code></pre></div>
+</body>
+</html>

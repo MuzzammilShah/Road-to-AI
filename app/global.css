@@ -17,11 +17,13 @@
 :root {
   --section-neural-networks: oklch(0.52 0.19 268);
   --section-library: oklch(0.6 0.15 55);
+  --section-academy: oklch(0.56 0.14 152);
 }
 
 .dark {
   --section-neural-networks: oklch(0.76 0.12 268);
   --section-library: oklch(0.8 0.13 70);
+  --section-academy: oklch(0.78 0.14 152);
 }
 
 [data-section-icon="Brain"] {
@@ -30,6 +32,10 @@
 
 [data-section-icon="LibraryBig"] {
   color: var(--section-library);
+}
+
+[data-section-icon="GraduationCap"] {
+  color: var(--section-academy);
 }
 
 /* Landing page: the sections below the globe use the globe's background so it reads as one surface. */
@@ -63,6 +69,15 @@ html > body[data-scroll-locked] {
 .prose img {
   max-width: 100%;
   height: auto;
+}
+
+/* Markdown output of a notebook cell (scripts/convert-notebooks.mjs), set apart from the prose. */
+.notebook-markdown-output {
+  margin-block: 1rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 0.75rem;
+  padding: 0.25rem 1rem;
+  font-size: 0.875rem;
 }
 
 /*

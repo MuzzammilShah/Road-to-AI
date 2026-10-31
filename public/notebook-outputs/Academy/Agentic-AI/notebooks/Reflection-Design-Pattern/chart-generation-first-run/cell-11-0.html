@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<style>
+    .pretty-card{
+      font-family: ui-sans-serif, system-ui;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 10px 0;
+      background: linear-gradient(#fff, #fff) padding-box,
+                  linear-gradient(135deg, #3b82f6, #9333ea) border-box;
+      color: #111;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+    .pretty-title{
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:14px;
+      color:#111;
+    }
+    /* 🔒 Only affects INSIDE the card */
+    .pretty-card pre, 
+    .pretty-card code {
+      background: #f3f4f6;
+      color: #111;
+      padding: 8px;
+      border-radius: 8px;
+      display: block;
+      overflow-x: auto;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .pretty-card img { max-width: 100%; height: auto; border-radius: 8px; }
+    .pretty-card table.pretty-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+      color: #111;
+    }
+    .pretty-card table.pretty-table th, 
+    .pretty-card table.pretty-table td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .pretty-card table.pretty-table th { background: #f9fafb; font-weight: 600; }
+    </style>
+    <div class="pretty-card"><div class="pretty-title">LLM output with first draft code</div><pre><code>&lt;execute_python&gt;
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Filter data for Q1 of 2024 and 2025
+df[&#x27;date&#x27;] = pd.to_datetime(df[&#x27;date&#x27;] + &#x27; &#x27; + df[&#x27;year&#x27;].astype(str))
+q1_2024 = df[(df[&#x27;year&#x27;] == 2024) &amp; (df[&#x27;quarter&#x27;] == 1)]
+q1_2025 = df[(df[&#x27;year&#x27;] == 2025) &amp; (df[&#x27;quarter&#x27;] == 1)]
+
+# Group by coffee_name and sum price for Q1 sales
+sales_2024 = q1_2024.groupby(&#x27;coffee_name&#x27;)[&#x27;price&#x27;].sum().reset_index()
+sales_2025 = q1_2025.groupby(&#x27;coffee_name&#x27;)[&#x27;price&#x27;].sum().reset_index()
+
+# Merge sales data for plotting
+merged_sales = pd.merge(sales_2024, sales_2025, on=&#x27;coffee_name&#x27;, suffixes=(&#x27;_2024&#x27;, &#x27;_2025&#x27;))
+
+# Plotting
+plt.figure(figsize=(10, 6))
+plt.bar(merged_sales[&#x27;coffee_name&#x27;], merged_sales[&#x27;price_2024&#x27;], label=&#x27;2024&#x27;, alpha=0.7)
+plt.bar(merged_sales[&#x27;coffee_name&#x27;], merged_sales[&#x27;price_2025&#x27;], label=&#x27;2025&#x27;, alpha=0.7, bottom=merged_sales[&#x27;price_2024&#x27;])
+
+plt.title(&#x27;Q1 Coffee Sales Comparison: 2024 vs 2025&#x27;)
+plt.xlabel(&#x27;Coffee Name&#x27;)
+plt.ylabel(&#x27;Total Sales ($)&#x27;)
+plt.legend()
+plt.xticks(rotation=45)
+plt.tight_layout()
+
+# Save the figure
+plt.savefig(&#x27;chart_v1.png&#x27;, dpi=300)
+plt.close()
+&lt;/execute_python&gt;</code></pre></div>
+</body>
+</html>

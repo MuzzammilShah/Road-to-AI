@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<style>
+    .pretty-card{
+      font-family: ui-sans-serif, system-ui;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 10px 0;
+      background: linear-gradient(#fff, #fff) padding-box,
+                  linear-gradient(135deg, #3b82f6, #9333ea) border-box;
+      color: #111;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+    .pretty-title{
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:14px;
+      color:#111;
+    }
+    /* 🔒 Solo afecta lo DENTRO de la tarjeta */
+    .pretty-card pre, 
+    .pretty-card code {
+      background: #f3f4f6;
+      color: #111;
+      padding: 8px;
+      border-radius: 8px;
+      display: block;
+      overflow-x: auto;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .pretty-card img { max-width: 100%; height: auto; border-radius: 8px; }
+    .pretty-card table.pretty-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+      color: #111;
+    }
+    .pretty-card table.pretty-table th, 
+    .pretty-card table.pretty-table td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .pretty-card table.pretty-table th { background: #f9fafb; font-weight: 600; }
+    </style>
+    <div class="pretty-card"><div class="pretty-title">Plan with Code (Full Response)</div><pre><code>&lt;execute_python&gt;
+from tinydb import Query
+import re
+
+# 1) Parse constraints from the user_request
+# Extract shape keyword (e.g., &quot;round&quot;)
+shape_match = re.search(r&quot;(round)\s+sunglasses&quot;, user_request, re.IGNORECASE)
+shape = shape_match.group(1).lower() if shape_match else None
+
+# Extract a maximum price if mentioned (e.g., &quot;under $100&quot;)
+price_match = re.search(r&quot;under\s*\$?(\d+)&quot;, user_request, re.IGNORECASE)
+max_price = float(price_match.group(1)) if price_match else None
+
+# 2) Build the TinyDB query conditionally
+S = Query()
+
+# Helper for case-insensitive substring match without capturing outer vars
+def contains(val, key):
+    return key in val.lower()
+
+condition = (S.quantity_in_stock &gt; 0)
+if shape:
+    shape_cond = (S.name.test(contains, shape)) | (S.description.test(contains, shape))
+    condition = condition &amp; shape_cond
+if max_price is not None:
+    condition = condition &amp; (S.price &lt; max_price)
+
+# 3) Perform the read-only search
+results = inventory_tbl.search(condition)
+
+if results:
+    # 4a) Success: at least one match
+    item = results[0]
+    answer_text = f&quot;Yes, we have our {item[&#x27;name&#x27;]} round sunglasses for ${item[&#x27;price&#x27;]}.&quot;
+    STATUS = &quot;success&quot;
+    print(f&quot;LOG: ACTION=read DRY_RUN=True STATUS={STATUS}&quot;)
+else:
+    # 4b) No match: suggest closest alternative if available
+    # Look for any round sunglasses in stock regardless of price
+    alt_condition = (S.quantity_in_stock &gt; 0)
+    if shape:
+        alt_condition = alt_condition &amp; ((S.name.test(contains, shape)) | (S.description.test(contains, shape)))
+    alt_results = inventory_tbl.search(alt_condition)
+    if alt_results and max_price is not None:
+        # pick the cheapest alternative
+        alt = sorted(alt_results, key=lambda x: x[&#x27;price&#x27;])[0]
+        answer_text = (f&quot;We don’t have round frames under ${int(max_price)} in stock right now, &quot;
+                       f&quot;but our {alt[&#x27;name&#x27;]} round frame is available at ${alt[&#x27;price&#x27;]}.&quot;)
+    else:
+        answer_text = &quot;We don’t have round sunglasses in stock right now—can I help you find another style?&quot;
+    STATUS = &quot;no_match&quot;
+    print(f&quot;LOG: ACTION=read DRY_RUN=True STATUS={STATUS}&quot;)
+&lt;/execute_python&gt;</code></pre></div>
+</body>
+</html>

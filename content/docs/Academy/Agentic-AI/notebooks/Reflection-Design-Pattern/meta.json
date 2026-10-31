@@ -1,0 +1,10 @@
+{
+  "title": "Reflection",
+  "pages": [
+    "index",
+    "chart-generation-first-run",
+    "chart-generation-full-workflow",
+    "sql-query-generation",
+    "graded-assignment"
+  ]
+}

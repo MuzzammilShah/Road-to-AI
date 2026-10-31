@@ -1,0 +1,564 @@
+---
+title: "Graded Assignment"
+---
+
+{/* Generated from notebooks/Academy/Agentic-AI/notebooks/Patterns-for-Autonomous-Agents/graded-assignment.ipynb by scripts/convert-notebooks.mjs. Do not edit: edit the notebook and run `npm run notebooks`. */}
+
+<NotebookDownload href="/notebooks/Academy/Agentic-AI/notebooks/Patterns-for-Autonomous-Agents/graded-assignment.ipynb" />
+
+In this lab, you will build an agentic system that generates a short research report through planning, external tool usage, and feedback integration. Your workflow will involve:
+
+### Agents [#agents]
+
+* **Planning Agent / Writer**: Creates an outline and coordinates tasks.
+* **Research Agent**: Gathers external information using tools like Arxiv, Tavily, and Wikipedia.
+* **Editor Agent**: Reflects on the report and provides suggestions for improvement.
+
+---
+<a name="submission"></a>
+
+\<h4 style="color:green; font-weight:bold;">TIPS FOR SUCCESSFUL GRADING OF YOUR ASSIGNMENT:\</h4>
+
+* All cells are frozen except for the ones where you need to write your solution code or when explicitly mentioned you can interact with it.
+
+* In each exercise cell, look for comments `### START CODE HERE ###` and `### END CODE HERE ###`. These show you where to write the solution code. **Do not add or change any code that is outside these comments**.
+
+* You can add new cells to experiment but these will be omitted by the grader, so don't rely on newly created cells to host your solution code, use the provided places for this.
+
+* Avoid using global variables unless you absolutely have to. The grader tests your code in an isolated environment without running all cells from the top. As a result, global variables may be unavailable when scoring your submission. Global variables that are meant to be used will be defined in UPPERCASE.
+
+* To submit your notebook for grading, first save it by clicking the 💾 icon on the top left of the page and then click on the <span style={{"backgroundColor":"red","color":"white","padding":"3px 5px","fontSize":"16px","borderRadius":"5px"}}>Submit assignment</span> button on the top right of the page.
+---
+
+### Research Tools [#research-tools]
+
+By importing `research_tools`, you gain access to several search utilities:
+
+- `research_tools.arxiv_search_tool(query)` → search academic papers from **arXiv**  
+
+  *Example:* `research_tools.arxiv_search_tool("neural networks for climate modeling")`
+
+- `research_tools.tavily_search_tool(query)` → perform web searches with the **Tavily API**  
+
+  *Example:* `research_tools.tavily_search_tool("latest trends in sunglasses fashion")`
+
+- `research_tools.wikipedia_search_tool(query)` → retrieve summaries from **Wikipedia**  
+
+  *Example:* `research_tools.wikipedia_search_tool("Ensemble Kalman Filter")`
+
+Run the cell below to make them available.
+
+```python
+# =========================
+# Imports
+# =========================
+
+# --- Standard library 
+from datetime import datetime
+import re
+import json
+import ast
+
+
+# --- Third-party ---
+from IPython.display import Markdown, display
+from aisuite import Client
+
+# --- Local / project ---
+import research_tools
+```
+
+```python
+import unittests
+```
+
+### Initialize client [#initialize-client]
+
+Create a shared client instance for upcoming calls.
+
+```python
+CLIENT = Client()
+```
+
+## Exercise 1: planner_agent [#exercise-1-planner_agent]
+
+### Objective [#objective]
+Correctly set up a call to a language model (LLM) to generate a research plan.
+
+### Instructions [#instructions]
+
+1. **Focus Areas**:
+   - Ensure `CLIENT.chat.completions.create` is correctly configured.
+   - Pass the `model` and `messages` parameters correctly:
+     - **Model**: Use `"openai:o4-mini"` by default.
+     - **Messages**: Set with `{"role": "user", "content": user_prompt}`.
+     - **Temperature**: Fixed at 1 for creative outputs.
+
+### Notes [#notes]
+
+- The prompt is pre-defined and guides the LLM on task requirements.
+- Only return a formatted list of steps — no extra text.
+
+Focus on the LLM call setup to complete the task.
+
+```python
+# GRADED FUNCTION: planner_agent
+
+def planner_agent(topic: str, model: str = "openai:o4-mini") -> list[str]:
+    """
+    Generates a plan as a Python list of steps (strings) for a research workflow.
+
+    Args:
+        topic (str): Research topic to investigate.
+        model (str): Language model to use.
+
+    Returns:
+        List[str]: A list of executable step strings.
+    """
+
+    
+    # Build the user prompt
+    user_prompt = f"""
+    You are a planning agent responsible for organizing a research workflow with multiple intelligent agents.
+
+    🧠 Available agents:
+    - A research agent who can search the web, Wikipedia, and arXiv.
+    - A writer agent who can draft research summaries.
+    - An editor agent who can reflect and revise the drafts.
+
+    🎯 Your job is to write a clear, step-by-step research plan **as a valid Python list**, where each step is a string.
+    Each step should be atomic, executable, and must rely only on the capabilities of the above agents.
+
+    🚫 DO NOT include irrelevant tasks like "create CSV", "set up a repo", "install packages", etc.
+    ✅ DO include real research-related tasks (e.g., search, summarize, draft, revise).
+    ✅ DO assume tool use is available.
+    ✅ DO NOT include explanation text — return ONLY the Python list.
+    ✅ The final step should be to generate a Markdown document containing the complete research report.
+
+    Topic: "{topic}"
+    """
+
+    # Add the user prompt to the messages list
+    messages = [{"role": "user", "content": user_prompt}]
+
+    ### START CODE HERE ###
+
+    # Call the LLM
+    response = CLIENT.chat.completions.create( 
+        # Pass in the model
+        model=model,
+        # Define the messages. Remember this is meant to be a user prompt!
+        messages=messages,
+        # Keep responses creative
+        temperature=1, 
+    )
+
+    ### END CODE HERE ###
+
+    # Extract message from response
+    steps_str = response.choices[0].message.content.strip()
+
+    # Parse steps
+    steps = ast.literal_eval(steps_str)
+
+    return steps
+```
+
+```python
+# Test your code!
+unittests.test_planner_agent(planner_agent)
+```
+
+```text title="Output"
+ All tests passed!
+```
+
+## Exercise 2: research_agent [#exercise-2-research_agent]
+
+### Objective [#objective_1]
+Set up a call to a language model (LLM) to perform a research task using various tools.
+
+### Instructions [#instructions_1]
+
+**Focus Areas**:
+
+- **Creating a Custom Prompt**:
+  - **Define the Role**: Clearly specify the role, such as "research assistant."
+  - **List Available Tools** (as strings inside the prompt, not the actual functions):
+    - Use `arxiv_tool` to find academic papers.
+    - Use `tavily_tool` for general web searches.
+    - Use `wikipedia_tool` for accessing encyclopedic knowledge.
+  - **Specify the Task**: Include a placeholder in your prompt for defining the specific task that needs to be accomplished.
+  - **Include Date Information**: Add a placeholder for the current date or time to provide context.
+
+- **Creating Messages Dict**:
+  - Ensure the `messages` are correctly set with `{"role": "user", "content": prompt}`.
+
+- **Creating Tools List**:
+  - Create a list of tools for use, such as `research_tools.arxiv_search_tool`, `research_tools.tavily_search_tool`, and `research_tools.wikipedia_search_tool`.
+
+- **Correctly Setting the Call to the LLM**:
+  - Pass the `model`, `messages`, and `tools` parameters accurately.
+  - Set `tool_choice` to `"auto"` for automatic tool selection.
+  - Limit interactions with `max_turns=6`.
+
+### Notes [#notes_1]
+
+- The function provides pre-coded blocks where you need to replace placeholder values.
+- The approach allows the LLM to use tools dynamically based on the task.
+
+Focus on accurately setting the messages, tools, and LLM call parameters to complete the task.
+
+```python
+# GRADED FUNCTION: research_agent
+
+def research_agent(task: str, model: str = "openai:gpt-4o", return_messages: bool = False):
+    """
+    Executes a research task using tools via aisuite (no manual loop).
+    Returns either the assistant text, or (text, messages) if return_messages=True.
+    """
+    print("==================================")  
+    print("🔍 Research Agent")                 
+    print("==================================")
+
+    current_time = datetime.now().strftime('%Y-%m-%d')
+    
+    ### START CODE HERE ###
+
+    # Create a customizable prompt by defining the role (e.g., "research assistant"),
+    # listing tools (arxiv_tool, tavily_tool, wikipedia_tool) for various searches,
+    # specifying the task with a placeholder, and including a current_time placeholder.
+    prompt = f"""
+    You are a research assistant.
+
+    You have access to the following tools:
+    - arxiv_search_tool: to find and summarize academic papers.
+    - tavily_search_tool: to search the general web for relevant information.
+    - wikipedia_search_tool: to access encyclopedic knowledge.
+
+    Your task is to: {task}
+
+    Current date and time: {current_time}
+
+    Follow these steps:
+    1. Use the most relevant tool(s) to gather information.
+    2. Analyze the information carefully.
+    3. Provide a clear, concise, and well-structured response to accomplish the task.
+    """
+    
+    # Create the messages dict to pass to the LLM. Remember this is a user prompt!
+    messages = [{"role": "user", "content": prompt}]
+
+    # Save all of your available tools in the tools list. These can be found in the research_tools module.
+    # You can identify each tool in your list like this: 
+    # research_tools.<name_of_tool>, where <name_of_tool> is replaced with the function name of the tool.
+    tools = [
+        research_tools.arxiv_search_tool,
+        research_tools.tavily_search_tool,
+        research_tools.wikipedia_search_tool
+    ]
+    
+    # Call the model with tools enabled
+    response = CLIENT.chat.completions.create(  
+        # Set the model
+        model=model,
+        # Pass in the messages. You already defined this!
+        messages=messages,
+        # Pass in the tools list. You already defined this!
+        tools=tools,
+        # Set the LLM to automatically choose the tools
+        tool_choice="auto",
+        # Set the max turns to 6
+        max_turns=6
+    )  
+    
+    ### END CODE HERE ###
+
+    content = response.choices[0].message.content
+    print("✅ Output:\n", content)
+
+    
+    return (content, messages) if return_messages else content  
+```
+
+```python
+# Test your code!
+unittests.test_research_agent(research_agent)
+```
+
+```text title="Output"
+==================================
+🔍 Research Agent
+==================================
+✅ Output:
+ To accomplish your task of finding and summarizing three key references, I'll employ various tools to search for pertinent information in academic papers, general web content, and encyclopedic summaries. I'll start this process by running searches across different platforms, then evaluate and summarize the results. Please specify the subject or topic you are interested in, so I can narrow down the search accordingly.
+==================================
+🔍 Research Agent
+==================================
+✅ Output:
+ The paper "On non-bipartite graphs with integral signless Laplacian eigenvalues at most 6" by Semin Oh et al., published in 2025, classifies connected non-bipartite graphs with certain eigenvalue properties, contributing a precise understanding of graph structures in advanced mathematics. Another influential work, "Star Stability and Star Regularity for Mori Domains" by Stefania Gabelli and Giampaolo Picozza, explores extensions of stability and regularity within algebraic structures known as Mori domains, enhancing fundamental concepts in the study of commutative algebra. These papers respectively advance the fields of graph theory and commutative algebra through their rigorous exploration and classification of complex mathematical constructs.
+ All tests passed!
+```
+
+## Exercise 3: writer_agent [#exercise-3-writer_agent]
+
+### Objective [#objective_2]
+Set up a call to a language model (LLM) for executing writing tasks like drafting, expanding, or summarizing text.
+
+### Instructions [#instructions_2]
+
+1. **Focus Areas**:
+   - **System Prompt**:
+     - Define `system_prompt` to assign the LLM the role of a writing agent focused on generating academic or technical content.
+   - **System and User Messages**:
+     - Create `system_msg` using `{"role": "system", "content": system_prompt}`.
+     - Create `user_msg` using `{"role": "user", "content": task}`.
+   - **Messages List**:
+     - Combine `system_msg` and `user_msg` into a `messages` list.
+
+### Notes [#notes_2]
+
+- The function is designed to produce well-structured text by setting the correct prompts.
+- Temperature is set to 1.0 to allow for creative variance in the writing outputs.
+
+Ensure the system prompt and messages are defined properly to achieve a structured output from the LLM.
+
+```python
+# GRADED FUNCTION: writer_agent
+def writer_agent(task: str, model: str = "openai:gpt-4o") -> str: # @REPLACE def writer_agent(task: str, model: str = None) -> str:
+    """
+    Executes writing tasks, such as drafting, expanding, or summarizing text.
+    """
+    print("==================================")
+    print("✍️ Writer Agent")
+    print("==================================")
+
+    ### START CODE HERE ###
+    
+    # Create the system prompt.
+    # This should assign the LLM the role of a writing agent specialized in generating well-structured academic or technical content
+    system_prompt = "You are a specialized writing agent. You should generate a well structured academic/technical content based on the data/task provided to you."
+
+    # Define the system msg by using the system_prompt and assigning the role of system
+    system_msg = {"role": "system", "content": system_prompt}
+
+    # Define the user msg. In this case the user prompt should be the task passed to the function
+    user_msg = {"role": "user", "content": task}
+
+    # Add both system and user messages to the messages list
+    messages = [system_msg, user_msg]
+    
+    ### END CODE HERE ###
+
+    response = CLIENT.chat.completions.create(
+        model=model, 
+        messages=messages,
+        temperature=1.0
+    )
+
+    return response.choices[0].message.content
+```
+
+```python
+# Test your code!
+unittests.test_writer_agent(writer_agent)
+```
+
+```text title="Output"
+==================================
+✍️ Writer Agent
+==================================
+ All tests passed!
+```
+
+## Exercise 4: editor_agent [#exercise-4-editor_agent]
+
+### Objective [#objective_3]
+Configure a call to a language model (LLM) to perform editorial tasks such as reflecting, critiquing, or revising drafts.
+
+### Instructions [#instructions_3]
+
+1. **Focus Areas**:
+   - **System Prompt**:
+     - Define `system_prompt` to assign the LLM the role of an editor agent whose task is to reflect on, critique, or improve drafts.
+   - **System and User Messages**:
+     - Create `system_msg` using `{"role": "system", "content": system_prompt}`.
+     - Create `user_msg` using `{"role": "user", "content": task}`.
+   - **Messages List**:
+     - Combine `system_msg` and `user_msg` into a `messages` list.
+
+### Notes [#notes_3]
+
+- The editor agent is tailored for enhancing the quality of text by setting an appropriate role and task in the prompts.
+- Temperature is set to 0.7, balancing creativity and coherence in editorial outputs.
+
+Ensure the system prompt and messages are accurately set up to perform effective editorial tasks with the LLM.
+
+```python
+# GRADED FUNCTION: editor_agent
+def editor_agent(task: str, model: str = "openai:gpt-4o") -> str:
+    """
+    Executes editorial tasks such as reflection, critique, or revision.
+    """
+    print("==================================")
+    print("🧠 Editor Agent")
+    print("==================================")
+    
+    ### START CODE HERE ###
+
+    # Create the system prompt.
+    # This should assign the LLM the role of an editor agent specialized in reflecting on, critiquing, or improving existing drafts.
+    system_prompt = "You are a specialized editor agent. You should reflect on, cretique on or improve existing drafts based on the data/task provided to you."
+    
+    # Define the system msg by using the system_prompt and assigning the role of system
+    system_msg = {"role": "system", "content": system_prompt}
+    
+    # Define the user msg. In this case the user prompt should be the task passed to the function
+    user_msg = {"role": "user", "content": task}
+    
+    # Add both system and user messages to the messages list
+    messages = [system_msg, user_msg]
+    
+    ### END CODE HERE ###
+    
+    response = CLIENT.chat.completions.create(
+        model=model, 
+        messages=messages,
+        temperature=0.7 
+    )
+    
+    return response.choices[0].message.content
+```
+
+```python
+# Test your code!
+unittests.test_editor_agent(editor_agent)
+```
+
+```text title="Output"
+==================================
+🧠 Editor Agent
+==================================
+ All tests passed!
+```
+
+### 🎯 The Executor Agent [#the-executor-agent]
+
+The `executor_agent` manages the workflow by executing each step of a given plan. It:
+
+1. Decides **which agent** (`research_agent`, `writer_agent`, or `editor_agent`) should handle the step.
+2. Builds context from the outputs of previous steps.
+3. Sends the enriched task to the selected agent.
+4. Collects and stores the results in a shared history.
+
+👉 **Do not implement or modify this function.** It is already provided as the orchestration component of the multi-agent pipeline.
+
+Notice that `planner_agent` might return a long list of steps. Because of this, the maximum number of steps is set to a maximum of 4 to keep running time reasonable.
+
+````python
+agent_registry = {
+    "research_agent": research_agent,
+    "editor_agent": editor_agent,
+    "writer_agent": writer_agent,
+}
+
+def clean_json_block(raw: str) -> str:
+    """
+    Clean the contents of a JSON block that may come wrapped with Markdown backticks.
+    """
+    raw = raw.strip()
+    if raw.startswith("```"):
+        raw = re.sub(r"^```(?:json)?\n?", "", raw)
+        raw = re.sub(r"\n?```$", "", raw)
+    return raw.strip()
+````
+
+```python
+def executor_agent(topic, model: str = "openai:gpt-4o", limit_steps: bool = True):
+
+    plan_steps = planner_agent(topic)
+    max_steps = 4
+
+    if limit_steps:
+        plan_steps = plan_steps[:min(len(plan_steps), max_steps)]
+    
+    history = []
+
+    print("==================================")
+    print("🎯 Editor Agent")
+    print("==================================")
+
+    for i, step in enumerate(plan_steps):
+
+        agent_decision_prompt = f"""
+        You are an execution manager for a multi-agent research team.
+
+        Given the following instruction, identify which agent should perform it and extract the clean task.
+
+        Return only a valid JSON object with two keys:
+        - "agent": one of ["research_agent", "editor_agent", "writer_agent"]
+        - "task": a string with the instruction that the agent should follow
+
+        Only respond with a valid JSON object. Do not include explanations or markdown formatting.
+
+        Instruction: "{step}"
+        """
+        response = CLIENT.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": agent_decision_prompt}],
+            temperature=0,
+        )
+
+        raw_content = response.choices[0].message.content
+        cleaned_json = clean_json_block(raw_content)
+        agent_info = json.loads(cleaned_json)
+
+        agent_name = agent_info["agent"]
+        task = agent_info["task"]
+
+        context = "\n".join([
+            f"Step {j+1} executed by {a}:\n{r}" 
+            for j, (s, a, r) in enumerate(history)
+        ])
+        enriched_task = f"""
+        You are {agent_name}.
+
+        Here is the context of what has been done so far:
+        {context}
+
+        Your next task is:
+        {task}
+        """
+
+        print(f"\n🛠️ Executing with agent: `{agent_name}` on task: {task}")
+
+        if agent_name in agent_registry:
+            output = agent_registry[agent_name](enriched_task)
+            history.append((step, agent_name, output))
+        else:
+            output = f"⚠️ Unknown agent: {agent_name}"
+            history.append((step, agent_name, output))
+
+        print(f"✅ Output:\n{output}")
+
+    return history
+```
+
+```python
+# If you want to see the full workflow without limiting the number of steps. Set limit_steps to False
+# Keep in mind this could take more than 10 minutes to complete
+executor_history = executor_agent("The ensemble Kalman filter for time series forecasting", limit_steps=True)
+
+md = executor_history[-1][-1].strip("`")  
+display(Markdown(md))
+```
+
+## Check grading feedback [#check-grading-feedback]
+
+If you have collapsed the right panel to have more screen space for your code, as shown below:
+
+*[Image not included: course material, property of DeepLearning.AI.]*
+
+You can click on the left-facing arrow button (highlighted in red) to view feedback for your submission after submitting it for grading. Once expanded, it should display like this:
+
+*[Image not included: course material, property of DeepLearning.AI.]*

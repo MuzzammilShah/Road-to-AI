@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<style>
+    .pretty-card{
+      font-family: ui-sans-serif, system-ui;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 10px 0;
+      background: linear-gradient(#fff, #fff) padding-box,
+                  linear-gradient(135deg, #3b82f6, #9333ea) border-box;
+      color: #111;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+    .pretty-title{
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:14px;
+      color:#111;
+    }
+    /* 🔒 Solo afecta lo DENTRO de la tarjeta */
+    .pretty-card pre, 
+    .pretty-card code {
+      background: #f3f4f6;
+      color: #111;
+      padding: 8px;
+      border-radius: 8px;
+      display: block;
+      overflow-x: auto;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .pretty-card img { max-width: 100%; height: auto; border-radius: 8px; }
+    .pretty-card table.pretty-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+      color: #111;
+    }
+    .pretty-card table.pretty-table th, 
+    .pretty-card table.pretty-table td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .pretty-card table.pretty-table th { background: #f9fafb; font-weight: 600; }
+    </style>
+    <div class="pretty-card"><div class="pretty-title">Plan with Code (Full Response)</div><pre><code>&lt;execute_python&gt;
+# 1) Parse intent &amp; constraints (quantity and item name)
+import re
+from tinydb import Query
+from datetime import datetime
+
+# Lowercase version for parsing
+req = user_request
+
+# Attempt to extract quantity and product name from the return request
+return_match = re.search(r&quot;return\s+(\d+)\s+([A-Za-z]+)&quot;, req, re.IGNORECASE)
+if not return_match:
+    # Missing quantity or item name
+    STATUS = &quot;invalid_request&quot;
+    answer_text = &quot;I can help with that—how many pairs would you like to return?&quot;
+    print(f&quot;LOG: ACTION=read DRY_RUN=False STATUS={STATUS}&quot;)
+else:
+    qty = int(return_match.group(1))
+    item_name = return_match.group(2)
+
+    # 2) Query inventory for matching item
+    Item = Query()
+    matches = inventory_tbl.search(Item.name.test(lambda v, target=item_name: v.lower() == target.lower()))
+
+    if not matches:
+        # No such item in inventory
+        STATUS = &quot;no_match&quot;
+        answer_text = f&quot;We don’t have any &#x27;{item_name}&#x27; sunglasses to return. Could you check the name?&quot;
+        print(f&quot;LOG: ACTION=read DRY_RUN=False STATUS={STATUS}&quot;)
+    else:
+        # Found the item; perform the return (restock and refund)
+        item = matches[0]
+        unit_price = item[&#x27;price&#x27;]
+        refund_amount = unit_price * qty
+
+        # 3) Update inventory stock
+        new_stock = item[&#x27;quantity_in_stock&#x27;] + qty
+        inventory_tbl.update({&#x27;quantity_in_stock&#x27;: new_stock}, Item.item_id == item[&#x27;item_id&#x27;])
+
+        # 4) Record transaction for the refund
+        prev_balance = get_current_balance(transactions_tbl)
+        new_balance = prev_balance - refund_amount
+        txn_id = next_transaction_id(transactions_tbl)
+        transaction = {
+            &#x27;transaction_id&#x27;: txn_id,
+            &#x27;customer_name&#x27;: &#x27;RETURN&#x27;,
+            &#x27;transaction_summary&#x27;: f&quot;Return of {qty} {item[&#x27;name&#x27;]}&quot;,
+            &#x27;transaction_amount&#x27;: -refund_amount,
+            &#x27;balance_after_transaction&#x27;: new_balance,
+            &#x27;timestamp&#x27;: datetime.now().isoformat()
+        }
+        transactions_tbl.insert(transaction)
+
+        # 5) Prepare success response
+        STATUS = &quot;success&quot;
+        answer_text = f&quot;Your return of {qty} {item[&#x27;name&#x27;]} sunglasses has been processed and a refund of ${refund_amount} issued.&quot;
+        print(f&quot;LOG: ACTION=mutate DRY_RUN=False STATUS={STATUS}&quot;)
+&lt;/execute_python&gt;</code></pre></div>
+</body>
+</html>

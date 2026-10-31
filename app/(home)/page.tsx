@@ -1,5 +1,5 @@
 import { Card, Cards } from 'fumadocs-ui/components/card';
-import { Brain, ChevronDown, LibraryBig } from 'lucide-react';
+import { Brain, ChevronDown, GraduationCap, LibraryBig } from 'lucide-react';
 import Image from 'next/image';
 import { HeroGlobe } from '@/components/home/hero-globe';
 import { Copyright } from '@/components/site-footer';
@@ -53,7 +53,7 @@ export default function HomePage() {
           <h2 className="mb-3 text-2xl font-semibold md:text-3xl">What is this?</h2>
           <p className="mb-10 text-fd-muted-foreground">
             My notes, Jupyter notebooks and book notes on AI: from building an autograd engine to
-            reproducing GPT-2, plus notes from the books I read.
+            reproducing GPT-2, plus notes from the books I read and the courses I take.
           </p>
 
           {/* TODO(landing): section cards */}
@@ -69,6 +69,12 @@ export default function HomePage() {
               title="Library"
               description="Notes from AI/ML books, starting with AI Engineering by Chip Huyen."
               href="/Books/"
+            />
+            <Card
+              icon={<GraduationCap data-section-icon="GraduationCap" />}
+              title="Academy"
+              description="Notes from AI/ML courses, starting with Agentic AI by DeepLearning.AI."
+              href="/Academy/"
             />
           </Cards>
         </div>

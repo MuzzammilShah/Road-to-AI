@@ -1,5 +1,5 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
-import { BookOpen, Brain } from 'lucide-react';
+import { BookOpen, Brain, GraduationCap } from 'lucide-react';
 import Image from 'next/image';
 import { appName, githubUrl } from './shared';
 
@@ -26,6 +26,12 @@ export function baseOptions(): BaseLayoutProps {
     links: [
       { text: 'Neural Networks', url: '/ZeroToHero/', icon: <Brain />, active: 'nested-url' },
       { text: 'Library', url: '/Books/', icon: <BookOpen />, active: 'nested-url' },
+      {
+        text: 'Academy',
+        url: '/Academy/',
+        icon: <GraduationCap />,
+        active: 'nested-url',
+      },
     ],
   };
 }
