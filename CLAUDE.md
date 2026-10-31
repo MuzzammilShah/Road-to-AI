@@ -60,6 +60,8 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 - **`content/docs/`** holds the docs content, with one root folder per sidebar section. Root folders show up in the section dropdown at the top of the sidebar.
   - `ZeroToHero/` is "Neural Networks". It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`.
   - `Books/` is "Library". It contains `AI-Engineering/`.
+  - `Academy/` is "Academy" (course notes). Its overview uses `CourseCards`/`CourseCard`. It contains `Agentic-AI/`, which has `notes/` (one page per module, from the old blog post) and `notebooks/<Category>/` (generated, plus a hand-written `index.mdx` per category).
+- **`content/docs/meta.json`** (root) only sets the section order in the dropdown: `ZeroToHero`, `Books`, `Academy`.
 - **`meta.json`** in each folder controls the sidebar. They are all hand-maintained (no generator any more):
   - `title` and `pages` set order and labels;
   - `"---Label---"` adds a separator;
@@ -69,7 +71,8 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 - **Page front matter:** `title`, optional `description`, and `hideToc: true` to hide the table of contents.
 - **`notebooks/`** holds the executed `.ipynb` files at the same relative paths as their pages (`notebooks/ZeroToHero/GPT-1/gpt-dev.ipynb` → `content/docs/ZeroToHero/GPT-1/gpt-dev.mdx`). `notebooks/titles.json` maps each notebook path to its page title. The generated MDX carries a "Generated from notebooks/…" banner: never edit those pages by hand, edit the notebook and re-run the converter.
 - **`public/`:**
-  - `assets/images/` holds images referenced by pages;
+  - `assets/images/` holds images referenced by pages (`academy/<course>/` for course slides and thumbnails, `academy/providers/` for provider logos);
+  - `assets/academy/` holds standalone files linked from course pages (e.g. the Agentic AI sample research report);
   - `notebook-outputs/` holds the generated notebook output images;
   - `notebooks/` holds the `.ipynb` download copies;
   - `manifest.webmanifest` and the icons are for the PWA / iOS home-screen;
@@ -84,7 +87,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 ## App code map
 
 - **Routes:**
-  - `app/(home)/` is the landing page.
+  - `app/(home)/` is the landing page. Below the hero, `#intro` has one card per root folder, built from `source.getPageTree()` (title, icon, `index` URL) in dropdown order, with accent-coloured corner glows on hover/focus (`.landing-section-card` in `app/global.css`).
   - `app/(docs)/layout.tsx` is the spacious `DocsLayout` + `CollapsedSidebarControls`.
   - `app/(docs)/[...slug]/page.tsx` is the docs pages: TOC style `'normal'`, TOC titles stripped of links, `SectionAccent`.
   - `app/api/search.json/route.ts` builds the static search index.
@@ -94,20 +97,23 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - Fumadocs' `preset.css` does not include the spacious layout's classes. Any layout from `fumadocs-ui/css/generated/` that preset.css doesn't list needs the same import, otherwise its pages render unstyled.
 - **`lib/`:**
   - `source.ts`: loader, MDX options, `getDocumentTitle`.
-  - `sections.tsx`: dropdown icons, `SectionAccent`.
+  - `sections.tsx`: dropdown icons, the `sections` map (accent colour + optional longer `landing` card text per root folder), `SectionAccent`.
   - `layout.shared.tsx`: navbar title and links (add links here).
   - `shared.ts`: site name, URL, GitHub repo.
 - **`components/`:**
   - `mdx.tsx`: MDX component map.
   - `mdx/heading.tsx`: headings that contain a link skip Fumadocs' self-link, and TOC entries get their links stripped. Both prevent `<a>` inside `<a>`.
   - `mdx/icon.tsx`, `mdx/tweet.tsx`, `mdx/notebook-download.tsx`.
+  - `mdx/course-card.tsx`: `CourseCards`/`CourseCard` (thumbnail, title, one-liner, dates, provider logo). `href` is optional (no link until a course has notes), and `providerLogoDark` is an optional dark-mode logo. Logos in `public/assets/images/academy/providers/` are cropped to their content so they share one height.
+  - `mdx/github-repo.tsx`: `GithubRepo`, a repo card with stars/forks fetched at build time. If the fetch fails it renders without counts and never fails the build; it uses `GITHUB_TOKEN` when set.
+  - `mdx/notebook-html-output.tsx`: `NotebookHtmlOutput`, a sandboxed (no scripts) auto-height iframe for `text/html` notebook outputs.
   - `collapsed-sidebar-controls.tsx`: the classic "open sidebar + search" pill.
   - `home/globe.tsx` and `home/hero-globe.tsx`: the Vanta globe.
   - `site-footer.tsx`.
 - **Switching to navbar tabs instead of the dropdown:** change `fumadocs-ui/layouts/spacious` (+ `/page`) back to `fumadocs-ui/layouts/docs` and pass `tabMode="top"`. The collapsed-sidebar pill then becomes unnecessary, because the classic layout has its own.
 - **MDX components available in content:**
   - from Fumadocs: `Callout`, `Cards`/`Card`, `Accordions`/`Accordion`;
-  - site-specific: `Icon` (Lucide), `Tweet` (X/Twitter embed), `NotebookDownload`.
+  - site-specific: `Icon` (Lucide), `Tweet` (X/Twitter embed), `NotebookDownload`, `NotebookHtmlOutput`, `CourseCards`/`CourseCard`, `GithubRepo`.
 - **Escaping in MDX:** `{`, `}` and `<` in prose must be escaped (`\{`, `\}`, `\<`). HTML must be JSX (`className`, `style={{...}}`, self-closing `<img />`).
 
 ## Deployment
@@ -147,9 +153,9 @@ A new sub-folder needs its own `meta.json` (`title`, `pages`) and must be listed
 
 ## How to add a section
 
-1. Create `content/docs/<Section>/meta.json` with `"root": true`, `title`, `description`, `icon` and `pages`.
-2. In `lib/sections.tsx`, add the Lucide icon to `sectionIcons` and map the folder name to its accent colour (used by `SectionAccent`). In `app/global.css`, define the `--section-*` colour (light and dark) and its `[data-section-icon]` rule.
-3. Optionally add a navbar link in `lib/layout.shared.tsx` and a landing card in `app/(home)/page.tsx`.
+1. Create `content/docs/<Section>/meta.json` with `"root": true`, `title`, `description`, `icon` and `pages`, and add the folder to the root `content/docs/meta.json` (dropdown order).
+2. In `lib/sections.tsx`, add the Lucide icon to `sectionIcons` and add the folder name to `sections` with its `accent` colour (used by `SectionAccent` and the landing card) and, optionally, a longer `landing` description for the landing card (otherwise the meta.json `description` is used). In `app/global.css`, define the `--section-*` colour (light and dark) and its `[data-section-icon]` rule.
+3. Optionally add a navbar link in `lib/layout.shared.tsx`. The landing card appears automatically (up to 3 per row, 4 cards as 2×2, last row centred).
 
 The build fails with "Unknown icon" if the `meta.json` icon is missing from `sectionIcons`. The MDX `<Icon>` component has its own short list in `components/mdx/icon.tsx`.
 
@@ -159,7 +165,8 @@ The build fails with "Unknown icon" if the `meta.json` icon is missing from `sec
 2. Add `"<Section>/<path>/<name>.ipynb": "<Sidebar title>"` to `notebooks/titles.json`.
 3. Add `<name>` to the `pages` array of `content/docs/<Section>/<path>/meta.json`.
 4. Run `npm run notebooks`. This writes `content/docs/<path>.mdx`, output images to `public/notebook-outputs/<path>/` and a download copy to `public/notebooks/`. Images referenced from markdown cells resolve against the page URL and must already exist in `public/` (the converter fails otherwise).
-5. Commit the generated files too. The build does not run the converter, and `check:parity` fails if a notebook changed without re-converting.
+5. Output types the converter handles: images (PNG/SVG files), `text/html` (standalone page in `public/notebook-outputs/`, shown via `NotebookHtmlOutput`), `text/markdown` (converted inline; headings become bold lines and missing local images become a note), and text. Anything else stops it.
+6. Commit the generated files too. The build does not run the converter, and `check:parity` fails if a notebook changed without re-converting.
 
 To edit a notebook's prose, change only the affected markdown-cell `source` strings in the `.ipynb` JSON, then re-run `npm run notebooks`.
 

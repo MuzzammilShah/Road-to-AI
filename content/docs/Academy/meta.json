@@ -1,0 +1,10 @@
+{
+  "title": "Academy",
+  "description": "Notes from AI/ML courses",
+  "icon": "GraduationCap",
+  "root": true,
+  "pages": [
+    "index",
+    "Agentic-AI"
+  ]
+}

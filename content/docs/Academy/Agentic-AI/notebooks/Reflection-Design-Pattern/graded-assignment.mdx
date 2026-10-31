@@ -1,0 +1,425 @@
+---
+title: "Graded Assignment"
+---
+
+{/* Generated from notebooks/Academy/Agentic-AI/notebooks/Reflection-Design-Pattern/graded-assignment.ipynb by scripts/convert-notebooks.mjs. Do not edit: edit the notebook and run `npm run notebooks`. */}
+
+<NotebookDownload href="/notebooks/Academy/Agentic-AI/notebooks/Reflection-Design-Pattern/graded-assignment.ipynb" />
+
+## Graded Lab: Reflection in a Research Agent [#graded-lab-reflection-in-a-research-agent]
+
+In this graded lab, you’ll implement a simple **agentic workflow** designed to simulate reflective thinking in a writing task. This is one building block of a more complex research agent that will be constructed throughout the course.
+
+### Objective [#objective]
+
+Build a three-step workflow where an LLM writes an essay draft, critiques it, and rewrites it. 
+
+* **Step 1 – Drafting:** Call the LLM to generate an initial draft of an essay based on a simple prompt.
+* **Step 2 – Reflection:** Reflect on the draft using a reasoning step. (Optionally, this can be done with a different model.)
+* **Step 3 – Revision:** Apply the feedback from the reflection to generate a revised version of the essay.
+
+---
+<a name="submission"></a>
+
+\<h4 style="color:green; font-weight:bold;">TIPS FOR SUCCESSFUL GRADING OF YOUR ASSIGNMENT:\</h4>
+
+* All cells are frozen except for the ones where you need to write your solution code or when explicitly mentioned you can interact with it.
+
+* In each exercise cell, look for comments `### START CODE HERE ###` and `### END CODE HERE ###`. These show you where to write the solution code. **Do not add or change any code that is outside these comments**.
+
+* You can add new cells to experiment but these will be omitted by the grader, so don't rely on newly created cells to host your solution code, use the provided places for this.
+
+* Avoid using global variables unless you absolutely have to. The grader tests your code in an isolated environment without running all cells from the top. As a result, global variables may be unavailable when scoring your submission. Global variables that are meant to be used will be defined in UPPERCASE.
+
+* To submit your notebook for grading, first save it by clicking the 💾 icon on the top left of the page and then click on the <span style={{"backgroundColor":"red","color":"white","padding":"3px 5px","fontSize":"16px","borderRadius":"5px"}}>Submit assignment</span> button on the top right of the page.
+---
+
+Before interacting with the language models, we initialize the `aisuite` client. This setup loads environment variables (e.g., API keys) from a `.env` file to securely authenticate with backend services. The `ai.Client()` instance will be used to make all model calls throughout this workflow.
+
+```python
+from dotenv import load_dotenv
+
+load_dotenv()
+
+import aisuite as ai
+
+# Define the client. You can use this variable inside your graded functions!
+CLIENT = ai.Client()
+```
+
+```python
+import unittests
+```
+
+## Exercise 1: `generate_draft` Function [#exercise-1-generate_draft-function]
+
+**Objective**:
+Write a function called `generate_draft` that takes in a string topic and uses a language model to generate a complete draft essay.
+
+**Inputs**:
+
+* `topic` (str): The essay topic.
+* `model` (str, optional): The model identifier to use. Defaults to `"openai:gpt-4o"`.
+
+**Output**:
+
+* A string representing the full draft of the essay.
+
+The setup for calling the LLM using the aisuite library is already provided. Focus on crafting the prompt content. You can reference this setup in later exercises to understand how to interact with the library effectively.
+
+```python
+# GRADED FUNCTION: generate_draft
+
+def generate_draft(topic: str, model: str = "openai:gpt-4o") -> str: 
+    
+    ### START CODE HERE ###
+
+    # Define your prompt here. A multi-line f-string is typically used for this.
+    prompt = f"""
+    Hi, I would like you to please generate a draft essay based on the provided topic from the user.
+    
+    topic:
+    {topic}
+    """
+
+    ### END CODE HERE ###
+    
+    # Get a response from the LLM by creating a chat with the client.
+    response = CLIENT.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=1.0,
+    )
+
+    return response.choices[0].message.content
+```
+
+Run the following cell to check your code is working correctly:
+
+```python
+# Test your code!
+unittests.test_generate_draft(generate_draft)
+```
+
+```text title="Output"
+ All tests passed!
+```
+
+## Exercise 2: `reflect_on_draft` Function [#exercise-2-reflect_on_draft-function]
+
+**Objective**:
+Write a function called `reflect_on_draft` that takes a previously generated essay draft and uses a language model to provide constructive feedback.
+
+**Inputs**:
+
+* `draft` (str): The essay text to reflect on.
+* `model` (str, optional): The model identifier to use. Defaults to `"openai:o4-mini"`.
+
+**Output**:
+
+* A string with feedback in paragraph form.
+
+**Requirements**:
+
+* The feedback should be critical but constructive.
+* It should address issues such as structure, clarity, strength of argument, and writing style.
+* The function should send the draft to the model and return its response.
+
+You do **not** need to rewrite the essay at this step—just analyze and reflect on it.
+
+```python
+# GRADED FUNCTION: reflect_on_draft
+
+def reflect_on_draft(draft: str, model: str = "openai:o4-mini") -> str:
+
+    ### START CODE HERE ###
+
+    # Define your prompt here. A multi-line f-string is typically used for this.
+    prompt = f"""
+    Hi, I would like you to please reflect on the provided draft essay and work on improving it based on the following instructions.
+    Instructions:
+    1. Make sure it follows the writing style and structure of that of a professional essay.
+    2. The flow of content should start with an introduction, point of argument and conclusion.
+    3. Make sure you provide enough points in the argument to provide strength to the essay.
+    
+    draft essay:
+    {draft}
+    """ 
+
+    ### END CODE HERE ###
+
+    # Get a response from the LLM by creating a chat with the client.
+    response = CLIENT.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=1.0,
+    )
+
+    return response.choices[0].message.content
+```
+
+```python
+# Test your code!
+unittests.test_reflect_on_draft(reflect_on_draft)
+```
+
+```text title="Output"
+ All tests passed!
+```
+
+## Exercise 3: `revise_draft` Function [#exercise-3-revise_draft-function]
+
+**Objective**:
+Implement a function called `revise_draft` that improves a given essay draft based on feedback from a reflection step.
+
+**Inputs**:
+
+* `original_draft` (str): The initial version of the essay.
+* `reflection` (str): Constructive feedback or critique on the draft.
+* `model` (str, optional): The model identifier to use. Defaults to `"openai:gpt-4o"`.
+
+**Output**:
+
+* A string containing the revised and improved essay.
+
+**Requirements**:
+
+* The revised draft should address the issues mentioned in the feedback.
+* It should improve clarity, coherence, argument strength, and overall flow.
+* The function should use the feedback to guide the revision, and return only the final revised essay.
+
+In this final exercise, you'll also need to manage the call to the LLM using the CLIENT, as you've practiced in previous exercises.
+
+```python
+# GRADED FUNCTION: revise_draft
+
+def revise_draft(original_draft: str, reflection: str, model: str = "openai:gpt-4o") -> str:
+
+    ### START CODE HERE ###
+
+    # Define your prompt here. A multi-line f-string is typically used for this.
+    prompt = f"""
+    Hi, You are provided with an original draft essay that was generated, along with a reflection that
+    has been given based on some constructive feedback provided on the original draft. I would like you
+    to please implement the suggestions in the reflection and implement it on the original draft to
+    make it better.
+    
+    original draft: {original_draft}
+    
+    reflection: {reflection}
+    """
+
+    # Get a response from the LLM by creating a chat with the client.
+    response = CLIENT.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=1.0,
+    )
+
+    ### END CODE HERE ###
+
+    return response.choices[0].message.content
+```
+
+```python
+# Test your code!
+unittests.test_revise_draft(revise_draft)
+```
+
+```text title="Output"
+ All tests passed!
+```
+
+### 🧪 Test the Reflective Writing Workflow [#test-the-reflective-writing-workflow]
+
+Use the functions you implemented to simulate the complete writing workflow:
+
+1. **Generate a draft** in response to the essay prompt.
+2. **Reflect** on the draft to identify improvements.
+3. **Revise** the draft using the feedback.
+
+Observe the outputs of each step. You do **not** need to modify the outputs — just verify that the workflow runs as expected and each component returns a valid string.
+
+```python
+essay_prompt = "Should social media platforms be regulated by the government?"
+
+# Agent 1 – Draft
+draft = generate_draft(essay_prompt)
+print("📝 Draft:\n")
+print(draft)
+
+# Agent 2 – Reflection
+feedback = reflect_on_draft(draft)
+print("\n🧠 Feedback:\n")
+print(feedback)
+
+# Agent 3 – Revision
+revised = revise_draft(draft, feedback)
+print("\n✍️ Revised:\n")
+print(revised)
+```
+
+```text title="Output"
+📝 Draft:
+
+Title: The Case for Government Regulation of Social Media Platforms
+
+Introduction
+
+In recent years, social media platforms have become an integral part of our lives, influencing everything from personal relationships to global politics. However, the pervasive influence of these platforms has sparked an ongoing debate about whether they should be regulated by the government. Proponents of regulation argue that it is necessary to protect users from harmful content, safeguard privacy, and ensure fair competition. Opponents, on the other hand, contend that government intervention could stifle innovation and infringe on free speech. This essay explores the arguments on both sides and examines the potential benefits and drawbacks of government regulation of social media platforms.
+
+The Need for Regulation
+
+One of the primary arguments for the regulation of social media platforms is the protection of users from harmful content. Social media has been a breeding ground for misinformation, hate speech, and cyberbullying. The proliferation of fake news has not only misled the public but also posed significant risks to public health and safety, as seen during the COVID-19 pandemic. Furthermore, platforms are often slow to remove offensive content that can incite violence or propagate discrimination. Government regulation could enforce stricter content moderation standards, requiring platforms to act more swiftly and effectively to protect users.
+
+Another compelling reason for regulation is the protection of user privacy. Social media companies collect vast amounts of personal data, which they may misuse or inadequately protect. High-profile data breaches have exposed sensitive information of millions of users, highlighting the need for stricter privacy laws. Government intervention could establish clearer guidelines for data collection, storage, and sharing, thereby safeguarding personal information and holding companies accountable for privacy violations.
+
+Ensuring fair competition is another reason to consider regulation. Major social media companies often engage in anti-competitive practices, such as acquiring potential rivals and prioritizing their own services. This stifles innovation and limits consumer choice. Regulatory measures could prevent monopolistic behavior, encouraging a more diverse and competitive market that benefits consumers.
+
+Concerns About Regulation
+
+Despite the arguments in favor of regulation, there are valid concerns about government intervention in social media. One major apprehension is that regulation could infringe upon free speech. Overzealous regulation might lead to censorship, where legitimate expressions of opinion are suppressed along with harmful content. It is essential to strike a balance between curbing harmful content and preserving freedom of expression.
+
+Moreover, government regulation could stifle innovation. Social media platforms thrive in a dynamic environment where rapid innovation is key to success. Excessive regulation could burden companies with compliance requirements, diverting resources away from innovation and slowing growth. Policymakers must ensure that regulation is flexible and adaptable, allowing for technological advancement while maintaining necessary safeguards.
+
+Implementing Effective Regulation
+
+To mitigate these concerns, it is crucial to design regulation that protects users without overstepping boundaries. Collaboration between governments, tech companies, and civil society is essential to create comprehensive and balanced regulations. Establishing independent oversight bodies can help ensure transparency and accountability, while allowing experts to contribute to regulatory frameworks.
+
+Furthermore, a differentiated approach may be needed, recognizing that different platforms have unique challenges and dynamics. Regulation should be tailored to address specific issues faced by each platform, rather than applying a one-size-fits-all policy.
+
+Conclusion
+
+As social media continues to shape our world, the question of government regulation becomes increasingly pressing. While there are valid concerns about the potential drawbacks of regulation, the need to protect users, ensure privacy, and maintain fair competition cannot be ignored. By implementing thoughtful, balanced regulations that involve multiple stakeholders, governments can create a safer and more equitable social media landscape. The challenge lies in finding the right balance between regulation and freedom, ultimately fostering an internet that serves the public interest while respecting individual rights.
+
+🧠 Feedback:
+
+Title: The Case for Government Regulation of Social Media Platforms
+
+Introduction  
+Social media platforms have transformed how we communicate, shape opinions, and consume information. From personal interactions to global movements, these digital forums exert a profound influence on society. Yet with unprecedented connectivity come new risks: the spread of misinformation, threats to privacy, and the concentration of market power in a handful of corporations. This essay argues that thoughtful government regulation is necessary to address these challenges, protect public interests, and preserve the openness and innovation that characterize the internet. After outlining the principal concerns driving the need for oversight, it will examine objections to regulation and propose a balanced framework for effective policy.
+
+Arguments in Favor of Regulation  
+
+1. Protecting Public Health and Safety  
+   a. Combating Misinformation: During crises such as the COVID-19 pandemic, social media became a vector for false cures and conspiracy theories, undermining public health measures. Regulation could require platforms to flag or remove demonstrably false content and direct users to authoritative sources.  
+   b. Preventing Radicalization and Violence: Extremist groups exploit algorithmic recommendation systems to recruit and spread propaganda. Mandatory transparency in recommendation algorithms and stricter rules on hate speech can curb the online recruitment of vulnerable individuals.
+
+2. Safeguarding Privacy and Data Security  
+   a. Limiting Data Harvesting: Social media companies routinely collect extensive personal data to fuel targeted advertising. Clear legal limits on data collection, retention, and third-party sharing would protect users from surveillance and identity theft.  
+   b. Strengthening Breach Notification and Penalties: Uniform requirements for rapid disclosure of data breaches, coupled with significant fines for noncompliance, would incentivize platforms to improve cybersecurity and safeguard user information.
+
+3. Ensuring Fair Competition and Innovation  
+   a. Preventing Monopolistic Practices: Dominant platforms often acquire emerging competitors or replicate popular features, stifling innovation. Antitrust enforcement can block anti-competitive mergers and impose remedies that preserve the market entry of new players.  
+   b. Promoting Interoperability and Data Portability: Standards that allow users to transfer their social graphs and content between platforms would empower consumers and reduce lock-in effects, spurring competition and encouraging novel services.
+
+4. Protecting Vulnerable Populations  
+   a. Child Safety and Development: Young users are exposed to harmful content, digital addiction, and invasive advertising. Regulations should set age-appropriate design standards, limit targeted ads to minors, and require parental controls.  
+   b. Mental Health Considerations: Studies link excessive social media use to anxiety, depression, and diminished self-esteem. Requiring platforms to provide tools for screen-time management and to audit the mental health impact of design choices can mitigate these harms.
+
+5. Preserving Democratic Processes  
+   a. Election Integrity: Foreign and domestic actors leverage social media to influence elections through disinformation campaigns. Mandatory disclosures for political advertising, real-time monitoring of coordinated inauthentic behavior, and cooperation with electoral authorities can safeguard democratic institutions.  
+   b. Algorithmic Transparency: Requiring platforms to publish regular reports on how content is prioritized or suppressed would allow independent researchers to assess bias and systemic risks.
+
+Concerns and Counterarguments  
+
+1. Free Speech and Censorship  
+Critics warn that regulation risks government overreach and undue censorship. To address this, laws must establish clear, narrowly defined standards for illicit content—such as incitement to violence or defamation—while protecting legitimate discourse. Independent oversight bodies and due-process mechanisms can ensure content decisions are fair and appealable.
+
+2. Innovation and Regulatory Burdens  
+Opponents argue that compliance costs could slow technological progress. In response, regulations should be outcome-oriented rather than prescriptive, allowing companies flexibility in achieving policy goals. Periodic sunset clauses and stakeholder consultations can help adapt rules to technological advances.
+
+A Balanced Regulatory Framework  
+
+Effective oversight of social media requires a multi-stakeholder approach:  
+• Legislative Action: Enact baseline rules for privacy, competition, and content moderation.  
+• Independent Regulators: Establish or empower data protection and competition authorities to enforce standards, conduct audits, and impose sanctions.  
+• Platform Accountability: Mandate regular transparency reports on content removal, algorithmic changes, and data practices.  
+• Civil Society Engagement: Involve researchers, consumer advocates, and user communities in policy design, monitoring, and evaluation.  
+• International Cooperation: Coordinate with other nations to address cross-border disinformation, data flows, and global platform governance.
+
+Conclusion  
+Social media platforms wield enormous power to inform, persuade, and connect billions of users. Left unchecked, they pose real risks to public health, privacy, competition, and democratic integrity. Yet heavy-handed regulation could also threaten free expression and innovation. The solution lies in a calibrated, transparent, and adaptable regulatory regime that balances public protection with individual rights and market dynamism. By combining legislative clarity, robust enforcement, platform accountability, and civil-society participation, governments can foster a safer, more open, and more competitive social media environment—one that serves both democratic values and the digital economy.
+```
+
+```text title="Output"
+
+✍️ Revised:
+
+**Title: The Case for Government Regulation of Social Media Platforms**
+
+**Introduction**
+
+Social media platforms have transformed how we communicate, shape opinions, and consume information. From personal interactions to global movements, these digital forums exert a profound influence on society. Yet with unprecedented connectivity come new risks: the spread of misinformation, threats to privacy, and the concentration of market power in a handful of corporations. This essay argues that thoughtful government regulation is necessary to address these challenges, protect public interests, and preserve the openness and innovation that characterize the internet. After outlining the principal concerns driving the need for oversight, it will examine objections to regulation and propose a balanced framework for effective policy.
+
+**Arguments in Favor of Regulation**
+
+1. **Protecting Public Health and Safety**
+   - *Combating Misinformation*: Social media became a vector for false cures and conspiracy theories during crises such as the COVID-19 pandemic, undermining public health measures. Regulation could require platforms to flag or remove demonstrably false content and direct users to authoritative sources.
+   - *Preventing Radicalization and Violence*: Extremist groups exploit algorithmic recommendation systems to recruit and spread propaganda. Mandatory transparency in recommendation algorithms and stricter rules on hate speech can curb the online recruitment of vulnerable individuals.
+
+2. **Safeguarding Privacy and Data Security**
+   - *Limiting Data Harvesting*: Social media companies collect extensive personal data to fuel targeted advertising. Clear legal limits on data collection, retention, and third-party sharing would protect users from surveillance and identity theft.
+   - *Strengthening Breach Notification and Penalties*: Uniform requirements for rapid disclosure of data breaches, coupled with significant fines for noncompliance, would incentivize platforms to improve cybersecurity and safeguard user information.
+
+3. **Ensuring Fair Competition and Innovation**
+   - *Preventing Monopolistic Practices*: Dominant platforms often acquire emerging competitors or replicate popular features, stifling innovation. Antitrust enforcement can block anti-competitive mergers and impose remedies that preserve the market entry of new players.
+   - *Promoting Interoperability and Data Portability*: Standards that allow users to transfer their social graphs and content between platforms would empower consumers and reduce lock-in effects, spurring competition and encouraging novel services.
+
+4. **Protecting Vulnerable Populations**
+   - *Child Safety and Development*: Young users are exposed to harmful content, digital addiction, and invasive advertising. Regulations should set age-appropriate design standards, limit targeted ads to minors, and require parental controls.
+   - *Mental Health Considerations*: Studies link excessive social media use to anxiety, depression, and diminished self-esteem. Requiring platforms to provide tools for screen-time management and to audit the mental health impact of design choices can mitigate these harms.
+
+5. **Preserving Democratic Processes**
+   - *Election Integrity*: Foreign and domestic actors leverage social media to influence elections through disinformation campaigns. Mandatory disclosures for political advertising, real-time monitoring of coordinated inauthentic behavior, and cooperation with electoral authorities can safeguard democratic institutions.
+   - *Algorithmic Transparency*: Requiring platforms to publish regular reports on how content is prioritized or suppressed would allow independent researchers to assess bias and systemic risks.
+
+**Concerns and Counterarguments**
+
+1. **Free Speech and Censorship**
+   Critics warn that regulation risks government overreach and undue censorship. To address this, laws must establish clear, narrowly defined standards for illicit content—such as incitement to violence or defamation—while protecting legitimate discourse. Independent oversight bodies and due-process mechanisms can ensure content decisions are fair and appealable.
+
+2. **Innovation and Regulatory Burdens**
+   Opponents argue that compliance costs could slow technological progress. In response, regulations should be outcome-oriented rather than prescriptive, allowing companies flexibility in achieving policy goals. Periodic sunset clauses and stakeholder consultations can help adapt rules to technological advances.
+
+**A Balanced Regulatory Framework**
+
+Effective oversight of social media requires a multi-stakeholder approach:
+- **Legislative Action**: Enact baseline rules for privacy, competition, and content moderation.
+- **Independent Regulators**: Establish or empower data protection and competition authorities to enforce standards, conduct audits, and impose sanctions.
+- **Platform Accountability**: Mandate regular transparency reports on content removal, algorithmic changes, and data practices.
+- **Civil Society Engagement**: Involve researchers, consumer advocates, and user communities in policy design, monitoring, and evaluation.
+- **International Cooperation**: Coordinate with other nations to address cross-border disinformation, data flows, and global platform governance.
+
+**Conclusion**
+
+Social media platforms wield enormous power to inform, persuade, and connect billions of users. Left unchecked, they pose real risks to public health, privacy, competition, and democratic integrity. Yet heavy-handed regulation could also threaten free expression and innovation. The solution lies in a calibrated, transparent, and adaptable regulatory regime that balances public protection with individual rights and market dynamism. By combining legislative clarity, robust enforcement, platform accountability, and civil-society participation, governments can foster a safer, more open, and more competitive social media environment—one that serves both democratic values and the digital economy.
+```
+
+To better visualize the output of each step in the reflective writing workflow, we use a utility function called `show_output`. This function displays the results of each stage (drafting, reflection, and revision) in styled boxes with custom background and text colors, making it easier to compare and understand the progression of the essay.
+
+```python
+from utils import show_output
+
+essay_prompt = "Should social media platforms be regulated by the government?"
+
+show_output("Step 1 – Draft", draft, background="#fff8dc", text_color="#333333")
+show_output("Step 2 – Reflection", feedback, background="#e0f7fa", text_color="#222222")
+show_output("Step 3 – Revision", revised, background="#f3e5f5", text_color="#222222")
+```
+
+<NotebookHtmlOutput src="/notebook-outputs/Academy/Agentic-AI/notebooks/Reflection-Design-Pattern/graded-assignment/cell-18-0.html" />
+
+<NotebookHtmlOutput src="/notebook-outputs/Academy/Agentic-AI/notebooks/Reflection-Design-Pattern/graded-assignment/cell-18-1.html" />
+
+<NotebookHtmlOutput src="/notebook-outputs/Academy/Agentic-AI/notebooks/Reflection-Design-Pattern/graded-assignment/cell-18-2.html" />
+
+## Check grading feedback [#check-grading-feedback]
+
+If you have collapsed the right panel to have more screen space for your code, as shown below:
+
+*[Image not included: course material, property of DeepLearning.AI.]*
+
+You can click on the left-facing arrow button (highlighted in red) to view feedback for your submission after submitting it for grading. Once expanded, it should display like this:
+
+*[Image not included: course material, property of DeepLearning.AI.]*

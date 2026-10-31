@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<style>
+    .pretty-card{
+      font-family: ui-sans-serif, system-ui;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 10px 0;
+      background: linear-gradient(#fff, #fff) padding-box,
+                  linear-gradient(135deg, #3b82f6, #9333ea) border-box;
+      color: #111;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+    .pretty-title{
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:14px;
+      color:#111;
+    }
+    /* 🔒 Only affects INSIDE the card */
+    .pretty-card pre, 
+    .pretty-card code {
+      background: #f3f4f6;
+      color: #111;
+      padding: 8px;
+      border-radius: 8px;
+      display: block;
+      overflow-x: auto;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .pretty-card img { max-width: 100%; height: auto; border-radius: 8px; }
+    .pretty-card table.pretty-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+      color: #111;
+    }
+    .pretty-card table.pretty-table th, 
+    .pretty-card table.pretty-table td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .pretty-card table.pretty-table th { background: #f9fafb; font-weight: 600; }
+    </style>
+    <div class="pretty-card"><div class="pretty-title">Regenerated Code Output (V2)</div><pre><code>&lt;execute_python&gt;
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Filter for Q1 2024 and 2025
+q1_2024 = df[(df[&#x27;year&#x27;] == 2024) &amp; (df[&#x27;quarter&#x27;] == 1)]
+q1_2025 = df[(df[&#x27;year&#x27;] == 2025) &amp; (df[&#x27;quarter&#x27;] == 1)]
+
+# Sum sales by coffee name
+sales_2024 = q1_2024.groupby(&#x27;coffee_name&#x27;)[&#x27;price&#x27;].sum()
+sales_2025 = q1_2025.groupby(&#x27;coffee_name&#x27;)[&#x27;price&#x27;].sum()
+
+# Ensure all coffee names are represented
+all_coffees = sorted(set(sales_2024.index).union(sales_2025.index))
+sales_2024 = sales_2024.reindex(all_coffees, fill_value=0)
+sales_2025 = sales_2025.reindex(all_coffees, fill_value=0)
+
+# Plotting grouped bars
+x = np.arange(len(all_coffees))
+width = 0.35
+
+plt.figure(figsize=(10, 6))
+bars1 = plt.bar(x - width/2, sales_2024, width, label=&#x27;2024&#x27;, color=&#x27;#1f77b4&#x27;)
+bars2 = plt.bar(x + width/2, sales_2025, width, label=&#x27;2025&#x27;, color=&#x27;#ff7f0e&#x27;)
+
+plt.title(&#x27;Q1 Coffee Sales Comparison: 2024 vs 2025&#x27;)
+plt.xlabel(&#x27;Coffee Name&#x27;)
+plt.ylabel(&#x27;Total Sales ($)&#x27;)
+plt.xticks(x, all_coffees, rotation=45, ha=&#x27;right&#x27;)
+plt.legend()
+plt.grid(axis=&#x27;y&#x27;, linestyle=&#x27;--&#x27;, alpha=0.7)
+
+# Annotate bar values
+y_max = max(sales_2024.max(), sales_2025.max())
+offset = y_max * 0.01
+for bar in list(bars1) + list(bars2):
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2, height + offset, f&#x27;{int(height)}&#x27;, ha=&#x27;center&#x27;, va=&#x27;bottom&#x27;, fontsize=8)
+
+plt.tight_layout()
+plt.savefig(&#x27;chart_v2.png&#x27;, dpi=300)
+plt.close()
+&lt;/execute_python&gt;</code></pre></div>
+</body>
+</html>

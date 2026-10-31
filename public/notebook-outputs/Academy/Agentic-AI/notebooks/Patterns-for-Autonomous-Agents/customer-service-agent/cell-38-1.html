@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<style>
+    .pretty-card{
+      font-family: ui-sans-serif, system-ui;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 10px 0;
+      background: linear-gradient(#fff, #fff) padding-box,
+                  linear-gradient(135deg, #3b82f6, #9333ea) border-box;
+      color: #111;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+    .pretty-title{
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:14px;
+      color:#111;
+    }
+    /* 🔒 Solo afecta lo DENTRO de la tarjeta */
+    .pretty-card pre, 
+    .pretty-card code {
+      background: #f3f4f6;
+      color: #111;
+      padding: 8px;
+      border-radius: 8px;
+      display: block;
+      overflow-x: auto;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .pretty-card img { max-width: 100%; height: auto; border-radius: 8px; }
+    .pretty-card table.pretty-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+      color: #111;
+    }
+    .pretty-card table.pretty-table th, 
+    .pretty-card table.pretty-table td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .pretty-card table.pretty-table th { background: #f9fafb; font-weight: 600; }
+    </style>
+    <div class="pretty-card"><div class="pretty-title">Plan with Code (Full Response)</div><pre><code>```python
+&lt;execute_python&gt;
+# 1) Parse intent and quantities
+import re
+from tinydb import Query
+import datetime
+
+matches = re.findall(r&#x27;(\d+)\s+pairs?\s+of\s+(\w+)\s*sunglasses?&#x27;, user_request, re.IGNORECASE)
+if not matches:
+    STATUS = &quot;invalid_request&quot;
+    answer_text = &quot;I can help with that—how many pairs would you like to purchase?&quot;
+    print(f&quot;LOG: ACTION=read DRY_RUN=True STATUS={STATUS}&quot;)
+else:
+    # Normalize requested items
+    requested = []
+    for qty, name in matches:
+        requested.append({&quot;name&quot;: name.title(), &quot;qty&quot;: int(qty)})
+    # 2) Validate existence and stock
+    missing = None
+    insufficient = None
+    for req in requested:
+        Item = Query()
+        docs = inventory_tbl.search(Item.name.test(lambda n, nm=req[&quot;name&quot;]: n.lower() == nm.lower()))
+        if not docs:
+            missing = req[&quot;name&quot;]
+            break
+        doc = docs[0]
+        if doc[&quot;quantity_in_stock&quot;] &lt; req[&quot;qty&quot;]:
+            insufficient = {&quot;name&quot;: req[&quot;name&quot;], &quot;available&quot;: doc[&quot;quantity_in_stock&quot;]}
+            break
+    if missing:
+        STATUS = &quot;no_match&quot;
+        answer_text = f&quot;Sorry, we don’t have {missing} sunglasses right now. Maybe try a different style?&quot;
+        print(f&quot;LOG: ACTION=read DRY_RUN=True STATUS={STATUS}&quot;)
+    elif insufficient:
+        STATUS = &quot;insufficient_stock&quot;
+        answer_text = f&quot;We only have {insufficient[&#x27;available&#x27;]} pairs of {insufficient[&#x27;name&#x27;]} left; let me know if you’d like to adjust your order.&quot;
+        print(f&quot;LOG: ACTION=read DRY_RUN=True STATUS={STATUS}&quot;)
+    else:
+        # 3) Process purchase transactions
+        STATUS = &quot;success&quot;
+        balance = get_current_balance(transactions_tbl)
+        for req in requested:
+            Item = Query()
+            doc = inventory_tbl.get(Item.name.test(lambda n, nm=req[&quot;name&quot;]: n.lower() == nm.lower()))
+            # Compute line total and new balance
+            line_total = doc[&quot;price&quot;] * req[&quot;qty&quot;]
+            balance_after = balance + line_total
+            # Insert transaction row
+            txn_id = next_transaction_id(transactions_tbl)
+            transactions_tbl.insert({
+                &quot;transaction_id&quot;: txn_id,
+                &quot;customer_name&quot;: &quot;ANONYMOUS&quot;,
+                &quot;transaction_summary&quot;: f&quot;Purchase: {req[&#x27;qty&#x27;]} x {req[&#x27;name&#x27;]}&quot;,
+                &quot;transaction_amount&quot;: line_total,
+                &quot;balance_after_transaction&quot;: balance_after,
+                &quot;timestamp&quot;: datetime.datetime.now().isoformat()
+            })
+            # Update stock
+            inventory_tbl.update(
+                {&quot;quantity_in_stock&quot;: doc[&quot;quantity_in_stock&quot;] - req[&quot;qty&quot;]},
+                Item.item_id == doc[&quot;item_id&quot;]
+            )
+            balance = balance_after
+        answer_text = &quot;Thank you! Your order for 3 Classic and 1 Aviator sunglasses has been placed.&quot;
+        print(f&quot;LOG: ACTION=mutate SHOULD_MUTATE=True STATUS={STATUS}&quot;)
+&lt;/execute_python&gt;
+```</code></pre></div>
+</body>
+</html>

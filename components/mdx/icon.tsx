@@ -4,6 +4,7 @@ import {
   CircleCheckBig,
   CornerDownRight,
   Feather,
+  FileText,
   LibraryBig,
   type LucideIcon,
   Sparkle,
@@ -17,6 +18,7 @@ const icons = {
   CircleCheckBig,
   CornerDownRight,
   Feather,
+  FileText,
   LibraryBig,
   Sparkle,
 } satisfies Record<string, LucideIcon>;

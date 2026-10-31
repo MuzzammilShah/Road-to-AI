@@ -1,11 +1,30 @@
-import { Card, Cards } from 'fumadocs-ui/components/card';
-import { Brain, ChevronDown, LibraryBig } from 'lucide-react';
+import { getSidebarTabs } from 'fumadocs-ui/components/sidebar/tabs';
+import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import type { CSSProperties } from 'react';
 import { HeroGlobe } from '@/components/home/hero-globe';
 import { Copyright } from '@/components/site-footer';
+import { cn } from '@/lib/cn';
+import { getSection } from '@/lib/sections';
 import { appDescription, websiteUrl } from '@/lib/shared';
+import { source } from '@/lib/source';
+
+/** The sections (root folders) as in the sidebar dropdown, in the order of content/docs/meta.json. */
+function getLandingSections() {
+  // Identity transform: keep the plain icon instead of the dropdown's wrapper.
+  return getSidebarTabs(source.getPageTree(), { transform: (tab) => tab }).map((tab) => {
+    const settings = getSection(tab.url.split('/')[1]);
+    return {
+      ...tab,
+      description: settings?.landing ?? tab.description,
+      accent: settings?.accent ?? 'var(--color-fd-primary)',
+    };
+  });
+}
 
 export default function HomePage() {
+  const sections = getLandingSections();
   return (
     <>
       {/* Hero: full viewport, the globe also sits behind the transparent navbar (h-14).
@@ -42,35 +61,47 @@ export default function HomePage() {
         </a>
       </section>
 
-      {/* TODO(landing): placeholder content below the hero; replace with the final landing copy. */}
-      {/* Fills the screen below the sticky navbar on desktop; content height on mobile. */}
+      {/* Section cards, one per root folder of the docs. Fills the screen below the sticky navbar on
+          desktop; content height on mobile. */}
       <section
         id="intro"
         className="mx-auto flex w-full max-w-(--fd-layout-width) scroll-mt-14 flex-col justify-center px-4 py-20 md:min-h-[calc(100svh-3.5rem)]"
       >
-        <div className="mx-auto w-full max-w-3xl">
-          {/* TODO(landing): intro text */}
-          <h2 className="mb-3 text-2xl font-semibold md:text-3xl">What is this?</h2>
-          <p className="mb-10 text-fd-muted-foreground">
-            My notes, Jupyter notebooks and book notes on AI: from building an autograd engine to
-            reproducing GPT-2, plus notes from the books I read.
-          </p>
+        <div className="mx-auto w-full max-w-5xl">
+          <h2 className="mb-10 text-center text-2xl font-semibold tracking-tight md:text-3xl">
+            Jump into any part of my journey
+          </h2>
 
-          {/* TODO(landing): section cards */}
-          <Cards className="landing-cards">
-            <Card
-              icon={<Brain data-section-icon="Brain" />}
-              title="Neural Networks"
-              description="Zero to Hero: Micrograd, Makemore, GPT-1, GPT-2, tokenizers and more."
-              href="/ZeroToHero/"
-            />
-            <Card
-              icon={<LibraryBig data-section-icon="LibraryBig" />}
-              title="Library"
-              description="Notes from AI/ML books, starting with AI Engineering by Chip Huyen."
-              href="/Books/"
-            />
-          </Cards>
+          {/* Up to 3 per row (4 cards: 2×2); an incomplete last row is centred. */}
+          <ul className="landing-cards flex flex-wrap justify-center gap-4">
+            {sections.map((section) => (
+              <li
+                key={section.url}
+                className={cn(
+                  'flex w-full sm:w-[calc((100%-1rem)/2)]',
+                  sections.length !== 4 && 'lg:w-[calc((100%-2rem)/3)]',
+                )}
+              >
+                <Link
+                  href={section.url}
+                  className="landing-section-card flex w-full flex-col rounded-2xl border bg-fd-card p-6 text-fd-card-foreground shadow-sm"
+                  style={{ '--card-accent': section.accent } as CSSProperties}
+                >
+                  <ArrowUpRight
+                    aria-hidden
+                    className="landing-section-card-arrow absolute top-5 right-5 size-5"
+                  />
+                  <span className="landing-section-card-icon mb-5 flex size-11 items-center justify-center rounded-lg border [&_svg]:size-5.5">
+                    {section.icon}
+                  </span>
+                  <h3 className="mb-2 text-xl font-medium tracking-tight lg:text-2xl">
+                    {section.title}
+                  </h3>
+                  <p className="text-sm text-fd-muted-foreground">{section.description}</p>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

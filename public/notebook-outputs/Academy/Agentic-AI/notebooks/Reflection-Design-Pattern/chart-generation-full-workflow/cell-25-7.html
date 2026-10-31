@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  html { color-scheme: light; }
+  body { display: flow-root; margin: 0; padding: 12px 16px; background: #fff; color: #111;
+    font: 14px/1.5 ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+  img { max-width: 100%; height: auto; }
+  pre { white-space: pre-wrap; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<style>
+    .pretty-card{
+      font-family: ui-sans-serif, system-ui;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 10px 0;
+      background: linear-gradient(#fff, #fff) padding-box,
+                  linear-gradient(135deg, #3b82f6, #9333ea) border-box;
+      color: #111;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+    .pretty-title{
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:14px;
+      color:#111;
+    }
+    /* 🔒 Only affects INSIDE the card */
+    .pretty-card pre, 
+    .pretty-card code {
+      background: #f3f4f6;
+      color: #111;
+      padding: 8px;
+      border-radius: 8px;
+      display: block;
+      overflow-x: auto;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .pretty-card img { max-width: 100%; height: auto; border-radius: 8px; }
+    .pretty-card table.pretty-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+      color: #111;
+    }
+    .pretty-card table.pretty-table th, 
+    .pretty-card table.pretty-table td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .pretty-card table.pretty-table th { background: #f9fafb; font-weight: 600; }
+    </style>
+    <div class="pretty-card"><div class="pretty-title">LLM output with revised code (V2)</div><pre><code>&lt;execute_python&gt;
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Filter for Q1 sales in 2024 and 2025
+df_q1 = df[(df[&#x27;quarter&#x27;] == 1) &amp; (df[&#x27;year&#x27;].isin([2024, 2025]))]
+
+# Summarize sales by coffee and year
+sales_summary = (
+    df_q1.groupby([&#x27;coffee_name&#x27;, &#x27;year&#x27;])[&#x27;price&#x27;]
+    .sum()
+    .unstack(fill_value=0)
+)
+
+# Sort by 2025 sales for ordering
+sales_summary = sales_summary.sort_values(by=2025, ascending=False)
+
+# Plot configuration
+years = [2024, 2025]
+x = range(len(sales_summary))
+width = 0.35
+
+fig, ax = plt.subplots(figsize=(12, 6))
+
+# Plot bars for each year
+ax.bar([i - width/2 for i in x], sales_summary[2024], width, label=&#x27;2024&#x27;, color=&#x27;#1f77b4&#x27;)
+ax.bar([i + width/2 for i in x], sales_summary[2025], width, label=&#x27;2025&#x27;, color=&#x27;#ff7f0e&#x27;)
+
+# Labels and title
+ax.set_xticks(x)
+ax.set_xticklabels(sales_summary.index, rotation=45, ha=&#x27;right&#x27;)
+ax.set_xlabel(&#x27;Coffee Name&#x27;)
+ax.set_ylabel(&#x27;Total Q1 Sales&#x27;)
+ax.set_title(&#x27;Q1 Coffee Sales Comparison: 2024 vs 2025&#x27;)
+ax.legend(title=&#x27;Year&#x27;)
+
+plt.tight_layout()
+plt.savefig(&#x27;drink_sales_v2.png&#x27;, dpi=300)
+plt.close()
+&lt;/execute_python&gt;</code></pre></div>
+</body>
+</html>
