@@ -58,15 +58,16 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 ## Content structure
 
 - **`content/docs/`** holds the docs content, with one root folder per sidebar section. Root folders show up in the section dropdown at the top of the sidebar.
-  - `ZeroToHero/` is "Neural Networks". `index.mdx` is the section overview; the series overview is `zero-to-hero-series.mdx`. It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`, listed flat under the `---Zero to Hero Series---` separator.
-  - `Books/` is "Library". It contains `AI-Engineering/`: `index.mdx` (book overview) and `(chapter-notes)/` (the chapters; the parentheses keep the folder out of the URL, so they stay at `/Books/AI-Engineering/chapter-1/`).
+  - `ZeroToHero/` is "Neural Networks". `index.mdx` is the section's "Contents"; the series "Overview" is `zero-to-hero-series.mdx`. It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`, listed flat under the `---Zero to Hero Series---` separator.
+  - `Books/` is "Library". It contains `AI-Engineering/`: `index.mdx` (the book's "Overview") and `(chapter-notes)/` (the chapters; the parentheses keep the folder out of the URL, so they stay at `/Books/AI-Engineering/chapter-1/`).
   - `Academy/` is "Academy" (course notes). Its overview uses `CourseCards`/`CourseCard`. It contains `Agentic-AI/`, which has `notes/` (one page per module, from the old blog post) and `notebooks/<Category>/` (generated, plus a hand-written `index.mdx` per category).
   - `Workshop/` is "Workshop" (software engineering). Its overview is a `Cards` list like Library's; no content yet.
 - **Sidebar pattern** (every section):
-  1. `index.mdx` ("Overview", `icon: BookMarked`) is the section overview, listing everything in the section;
-  2. then one `---Separator---` per group (a book, a course, a series);
-  3. under it, the group's overview page with its own icon;
+  1. `index.mdx` ("Contents", `icon: List`) lists everything in the section;
+  2. then one separator with an icon per group (a book, a course, a series), e.g. `"---[Feather]AI Engineering---"`;
+  3. under it, the group's "Overview" page (no icon);
   4. then the group's notes in collapsible folders.
+  - Several pages are titled "Overview"/"Contents"; `getDocumentTitle` adds the separator and section to their browser-tab title.
   - In Library/Academy (and later Workshop), each group is one folder listed as `"...<Folder>"`: its `index.mdx` and sub-folders show directly under the separator.
   - Neural Networks lists its series pages and folders individually instead.
 - **`content/docs/meta.json`** (root) only sets the section order in the dropdown: `ZeroToHero`, `Books`, `Academy`, `Workshop`.

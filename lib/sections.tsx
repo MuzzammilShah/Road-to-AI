@@ -1,11 +1,11 @@
 import {
-  BookMarked,
   Bot,
   Brain,
   Feather,
   GraduationCap,
   Hammer,
   LibraryBig,
+  List,
   type LucideIcon,
   Rocket,
 } from 'lucide-react';
@@ -15,15 +15,15 @@ import {
  * - sections (`icon` in each root meta.json): Brain, LibraryBig, GraduationCap, Hammer. Each gets its
  *   section's accent colour via `[data-section-icon]` in app/global.css, where the `--section-*`
  *   colours are defined;
- * - sidebar pages (`icon` in front matter): BookMarked on every section overview, and one icon per
- *   group overview (the page right below each `---Separator---`).
+ * - the "Contents" page of every section (`icon: List` in front matter);
+ * - group separators (`---[Icon]Label---` in meta.json): Rocket, Feather, Bot.
  */
 const sectionIcons: Record<string, LucideIcon> = {
   Brain,
   LibraryBig,
   GraduationCap,
   Hammer,
-  BookMarked,
+  List,
   Rocket,
   Feather,
   Bot,

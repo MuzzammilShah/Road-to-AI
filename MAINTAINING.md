@@ -104,7 +104,7 @@ The file name becomes the URL: `/Books/AI-Engineering/chapter-7/` (a folder in p
 |---|---|---|
 | `title` | yes | sidebar label, page heading, browser tab |
 | `description` | no | subtitle under the title, and the page's meta description |
-| `icon` | no | sidebar icon (a Lucide name registered in `sectionIcons` in `lib/sections.tsx`). Used only for overview pages: `BookMarked` on section overviews, one icon per group overview |
+| `icon` | no | sidebar icon (a Lucide name registered in `sectionIcons` in `lib/sections.tsx`). Used only for the `List` icon on each section's "Contents" page (group icons go on their separators, see section 5) |
 | `hideToc: true` | no | hides the "On this page" table of contents |
 
 ## 5. Add a group: a book, course or series
@@ -112,9 +112,9 @@ The file name becomes the URL: `/Books/AI-Engineering/chapter-7/` (a folder in p
 Every section's sidebar follows the same pattern:
 
 ```
-Overview                      ← section overview (index.mdx, icon BookMarked)
-AI ENGINEERING                ← separator: a non-clickable heading
-  AI Engineering              ← the group's overview page, with its own icon
+Contents                      ← section contents (index.mdx, icon List)
+🪶 AI ENGINEERING             ← separator: a non-clickable heading, with the group's icon
+  Overview                    ← the group's overview page
   ▸ Chapter Notes             ← the group's notes, in collapsible folders
 DESIGNING ML SYSTEMS
   …
@@ -124,22 +124,23 @@ Separators are only labels: adding, renaming or moving them never changes a URL.
 
 Example: a second book, `content/docs/Books/Designing-ML-Systems/`.
 
-1. **Group overview:** create `Designing-ML-Systems/index.mdx` with `title: "Designing ML Systems"` and an `icon:` (add the icon to `sectionIcons` in `lib/sections.tsx`). Give it an intro and a card per chapter, like `Books/AI-Engineering/index.mdx`.
+1. **Group overview:** create `Designing-ML-Systems/index.mdx` with `title: "Overview"` and a `description` naming the book. Give it an intro and a card per chapter, like `Books/AI-Engineering/index.mdx`.
 2. **Notes folder:** put the chapters in `Designing-ML-Systems/(chapter-notes)/` with a `meta.json`:
    ```json
    { "title": "Chapter Notes", "pages": ["chapter-1", "chapter-2"] }
    ```
    The parentheses make it a sidebar group without a URL segment: the pages stay at `/Books/Designing-ML-Systems/chapter-1/`. Use a normal folder name (e.g. `notes/`, `notebooks/`) when the folder should be part of the URL, as in Academy.
 3. **Group `meta.json`** (`Designing-ML-Systems/meta.json`): `{ "title": "Designing ML Systems", "pages": ["index", "(chapter-notes)"] }`.
-4. **Section `meta.json`** (`Books/meta.json`): add a separator and the folder with `...` in front, which shows its overview and sub-folders right under the separator instead of nesting them:
+4. **Section `meta.json`** (`Books/meta.json`): add a separator with the group's icon, and the folder with `...` in front, which shows its overview and sub-folders right under the separator instead of nesting them:
    ```json
-   "pages": ["index", "---AI Engineering---", "...AI-Engineering", "---Designing ML Systems---", "...Designing-ML-Systems"]
+   "pages": ["index", "---[Feather]AI Engineering---", "...AI-Engineering", "---[Bird]Designing ML Systems---", "...Designing-ML-Systems"]
    ```
-5. **Section overview:** the Books overview (`Books/index.mdx`) has a card per book. Add an `href` to the "Designing ML Systems" card (pointing to `/Books/Designing-ML-Systems/`) once its notes exist.
+   The icon is a Lucide name and must be added to `sectionIcons` in `lib/sections.tsx` (the build fails with "Unknown icon" otherwise).
+5. **Section contents:** the Books contents page (`Books/index.mdx`) has a card per book. Add an `href` to the "Designing ML Systems" card (pointing to `/Books/Designing-ML-Systems/`) once its notes exist.
 
-Neural Networks is the exception: the Zero to Hero lessons are listed one by one under `---Zero to Hero Series---` (after its `zero-to-hero-series` overview page). A second series there gets its own separator and overview page.
+Neural Networks is the exception: the Zero to Hero lessons are listed one by one under `---[Rocket]Zero to Hero Series---` (after its `zero-to-hero-series` "Overview" page). A second series there gets its own separator and overview page.
 
-**A new course in Academy** works the same way: a folder such as `content/docs/Academy/<Course>/` with `index` (with an `icon`), `notes/` and `notebooks/` (see `Agentic-AI/`), listed in `content/docs/Academy/meta.json` as `"---<Course name>---", "...<Course>"`. Then add a course card to `content/docs/Academy/index.mdx`:
+**A new course in Academy** works the same way: a folder such as `content/docs/Academy/<Course>/` with `index` ("Overview"), `notes/` and `notebooks/` (see `Agentic-AI/`), listed in `content/docs/Academy/meta.json` as `"---[Icon]<Course name>---", "...<Course>"`. Then add a course card to `content/docs/Academy/index.mdx`:
 
 ```mdx
 <CourseCards>
