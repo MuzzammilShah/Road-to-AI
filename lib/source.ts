@@ -31,7 +31,7 @@ const docs = defineDocs({
   },
 });
 
-// Docs are served from the site root (`/NeuralNetworks/...`, `/Books/...`), as on the old MkDocs site.
+// Docs are served from the site root (`/NeuralNetworks/...`, `/Library/...`), as on the old MkDocs site.
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
   baseUrl: docsRoute,

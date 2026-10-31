@@ -25,7 +25,7 @@ export function baseOptions(): BaseLayoutProps {
     // Add more navbar links here.
     links: [
       { text: 'Neural Networks', url: '/NeuralNetworks/', icon: <Brain />, active: 'nested-url' },
-      { text: 'Library', url: '/Books/', icon: <BookOpen />, active: 'nested-url' },
+      { text: 'Library', url: '/Library/', icon: <BookOpen />, active: 'nested-url' },
       {
         text: 'Academy',
         url: '/Academy/',

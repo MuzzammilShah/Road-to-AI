@@ -66,13 +66,13 @@ Then:
 | Landing page | `app/(home)/page.tsx` |
 | Deploy workflow | `.github/workflows/deploy.yml` |
 
-The four current sections, in dropdown order, are `NeuralNetworks/` ("Neural Networks"), `Books/` ("Library"), `Academy/` ("Academy", course notes) and `Workshop/` ("Workshop", software engineering).
+The four current sections, in dropdown order, are `NeuralNetworks/` ("Neural Networks"), `Library/` ("Library"), `Academy/` ("Academy", course notes) and `Workshop/` ("Workshop", software engineering).
 
 ## 4. Add a page
 
 Example: a new chapter in the AI Engineering book.
 
-**1. Create `content/docs/Books/AI-Engineering/(chapter-notes)/chapter-7.mdx`:**
+**1. Create `content/docs/Library/AI-Engineering/(chapter-notes)/chapter-7.mdx`:**
 
 ```mdx
 ---
@@ -85,7 +85,7 @@ description: "Optional one-line summary, shown under the title"
 Your notes…
 ```
 
-The file name becomes the URL: `/Books/AI-Engineering/chapter-7/` (a folder in parentheses is not part of the URL, see section 5). Use lowercase-with-dashes for new files. Case matters in URLs.
+The file name becomes the URL: `/Library/AI-Engineering/chapter-7/` (a folder in parentheses is not part of the URL, see section 5). Use lowercase-with-dashes for new files. Case matters in URLs.
 
 **2. Add the file name (without `.mdx`) to the folder's `meta.json`** (`(chapter-notes)/meta.json`), where it should appear in the sidebar:
 
@@ -113,7 +113,7 @@ The file name becomes the URL: `/Books/AI-Engineering/chapter-7/` (a folder in p
 Every section's sidebar follows the same pattern:
 
 ```
-Contents                      ← section contents (index.mdx, icon List)
+Contents                      ← section contents (index.mdx, icon List), titled "Library – Contents"
 🪶 AI ENGINEERING             ← separator: a non-clickable heading, with the group's icon
   Overview                    ← the group's overview page
   ▸ Chapter Notes             ← the group's notes, in collapsible folders
@@ -123,23 +123,23 @@ DESIGNING ML SYSTEMS
 
 Separators are only labels: adding, renaming or moving them never changes a URL. Variants in `pages`: `"---Label---"`, `"---[Icon]Label---"` (icon registered in `lib/sections.tsx`) and `"---"` (a plain line).
 
-Example: a second book, `content/docs/Books/Designing-ML-Systems/`.
+Example: a second book, `content/docs/Library/Designing-ML-Systems/`.
 
-1. **Group overview:** create `Designing-ML-Systems/index.mdx` with `title: "Designing ML Systems – Overview"`, `sidebarTitle: "Overview"` and a `description`. Give it an intro and a card per chapter, like `Books/AI-Engineering/index.mdx`.
+1. **Group overview:** create `Designing-ML-Systems/index.mdx` with `title: "Designing ML Systems – Overview"`, `sidebarTitle: "Overview"` and a `description`. Give it an intro and a card per chapter, like `Library/AI-Engineering/index.mdx`.
 2. **Notes folder:** put the chapters in `Designing-ML-Systems/(chapter-notes)/` with a `meta.json`:
    ```json
    { "title": "Chapter Notes", "pages": ["chapter-1", "chapter-2"] }
    ```
-   The parentheses make it a sidebar group without a URL segment: the pages stay at `/Books/Designing-ML-Systems/chapter-1/`. Use a normal folder name (e.g. `notes/`, `notebooks/`) when the folder should be part of the URL, as in Academy.
+   The parentheses make it a sidebar group without a URL segment: the pages stay at `/Library/Designing-ML-Systems/chapter-1/`. Use a normal folder name (e.g. `notes/`, `notebooks/`) when the folder should be part of the URL, as in Academy.
 3. **Group `meta.json`** (`Designing-ML-Systems/meta.json`): `{ "title": "Designing ML Systems", "pages": ["index", "(chapter-notes)"] }`.
-4. **Section `meta.json`** (`Books/meta.json`): add a separator with the group's icon, and the folder with `...` in front, which shows its overview and sub-folders right under the separator instead of nesting them:
+4. **Section `meta.json`** (`Library/meta.json`): add a separator with the group's icon, and the folder with `...` in front, which shows its overview and sub-folders right under the separator instead of nesting them:
    ```json
    "pages": ["index", "---[Feather]AI Engineering---", "...AI-Engineering", "---[Bird]Designing ML Systems---", "...Designing-ML-Systems"]
    ```
    The icon is a Lucide name and must be added to `sectionIcons` in `lib/sections.tsx` (the build fails with "Unknown icon" otherwise).
-5. **Section contents:** the Books contents page (`Books/index.mdx`) has a card per book. Add an `href` to the "Designing ML Systems" card (pointing to `/Books/Designing-ML-Systems/`) once its notes exist.
+5. **Section contents:** the Library contents page (`Library/index.mdx`) has a card per book. Add an `href` to the "Designing ML Systems" card (pointing to `/Library/Designing-ML-Systems/`) once its notes exist.
 
-Neural Networks is the exception: the Zero to Hero lessons are listed one by one under `---[Rocket]Zero to Hero Series---` (after its `zero-to-hero-series` "Overview" page). A second series there gets its own separator and overview page.
+Neural Networks is the exception: the Zero to Hero lessons are listed one by one under `---[Rocket]Zero to Hero Series---` (after its `Zero-To-Hero-Series` "Overview" page). A second series there gets its own separator and overview page.
 
 **A new course in Academy** works the same way: a folder such as `content/docs/Academy/<Course>/` with `index` ("Overview"), `notes/` and `notebooks/` (see `Agentic-AI/`), listed in `content/docs/Academy/meta.json` as `"---[Icon]<Course name>---", "...<Course>"`. Then add a course card to `content/docs/Academy/index.mdx`:
 
@@ -199,7 +199,7 @@ Notebooks are never run by the site. It converts their **saved outputs**, so run
 
 Example: a "Papers" section next to Neural Networks and Library. It shows up in the sidebar's section dropdown with its own icon and accent colour.
 
-**1. Content:** add the folder name to the root `content/docs/meta.json` at the position it should have in the dropdown (`"pages": ["NeuralNetworks", "Books", "Academy", "Workshop", "Papers"]`). Then create `content/docs/Papers/meta.json`:
+**1. Content:** add the folder name to the root `content/docs/meta.json` at the position it should have in the dropdown (`"pages": ["NeuralNetworks", "Library", "Academy", "Workshop", "Papers"]`). Then create `content/docs/Papers/meta.json`:
 
 ```json
 {
@@ -226,7 +226,7 @@ const sectionIcons: Record<string, LucideIcon> = { Brain, LibraryBig, ScrollText
 
 const sections: Record<string, { accent: string; landing?: string }> = {
   NeuralNetworks: { accent: 'var(--section-neural-networks)', landing: 'Zero to Hero: …' },
-  Books: { accent: 'var(--section-library)', landing: 'Notes from AI/ML books, …' },
+  Library: { accent: 'var(--section-library)', landing: 'Notes from AI/ML books, …' },
   // key = folder name; `landing` is optional
   Papers: { accent: 'var(--section-papers)', landing: 'Notes on research papers, starting with …' },
 };
@@ -272,9 +272,21 @@ MDX is Markdown plus components. Everything normal works: headings, lists, table
 - `style={{ width: '50%' }}` instead of `style="width:50%"`;
 - self-close tags: `<img />`, `<br />`.
 
+**Divider line:** a line with only `---`, with an empty line above and below it:
+
+```mdx
+Some paragraph.
+
+---
+
+## Next heading
+```
+
+Without the empty line above, Markdown turns `---` into an underline for the text before it, making that text a heading. Use dividers sparingly; headings already separate sections.
+
 **Links and images:**
 ```mdx
-[Chapter 1](/Books/AI-Engineering/chapter-1/)          ← absolute, with trailing slash
+[Chapter 1](/Library/AI-Engineering/chapter-1/)          ← absolute, with trailing slash
 [a heading on this page](#when-to-finetune)
 ![Diagram](/assets/images/books-assets/diagram.png)
 ```
@@ -295,7 +307,7 @@ MDX is Markdown plus components. Everything normal works: headings, lists, table
 </Accordions>
 
 <Cards>
-  <Card title="AI Engineering" href="/Books/AI-Engineering/chapter-1/">Short description</Card>
+  <Card title="AI Engineering" href="/Library/AI-Engineering/chapter-1/">Short description</Card>
 </Cards>
 
 <Icon name="Sparkle" />   {/* Sparkle, CircleCheckBig, CircleAlert, CornerDownRight, LibraryBig, Bird, Feather, FileText, Network */}

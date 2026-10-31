@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/components/mdx';
 import { tocWithoutLinks } from '@/components/mdx/heading';
-import { Copyright } from '@/components/site-footer';
 import { SectionAccent } from '@/lib/sections';
 import { getDocumentTitle, source } from '@/lib/source';
 
@@ -37,7 +36,8 @@ export default async function Page(props: PageProps<'/[...slug]'>) {
           })}
         />
       </DocsBody>
-      <Copyright className="mt-8" />
+      {/* Separates the page from the previous/next links below. */}
+      <hr className="mt-8 border-fd-border" />
       <SectionAccent section={page.slugs[0]} />
     </DocsPage>
   );

@@ -12,10 +12,13 @@ import { listFiles, ROOT } from './lib/site.mjs';
 const OUT = join(ROOT, 'out');
 const SITE = 'https://docs.muhammedshah.com';
 
-const RENAMES = [{ from: '/ZeroToHero/', to: '/NeuralNetworks/' }];
+const RENAMES = [
+  { from: '/ZeroToHero/', to: '/NeuralNetworks/' },
+  { from: '/Books/', to: '/Library/' },
+];
 const EXACT = {
   // The old section index was the Zero to Hero series overview (its #anchors live there now).
-  '/ZeroToHero/': '/NeuralNetworks/zero-to-hero-series/',
+  '/ZeroToHero/': '/NeuralNetworks/Zero-To-Hero-Series/',
 };
 
 const redirects = new Map(Object.entries(EXACT));

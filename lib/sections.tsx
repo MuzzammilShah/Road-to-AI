@@ -47,7 +47,7 @@ const sections: Record<string, { accent: string; landing?: string }> = {
     accent: 'var(--section-neural-networks)',
     landing: 'Zero to Hero: Micrograd, Makemore, GPT-1, GPT-2, tokenizers and more.',
   },
-  Books: {
+  Library: {
     accent: 'var(--section-library)',
     landing: 'Notes from AI/ML books, starting with AI Engineering by Chip Huyen.',
   },

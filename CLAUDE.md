@@ -48,7 +48,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - no route handlers that need a request;
   - every dynamic route has `generateStaticParams` (+ `dynamicParams = false`);
   - route handlers set `dynamic = 'force-static'`.
-- **URL parity with the old MkDocs site.** Docs are served at the site root (`baseUrl: '/'`), and folder and file names, including their case, are the URLs. Never rename content files or folders without adding redirects. `scripts/old-urls.txt` lists the URLs that must keep working. Redirects live in `scripts/write-redirects.mjs` (run by `npm run build` after `next build`): for a renamed prefix it writes a small forwarding page (meta refresh + JS that keeps `#anchor`) at every old path. `ZeroToHero/` was renamed to `NeuralNetworks/` this way; the old `/ZeroToHero/` itself goes to `/NeuralNetworks/zero-to-hero-series/` (it used to be that page). Old `/notebooks/ZeroToHero/*.ipynb` download links are not redirected. Headings carry explicit MkDocs-style ids (`## Title [#id]`), so old `#anchor` links keep working too.
+- **URL parity with the old MkDocs site.** Docs are served at the site root (`baseUrl: '/'`), and folder and file names, including their case, are the URLs. Never rename content files or folders without adding redirects. `scripts/old-urls.txt` lists the URLs that must keep working. Redirects live in `scripts/write-redirects.mjs` (run by `npm run build` after `next build`): for a renamed prefix it writes a small forwarding page (meta refresh + JS that keeps `#anchor`) at every old path. `ZeroToHero/` → `NeuralNetworks/` and `Books/` → `Library/` were renamed this way; the old `/ZeroToHero/` itself goes to `/NeuralNetworks/Zero-To-Hero-Series/` (it used to be that page). Old `/notebooks/ZeroToHero/*.ipynb` download links are not redirected. Headings carry explicit MkDocs-style ids (`## Title [#id]`), so old `#anchor` links keep working too.
 - **Notebooks are never executed.** The converter only reads the saved outputs.
 - **Biome is limited by an allow-list** in `biome.json`. It also formats YAML and Markdown, so keep `content/`, `notebooks/`, `archive/`, `*.md` and `.github/` out of its scope.
 - **Read the versioned docs before using framework APIs:**
@@ -58,19 +58,18 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 ## Content structure
 
 - **`content/docs/`** holds the docs content, with one root folder per sidebar section. Root folders show up in the section dropdown at the top of the sidebar.
-  - `NeuralNetworks/` is "Neural Networks" (formerly `ZeroToHero/`, see URL parity). `index.mdx` is the section's "Contents"; the series "Overview" is `zero-to-hero-series.mdx`. It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`, listed flat under the `---Zero to Hero Series---` separator.
-  - `Books/` is "Library". It contains `AI-Engineering/`: `index.mdx` (the book's "Overview") and `(chapter-notes)/` (the chapters; the parentheses keep the folder out of the URL, so they stay at `/Books/AI-Engineering/chapter-1/`).
+  - `NeuralNetworks/` is "Neural Networks" (formerly `ZeroToHero/`, see URL parity). `index.mdx` is the section's "Contents"; the series "Overview" is `Zero-To-Hero-Series.mdx`. It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`, listed flat under the `---Zero to Hero Series---` separator.
+  - `Library/` is "Library" (formerly `Books/`, see URL parity). It contains `AI-Engineering/`: `index.mdx` (the book's "Overview") and `(chapter-notes)/` (the chapters; the parentheses keep the folder out of the URL, so they stay at `/Library/AI-Engineering/chapter-1/`).
   - `Academy/` is "Academy" (course notes). Its overview uses `CourseCards`/`CourseCard`. It contains `Agentic-AI/`, which has `notes/` (one page per module, from the old blog post) and `notebooks/<Category>/` (generated, plus a hand-written `index.mdx` per category).
   - `Workshop/` is "Workshop" (software engineering). Its overview is a `Cards` list like Library's; no content yet.
 - **Sidebar pattern** (every section):
-  1. `index.mdx` ("Contents", `icon: List`) lists everything in the section;
+  1. `index.mdx` (`title: "<Section> – Contents"`, `sidebarTitle: "Contents"`, `icon: List`) lists everything in the section, cards only (no intro text);
   2. then one separator with an icon per group (a book, a course, a series), e.g. `"---[Feather]AI Engineering---"`;
   3. under it, the group's overview page (no icon): `title: "<Group> – Overview"` with `sidebarTitle: "Overview"`;
   4. then the group's notes in collapsible folders.
-  - The section pages are all titled "Contents"; `getDocumentTitle` adds the section to their browser-tab title.
   - In Library/Academy (and later Workshop), each group is one folder listed as `"...<Folder>"`: its `index.mdx` and sub-folders show directly under the separator.
   - Neural Networks lists its series pages and folders individually instead.
-- **`content/docs/meta.json`** (root) only sets the section order in the dropdown: `NeuralNetworks`, `Books`, `Academy`, `Workshop`.
+- **`content/docs/meta.json`** (root) only sets the section order in the dropdown: `NeuralNetworks`, `Library`, `Academy`, `Workshop`.
 - **`meta.json`** in each folder controls the sidebar. They are all hand-maintained (no generator any more):
   - `title` and `pages` set order and labels;
   - `"---Label---"` adds a separator (non-clickable heading); `"---[Icon]Label---"` adds one with an icon, and `"---"` a plain line;
@@ -120,7 +119,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - `mdx/notebook-html-output.tsx`: `NotebookHtmlOutput`, a sandboxed (no scripts) auto-height iframe for `text/html` notebook outputs.
   - `collapsed-sidebar-controls.tsx`: the classic "open sidebar + search" pill.
   - `home/globe.tsx` and `home/hero-globe.tsx`: the Vanta globe.
-  - `site-footer.tsx`.
+  - `site-footer.tsx`: `Copyright` (landing page only; the year comes from `current-year.tsx`, which updates in the browser). Docs pages end with a divider (`<hr>` in `app/(docs)/[...slug]/page.tsx`) instead.
 - **Switching to navbar tabs instead of the dropdown:** change `fumadocs-ui/layouts/spacious` (+ `/page`) back to `fumadocs-ui/layouts/docs` and pass `tabMode="top"`. The collapsed-sidebar pill then becomes unnecessary, because the classic layout has its own.
 - **MDX components available in content:**
   - from Fumadocs: `Callout`, `Cards`/`Card`, `Accordions`/`Accordion`;
