@@ -61,7 +61,8 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - `ZeroToHero/` is "Neural Networks". It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`.
   - `Books/` is "Library". It contains `AI-Engineering/`.
   - `Academy/` is "Academy" (course notes). Its overview uses `CourseCards`/`CourseCard`. It contains `Agentic-AI/`, which has `notes/` (one page per module, from the old blog post) and `notebooks/<Category>/` (generated, plus a hand-written `index.mdx` per category).
-- **`content/docs/meta.json`** (root) only sets the section order in the dropdown: `ZeroToHero`, `Books`, `Academy`.
+  - `Workshop/` is "Workshop" (software engineering). Its overview is a `Cards` list like Library's; no content yet.
+- **`content/docs/meta.json`** (root) only sets the section order in the dropdown: `ZeroToHero`, `Books`, `Academy`, `Workshop`.
 - **`meta.json`** in each folder controls the sidebar. They are all hand-maintained (no generator any more):
   - `title` and `pages` set order and labels;
   - `"---Label---"` adds a separator;

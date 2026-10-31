@@ -1,0 +1,9 @@
+{
+  "title": "Workshop",
+  "description": "Exploring the craft of software engineering.",
+  "icon": "Hammer",
+  "root": true,
+  "pages": [
+    "index"
+  ]
+}

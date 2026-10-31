@@ -66,7 +66,7 @@ Then:
 | Landing page | `app/(home)/page.tsx` |
 | Deploy workflow | `.github/workflows/deploy.yml` |
 
-The three current sections, in dropdown order, are `ZeroToHero/` ("Neural Networks"), `Books/` ("Library") and `Academy/` ("Academy", course notes).
+The four current sections, in dropdown order, are `ZeroToHero/` ("Neural Networks"), `Books/` ("Library"), `Academy/` ("Academy", course notes) and `Workshop/` ("Workshop", software engineering).
 
 ## 4. Add a page
 
@@ -176,7 +176,7 @@ Notebooks are never run by the site. It converts their **saved outputs**, so run
 
 Example: a "Papers" section next to Neural Networks and Library. It shows up in the sidebar's section dropdown with its own icon and accent colour.
 
-**1. Content:** add the folder name to the root `content/docs/meta.json` at the position it should have in the dropdown (`"pages": ["ZeroToHero", "Books", "Academy", "Papers"]`). Then create `content/docs/Papers/meta.json`:
+**1. Content:** add the folder name to the root `content/docs/meta.json` at the position it should have in the dropdown (`"pages": ["ZeroToHero", "Books", "Academy", "Workshop", "Papers"]`). Then create `content/docs/Papers/meta.json`:
 
 ```json
 {
@@ -232,7 +232,7 @@ The build fails with "Unknown icon" if the `meta.json` icon isn't registered her
 }
 ```
 
-In `oklch(lightness chroma hue)`, the last number is the hue: 268 is indigo (Neural Networks), 55–70 is amber (Library), 152 is green (Academy), 25 is red. Keep chroma low (around 0.12–0.19) for a subtle accent.
+In `oklch(lightness chroma hue)`, the last number is the hue: 268 is indigo (Neural Networks), 55–70 is amber (Library), 152 is green (Academy), 92–95 is yellow (Workshop), 25 is red. Keep chroma low (around 0.12–0.19) for a subtle accent.
 
 **4. Optional:**
 - **Navbar link:** add `{ text: 'Papers', url: '/Papers/', icon: <ScrollText />, active: 'nested-url' }` to `links` in `lib/layout.shared.tsx`.
@@ -275,7 +275,7 @@ MDX is Markdown plus components. Everything normal works: headings, lists, table
   <Card title="AI Engineering" href="/Books/AI-Engineering/chapter-1/">Short description</Card>
 </Cards>
 
-<Icon name="Sparkle" />   {/* Sparkle, CircleCheckBig, CircleAlert, CornerDownRight, LibraryBig, Bird, Feather, FileText */}
+<Icon name="Sparkle" />   {/* Sparkle, CircleCheckBig, CircleAlert, CornerDownRight, LibraryBig, Bird, Feather, FileText, Network */}
 
 <Tweet url="https://twitter.com/<user>/status/<id>" />
 

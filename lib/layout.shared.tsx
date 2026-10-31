@@ -1,5 +1,5 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
-import { BookOpen, Brain, GraduationCap } from 'lucide-react';
+import { BookOpen, Brain, GraduationCap, Hammer } from 'lucide-react';
 import Image from 'next/image';
 import { appName, githubUrl } from './shared';
 
@@ -32,6 +32,7 @@ export function baseOptions(): BaseLayoutProps {
         icon: <GraduationCap />,
         active: 'nested-url',
       },
+      { text: 'Workshop', url: '/Workshop/', icon: <Hammer />, active: 'nested-url' },
     ],
   };
 }
