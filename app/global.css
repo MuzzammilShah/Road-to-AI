@@ -152,6 +152,16 @@ html > body[data-scroll-locked] {
   height: auto;
 }
 
+/* Links in notes take the section colour on hover (Fumadocs fades them to 80% opacity instead). */
+.prose :where(a:not([data-card])):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  transition: color 150ms ease;
+}
+
+.prose :where(a:not([data-card])):not(:where([class~="not-prose"], [class~="not-prose"] *)):hover {
+  color: var(--color-fd-primary);
+  opacity: 1;
+}
+
 /* Markdown output of a notebook cell (scripts/convert-notebooks.mjs), set apart from the prose. */
 .notebook-markdown-output {
   margin-block: 1rem;

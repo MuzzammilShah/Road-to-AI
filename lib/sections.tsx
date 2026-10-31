@@ -43,7 +43,7 @@ export function resolveIcon(name: string | undefined) {
  *   `description`, which stays short for the dropdown).
  */
 const sections: Record<string, { accent: string; landing?: string }> = {
-  ZeroToHero: {
+  NeuralNetworks: {
     accent: 'var(--section-neural-networks)',
     landing: 'Zero to Hero: Micrograd, Makemore, GPT-1, GPT-2, tokenizers and more.',
   },

@@ -29,7 +29,7 @@ Personal documentation site (notes, Jupyter notebooks, book notes on AI), served
 ```bash
 npm ci                    # install exactly what package-lock.json says
 npm run dev               # http://localhost:3000 (dev mode is slower than the real site)
-npm run build             # static export into out/
+npm run build             # static export into out/, then redirect pages for renamed URLs
 npx serve out -l 4173     # preview the export (serve is a local devDependency)
 npm run typecheck         # next typegen && tsc --noEmit
 npm run lint              # biome check (npm run format to fix formatting)
@@ -48,7 +48,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - no route handlers that need a request;
   - every dynamic route has `generateStaticParams` (+ `dynamicParams = false`);
   - route handlers set `dynamic = 'force-static'`.
-- **URL parity with the old MkDocs site.** Docs are served at the site root (`baseUrl: '/'`), and folder and file names, including their case, are the URLs. Never rename content files or folders without adding redirects. `scripts/old-urls.txt` lists the URLs that must keep working. Headings carry explicit MkDocs-style ids (`## Title [#id]`), so old `#anchor` links keep working too.
+- **URL parity with the old MkDocs site.** Docs are served at the site root (`baseUrl: '/'`), and folder and file names, including their case, are the URLs. Never rename content files or folders without adding redirects. `scripts/old-urls.txt` lists the URLs that must keep working. Redirects live in `scripts/write-redirects.mjs` (run by `npm run build` after `next build`): for a renamed prefix it writes a small forwarding page (meta refresh + JS that keeps `#anchor`) at every old path. `ZeroToHero/` was renamed to `NeuralNetworks/` this way; the old `/ZeroToHero/` itself goes to `/NeuralNetworks/zero-to-hero-series/` (it used to be that page). Old `/notebooks/ZeroToHero/*.ipynb` download links are not redirected. Headings carry explicit MkDocs-style ids (`## Title [#id]`), so old `#anchor` links keep working too.
 - **Notebooks are never executed.** The converter only reads the saved outputs.
 - **Biome is limited by an allow-list** in `biome.json`. It also formats YAML and Markdown, so keep `content/`, `notebooks/`, `archive/`, `*.md` and `.github/` out of its scope.
 - **Read the versioned docs before using framework APIs:**
@@ -58,19 +58,19 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 ## Content structure
 
 - **`content/docs/`** holds the docs content, with one root folder per sidebar section. Root folders show up in the section dropdown at the top of the sidebar.
-  - `ZeroToHero/` is "Neural Networks". `index.mdx` is the section's "Contents"; the series "Overview" is `zero-to-hero-series.mdx`. It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`, listed flat under the `---Zero to Hero Series---` separator.
+  - `NeuralNetworks/` is "Neural Networks" (formerly `ZeroToHero/`, see URL parity). `index.mdx` is the section's "Contents"; the series "Overview" is `zero-to-hero-series.mdx`. It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`, listed flat under the `---Zero to Hero Series---` separator.
   - `Books/` is "Library". It contains `AI-Engineering/`: `index.mdx` (the book's "Overview") and `(chapter-notes)/` (the chapters; the parentheses keep the folder out of the URL, so they stay at `/Books/AI-Engineering/chapter-1/`).
   - `Academy/` is "Academy" (course notes). Its overview uses `CourseCards`/`CourseCard`. It contains `Agentic-AI/`, which has `notes/` (one page per module, from the old blog post) and `notebooks/<Category>/` (generated, plus a hand-written `index.mdx` per category).
   - `Workshop/` is "Workshop" (software engineering). Its overview is a `Cards` list like Library's; no content yet.
 - **Sidebar pattern** (every section):
   1. `index.mdx` ("Contents", `icon: List`) lists everything in the section;
   2. then one separator with an icon per group (a book, a course, a series), e.g. `"---[Feather]AI Engineering---"`;
-  3. under it, the group's "Overview" page (no icon);
+  3. under it, the group's overview page (no icon): `title: "<Group> – Overview"` with `sidebarTitle: "Overview"`;
   4. then the group's notes in collapsible folders.
-  - Several pages are titled "Overview"/"Contents"; `getDocumentTitle` adds the separator and section to their browser-tab title.
+  - The section pages are all titled "Contents"; `getDocumentTitle` adds the section to their browser-tab title.
   - In Library/Academy (and later Workshop), each group is one folder listed as `"...<Folder>"`: its `index.mdx` and sub-folders show directly under the separator.
   - Neural Networks lists its series pages and folders individually instead.
-- **`content/docs/meta.json`** (root) only sets the section order in the dropdown: `ZeroToHero`, `Books`, `Academy`, `Workshop`.
+- **`content/docs/meta.json`** (root) only sets the section order in the dropdown: `NeuralNetworks`, `Books`, `Academy`, `Workshop`.
 - **`meta.json`** in each folder controls the sidebar. They are all hand-maintained (no generator any more):
   - `title` and `pages` set order and labels;
   - `"---Label---"` adds a separator (non-clickable heading); `"---[Icon]Label---"` adds one with an icon, and `"---"` a plain line;
@@ -79,8 +79,8 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - listing `"index"` makes the folder's index a child item;
   - `"root": true` marks a section;
   - root folders also have `icon` and `description` for the dropdown.
-- **Page front matter:** `title`, optional `description`, optional `icon` (sidebar icon; must be in `sectionIcons` in `lib/sections.tsx`), and `hideToc: true` to hide the table of contents.
-- **`notebooks/`** holds the executed `.ipynb` files at the same relative paths as their pages (`notebooks/ZeroToHero/GPT-1/gpt-dev.ipynb` → `content/docs/ZeroToHero/GPT-1/gpt-dev.mdx`). `notebooks/titles.json` maps each notebook path to its page title. The generated MDX carries a "Generated from notebooks/…" banner: never edit those pages by hand, edit the notebook and re-run the converter.
+- **Page front matter:** `title`, optional `description`, optional `icon` (sidebar icon; must be in `sectionIcons` in `lib/sections.tsx`), optional `sidebarTitle` (shorter sidebar/breadcrumb label, applied by the `sidebar-title` loader plugin in `lib/source.ts`), and `hideToc: true` to hide the table of contents.
+- **`notebooks/`** holds the executed `.ipynb` files at the same relative paths as their pages (`notebooks/NeuralNetworks/GPT-1/gpt-dev.ipynb` → `content/docs/NeuralNetworks/GPT-1/gpt-dev.mdx`). `notebooks/titles.json` maps each notebook path to its page title. The generated MDX carries a "Generated from notebooks/…" banner: never edit those pages by hand, edit the notebook and re-run the converter.
 - **`public/`:**
   - `assets/images/` holds images referenced by pages (`academy/<course>/` for course slides and thumbnails, `academy/providers/` for provider logos);
   - `assets/academy/` holds standalone files linked from course pages (e.g. the Agentic AI sample research report);
@@ -88,7 +88,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - `notebooks/` holds the `.ipynb` download copies;
   - `manifest.webmanifest` and the icons are for the PWA / iOS home-screen;
   - `CNAME` is the custom domain for GitHub Pages (exported as `out/CNAME`), and `.nojekyll` is the empty Jekyll opt-out (see "Deployment").
-- **`scripts/`:** `convert-notebooks.mjs` (+ `lib/mdx.mjs`, `lib/site.mjs`), `check-links.mjs`, `check-parity.mjs`, `old-urls.txt`.
+- **`scripts/`:** `convert-notebooks.mjs` (+ `lib/mdx.mjs`, `lib/site.mjs`), `check-links.mjs`, `check-parity.mjs`, `old-urls.txt`, `write-redirects.mjs`.
 - **`archive/`:** reference only.
   - `mkdocs/` is the old MkDocs config, theme and workflow, copied from commit `f58d881`.
   - `MIGRATION_NOTES.md` is the migration log.

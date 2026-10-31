@@ -1,0 +1,303 @@
+---
+title: "Jupyter Notebook"
+---
+
+{/* Generated from notebooks/NeuralNetworks/Makemore-part2/A-main-notebook.ipynb by scripts/convert-notebooks.mjs. Do not edit: edit the notebook and run `npm run notebooks`. */}
+
+<NotebookDownload href="/notebooks/NeuralNetworks/Makemore-part2/A-main-notebook.ipynb" />
+
+```python
+import torch
+import torch.nn.functional as F
+import matplotlib.pyplot as plt # for making figures
+%matplotlib inline
+```
+
+```python
+# read in all the words
+words = open('names.txt', 'r').read().splitlines()
+words[:8]
+```
+
+```text title="Output"
+['emma', 'olivia', 'ava', 'isabella', 'sophia', 'charlotte', 'mia', 'amelia']
+```
+
+```python
+len(words)
+```
+
+```text title="Output"
+32033
+```
+
+```python
+# build the vocabulary of characters and mappings to/from integers
+chars = sorted(list(set(''.join(words))))
+stoi = {s:i+1 for i,s in enumerate(chars)}
+stoi['.'] = 0
+itos = {i:s for s,i in stoi.items()}
+print(itos)
+```
+
+```text title="Output"
+{1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'f', 7: 'g', 8: 'h', 9: 'i', 10: 'j', 11: 'k', 12: 'l', 13: 'm', 14: 'n', 15: 'o', 16: 'p', 17: 'q', 18: 'r', 19: 's', 20: 't', 21: 'u', 22: 'v', 23: 'w', 24: 'x', 25: 'y', 26: 'z', 0: '.'}
+```
+
+```python
+# build the dataset
+
+block_size = 3 # context length: how many characters do we take to predict the next one?
+X, Y = [], []
+for w in words[:5]:
+  
+  #print(w)
+  context = [0] * block_size
+  for ch in w + '.':
+    ix = stoi[ch]
+    X.append(context)
+    Y.append(ix)
+    print(''.join(itos[i] for i in context), '--->', itos[ix])
+    context = context[1:] + [ix] # crop and append
+  
+X = torch.tensor(X)
+Y = torch.tensor(Y)
+```
+
+```text title="Output"
+... ---> e
+..e ---> m
+.em ---> m
+emm ---> a
+mma ---> .
+... ---> o
+..o ---> l
+.ol ---> i
+oli ---> v
+liv ---> i
+ivi ---> a
+via ---> .
+... ---> a
+..a ---> v
+.av ---> a
+ava ---> .
+... ---> i
+..i ---> s
+.is ---> a
+isa ---> b
+sab ---> e
+abe ---> l
+bel ---> l
+ell ---> a
+lla ---> .
+... ---> s
+..s ---> o
+.so ---> p
+sop ---> h
+oph ---> i
+phi ---> a
+hia ---> .
+```
+
+```python
+X.shape, X.dtype, Y.shape, Y.dtype
+```
+
+```text title="Output"
+(torch.Size([32, 3]), torch.int64, torch.Size([32]), torch.int64)
+```
+
+So our dataset looks like this^ \
+\
+So, for each of those above 5 words, \
+`torch.Size([32, 3])` we have created a dataset of 32 examples and each input of the neural net is 3 integers => X \
+`torch.Size([32])` and these are the labels (single row, 32 values) => Y
+
+```python
+X
+```
+
+```text title="Output"
+tensor([[ 0,  0,  0],
+        [ 0,  0,  5],
+        [ 0,  5, 13],
+        [ 5, 13, 13],
+        [13, 13,  1],
+        [ 0,  0,  0],
+        [ 0,  0, 15],
+        [ 0, 15, 12],
+        [15, 12,  9],
+        [12,  9, 22],
+        [ 9, 22,  9],
+        [22,  9,  1],
+        [ 0,  0,  0],
+        [ 0,  0,  1],
+        [ 0,  1, 22],
+        [ 1, 22,  1],
+        [ 0,  0,  0],
+        [ 0,  0,  9],
+        [ 0,  9, 19],
+        [ 9, 19,  1],
+        [19,  1,  2],
+        [ 1,  2,  5],
+        [ 2,  5, 12],
+        [ 5, 12, 12],
+        [12, 12,  1],
+        [ 0,  0,  0],
+        [ 0,  0, 19],
+        [ 0, 19, 15],
+        [19, 15, 16],
+        [15, 16,  8],
+        [16,  8,  9],
+        [ 8,  9,  1]])
+```
+
+```python
+Y
+```
+
+```text title="Output"
+tensor([ 5, 13, 13,  1,  0, 15, 12,  9, 22,  9,  1,  0,  1, 22,  1,  0,  9, 19,
+         1,  2,  5, 12, 12,  1,  0, 19, 15, 16,  8,  9,  1,  0])
+```
+
+```python
+C = torch.rand((27, 2))
+```
+
+```python
+emb = C[X]
+
+emb.shape
+```
+
+```text title="Output"
+torch.Size([32, 3, 2])
+```
+
+(PyTorch indexing is awesome) \
+\
+To index simultaneously all the elements of X, We simply do C[X]
+
+```python
+W1 = torch.randn((6, 100))
+b1 = torch.rand(100)
+```
+
+```python
+h = torch.tanh(emb.view(-1, 6) @ W1 + b1)
+```
+
+```python
+h
+```
+
+```text title="Output"
+tensor([[ 0.9910,  0.8405,  0.4715,  ...,  0.9999,  0.8814,  0.9998],
+        [ 0.9763,  0.9163,  0.3350,  ...,  0.9991,  0.8249,  0.9992],
+        [ 0.9791,  0.8450, -0.0272,  ...,  0.9997,  0.9230,  0.9997],
+        ...,
+        [ 0.8995,  0.6590,  0.4667,  ...,  0.9995, -0.4144,  0.9988],
+        [ 0.9777,  0.7397,  0.2623,  ...,  0.9999,  0.9593,  0.9999],
+        [ 0.9402,  0.7154,  0.2493,  ...,  0.9980, -0.6247,  0.9979]])
+```
+
+```python
+h.shape
+```
+
+```text title="Output"
+torch.Size([32, 100])
+```
+
+Hidden layer is now made^
+
+```python
+W2 = torch.randn((100, 27))
+b2 = torch.rand(27)
+```
+
+```python
+logits = h @ W2 + b2
+```
+
+```python
+logits.shape
+```
+
+```text title="Output"
+torch.Size([32, 27])
+```
+
+```python
+counts = logits.exp()
+```
+
+```python
+prob = counts / counts.sum(1, keepdims=True)
+```
+
+```python
+prob.shape
+```
+
+```text title="Output"
+torch.Size([32, 27])
+```
+
+```python
+loss = -prob[torch.arange(32), Y].log().mean()
+loss
+```
+
+```text title="Output"
+tensor(13.4043)
+```
+
+We've made the final output layer^ \
+Found the loss function value, which we have to reduce
+
+---------------------
+
+**Summarising what we've done so far to make this more respectable :)**
+
+```python
+#Run the first 5 cells and then start from here
+X.shape, Y.shape #dataset
+```
+
+```text title="Output"
+(torch.Size([32, 3]), torch.Size([32]))
+```
+
+```python
+g = torch.Generator().manual_seed(2147483647) #For consistency ofcourse, to keep the same values as andrej
+C = torch.randn((27,2), generator=g)
+W1 = torch.rand((6, 100), generator=g)
+b1 = torch.rand(100, generator=g)
+W2 = torch.rand((100, 27), generator=g)
+b2 = torch.rand(27, generator=g)
+parameters = [C, W1, b1, W2, b2]
+```
+
+```python
+sum(p.nelement() for p in parameters) #to check number of parameters in total
+```
+
+```text title="Output"
+3481
+```
+
+```python
+emb = C[X]
+h = torch.tanh(emb.view(-1,6) @ W1 + b1)
+logits = h @ W2 + b2
+counts = logits.exp()
+prob = counts / counts.sum(1, keepdims=True)
+loss = - prob[torch.arange(32), Y].log().mean()
+loss
+```
+
+```text title="Output"
+tensor(6.4365)
+```

@@ -66,7 +66,7 @@ Then:
 | Landing page | `app/(home)/page.tsx` |
 | Deploy workflow | `.github/workflows/deploy.yml` |
 
-The four current sections, in dropdown order, are `ZeroToHero/` ("Neural Networks"), `Books/` ("Library"), `Academy/` ("Academy", course notes) and `Workshop/` ("Workshop", software engineering).
+The four current sections, in dropdown order, are `NeuralNetworks/` ("Neural Networks"), `Books/` ("Library"), `Academy/` ("Academy", course notes) and `Workshop/` ("Workshop", software engineering).
 
 ## 4. Add a page
 
@@ -105,6 +105,7 @@ The file name becomes the URL: `/Books/AI-Engineering/chapter-7/` (a folder in p
 | `title` | yes | sidebar label, page heading, browser tab |
 | `description` | no | subtitle under the title, and the page's meta description |
 | `icon` | no | sidebar icon (a Lucide name registered in `sectionIcons` in `lib/sections.tsx`). Used only for the `List` icon on each section's "Contents" page (group icons go on their separators, see section 5) |
+| `sidebarTitle` | no | shorter label for the sidebar and breadcrumbs, e.g. `"Overview"` while the title is `"AI Engineering – Overview"` |
 | `hideToc: true` | no | hides the "On this page" table of contents |
 
 ## 5. Add a group: a book, course or series
@@ -124,7 +125,7 @@ Separators are only labels: adding, renaming or moving them never changes a URL.
 
 Example: a second book, `content/docs/Books/Designing-ML-Systems/`.
 
-1. **Group overview:** create `Designing-ML-Systems/index.mdx` with `title: "Overview"` and a `description` naming the book. Give it an intro and a card per chapter, like `Books/AI-Engineering/index.mdx`.
+1. **Group overview:** create `Designing-ML-Systems/index.mdx` with `title: "Designing ML Systems – Overview"`, `sidebarTitle: "Overview"` and a `description`. Give it an intro and a card per chapter, like `Books/AI-Engineering/index.mdx`.
 2. **Notes folder:** put the chapters in `Designing-ML-Systems/(chapter-notes)/` with a `meta.json`:
    ```json
    { "title": "Chapter Notes", "pages": ["chapter-1", "chapter-2"] }
@@ -171,12 +172,12 @@ Neural Networks is the exception: the Zero to Hero lessons are listed one by one
 
 Notebooks are never run by the site. It converts their **saved outputs**, so run and save the notebook in Jupyter first.
 
-1. Save it as `notebooks/<Section>/<path>/<name>.ipynb`, for example `notebooks/ZeroToHero/GPT-2/section-3.ipynb`.
+1. Save it as `notebooks/<Section>/<path>/<name>.ipynb`, for example `notebooks/NeuralNetworks/GPT-2/section-3.ipynb`.
 2. Add its sidebar title to `notebooks/titles.json`:
    ```json
-   "ZeroToHero/GPT-2/section-3.ipynb": "Section 3"
+   "NeuralNetworks/GPT-2/section-3.ipynb": "Section 3"
    ```
-3. Add `section-3` to `content/docs/ZeroToHero/GPT-2/meta.json`.
+3. Add `section-3` to `content/docs/NeuralNetworks/GPT-2/meta.json`.
 4. Run `npm run notebooks`. This creates:
    - `content/docs/…/section-3.mdx` (the page);
    - output images in `public/notebook-outputs/…`;
@@ -198,7 +199,7 @@ Notebooks are never run by the site. It converts their **saved outputs**, so run
 
 Example: a "Papers" section next to Neural Networks and Library. It shows up in the sidebar's section dropdown with its own icon and accent colour.
 
-**1. Content:** add the folder name to the root `content/docs/meta.json` at the position it should have in the dropdown (`"pages": ["ZeroToHero", "Books", "Academy", "Workshop", "Papers"]`). Then create `content/docs/Papers/meta.json`:
+**1. Content:** add the folder name to the root `content/docs/meta.json` at the position it should have in the dropdown (`"pages": ["NeuralNetworks", "Books", "Academy", "Workshop", "Papers"]`). Then create `content/docs/Papers/meta.json`:
 
 ```json
 {
@@ -224,7 +225,7 @@ import { Brain, LibraryBig, type LucideIcon, ScrollText } from 'lucide-react';
 const sectionIcons: Record<string, LucideIcon> = { Brain, LibraryBig, ScrollText };
 
 const sections: Record<string, { accent: string; landing?: string }> = {
-  ZeroToHero: { accent: 'var(--section-neural-networks)', landing: 'Zero to Hero: …' },
+  NeuralNetworks: { accent: 'var(--section-neural-networks)', landing: 'Zero to Hero: …' },
   Books: { accent: 'var(--section-library)', landing: 'Notes from AI/ML books, …' },
   // key = folder name; `landing` is optional
   Papers: { accent: 'var(--section-papers)', landing: 'Notes on research papers, starting with …' },
@@ -311,7 +312,7 @@ MDX is Markdown plus components. Everything normal works: headings, lists, table
 
 ## 9. Things not to do
 
-- **Don't rename or move published pages or folders.** The URL comes from the path, so old links (and Google) would get a 404. The site is a static export and has no redirects. If you must, ask an agent to add a redirect page for the old URL. `scripts/old-urls.txt` lists the URLs that must always work, and `check:parity` enforces them.
+- **Don't rename or move published pages or folders.** The URL comes from the path, so old links (and Google) would get a 404. The site is a static export, so redirects are pages written by `scripts/write-redirects.mjs` during `npm run build` (that's how `/ZeroToHero/…` now forwards to `/NeuralNetworks/…`). If you must rename, add the old → new prefix there. `scripts/old-urls.txt` lists the URLs that must always work, and `check:parity` enforces them.
 - **Don't edit generated notebook pages.** Edit the notebook and re-run `npm run notebooks`.
 - **Don't delete or push to the `gh-pages` branch.** It holds the old MkDocs site and is the emergency rollback.
 - **Don't install packages globally** (`npm i -g`, `sudo`, `brew`). Everything is local to the project. New npm packages are pinned to exact versions (`.npmrc` does this) and `package-lock.json` is committed.

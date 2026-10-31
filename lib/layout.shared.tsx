@@ -24,7 +24,7 @@ export function baseOptions(): BaseLayoutProps {
     githubUrl,
     // Add more navbar links here.
     links: [
-      { text: 'Neural Networks', url: '/ZeroToHero/', icon: <Brain />, active: 'nested-url' },
+      { text: 'Neural Networks', url: '/NeuralNetworks/', icon: <Brain />, active: 'nested-url' },
       { text: 'Library', url: '/Books/', icon: <BookOpen />, active: 'nested-url' },
       {
         text: 'Academy',
