@@ -201,12 +201,16 @@ import { Brain, LibraryBig, type LucideIcon, ScrollText } from 'lucide-react';
 
 const sectionIcons: Record<string, LucideIcon> = { Brain, LibraryBig, ScrollText };
 
-const sectionAccents: Record<string, string> = {
-  ZeroToHero: 'var(--section-neural-networks)',
-  Books: 'var(--section-library)',
-  Papers: 'var(--section-papers)', // key = folder name
+const sections: Record<string, { accent: string; landing?: string }> = {
+  ZeroToHero: { accent: 'var(--section-neural-networks)', landing: 'Zero to Hero: …' },
+  Books: { accent: 'var(--section-library)', landing: 'Notes from AI/ML books, …' },
+  // key = folder name; `landing` is optional
+  Papers: { accent: 'var(--section-papers)', landing: 'Notes on research papers, starting with …' },
 };
 ```
+
+- `accent` colours the docs pages of the section and the glow on its landing card.
+- `landing` is the description on the landing card. Without it, the card uses the (shorter) `description` from meta.json.
 
 The build fails with "Unknown icon" if the `meta.json` icon isn't registered here.
 
@@ -232,7 +236,7 @@ In `oklch(lightness chroma hue)`, the last number is the hue: 268 is indigo (Neu
 
 **4. Optional:**
 - **Navbar link:** add `{ text: 'Papers', url: '/Papers/', icon: <ScrollText />, active: 'nested-url' }` to `links` in `lib/layout.shared.tsx`.
-- **Landing card:** copy one of the `<Card>`s in `app/(home)/page.tsx`.
+- **Landing card:** nothing to do. The landing page builds one card per section from the sidebar data (title, icon, link), in dropdown order. Set `landing` in step 2 for a longer description.
 
 ## 8. Writing MDX: cheat sheet
 

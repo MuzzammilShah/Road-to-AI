@@ -87,7 +87,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 ## App code map
 
 - **Routes:**
-  - `app/(home)/` is the landing page.
+  - `app/(home)/` is the landing page. Below the hero, `#intro` has one card per root folder, built from `source.getPageTree()` (title, icon, `index` URL) in dropdown order, with accent-coloured corner glows on hover/focus (`.landing-section-card` in `app/global.css`).
   - `app/(docs)/layout.tsx` is the spacious `DocsLayout` + `CollapsedSidebarControls`.
   - `app/(docs)/[...slug]/page.tsx` is the docs pages: TOC style `'normal'`, TOC titles stripped of links, `SectionAccent`.
   - `app/api/search.json/route.ts` builds the static search index.
@@ -97,7 +97,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - Fumadocs' `preset.css` does not include the spacious layout's classes. Any layout from `fumadocs-ui/css/generated/` that preset.css doesn't list needs the same import, otherwise its pages render unstyled.
 - **`lib/`:**
   - `source.ts`: loader, MDX options, `getDocumentTitle`.
-  - `sections.tsx`: dropdown icons, `SectionAccent`.
+  - `sections.tsx`: dropdown icons, the `sections` map (accent colour + optional longer `landing` card text per root folder), `SectionAccent`.
   - `layout.shared.tsx`: navbar title and links (add links here).
   - `shared.ts`: site name, URL, GitHub repo.
 - **`components/`:**
@@ -154,8 +154,8 @@ A new sub-folder needs its own `meta.json` (`title`, `pages`) and must be listed
 ## How to add a section
 
 1. Create `content/docs/<Section>/meta.json` with `"root": true`, `title`, `description`, `icon` and `pages`, and add the folder to the root `content/docs/meta.json` (dropdown order).
-2. In `lib/sections.tsx`, add the Lucide icon to `sectionIcons` and map the folder name to its accent colour (used by `SectionAccent`). In `app/global.css`, define the `--section-*` colour (light and dark) and its `[data-section-icon]` rule.
-3. Optionally add a navbar link in `lib/layout.shared.tsx` and a landing card in `app/(home)/page.tsx`.
+2. In `lib/sections.tsx`, add the Lucide icon to `sectionIcons` and add the folder name to `sections` with its `accent` colour (used by `SectionAccent` and the landing card) and, optionally, a longer `landing` description for the landing card (otherwise the meta.json `description` is used). In `app/global.css`, define the `--section-*` colour (light and dark) and its `[data-section-icon]` rule.
+3. Optionally add a navbar link in `lib/layout.shared.tsx`. The landing card appears automatically (up to 3 per row, 4 cards as 2×2, last row centred).
 
 The build fails with "Unknown icon" if the `meta.json` icon is missing from `sectionIcons`. The MDX `<Icon>` component has its own short list in `components/mdx/icon.tsx`.
 
