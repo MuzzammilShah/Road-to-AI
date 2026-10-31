@@ -8,6 +8,7 @@ import {
   LibraryBig,
   type LucideIcon,
   Network,
+  Rocket,
   Sparkle,
 } from 'lucide-react';
 
@@ -22,6 +23,7 @@ const icons = {
   FileText,
   LibraryBig,
   Network,
+  Rocket,
   Sparkle,
 } satisfies Record<string, LucideIcon>;
 

@@ -72,7 +72,7 @@ The four current sections, in dropdown order, are `ZeroToHero/` ("Neural Network
 
 Example: a new chapter in the AI Engineering book.
 
-**1. Create `content/docs/Books/AI-Engineering/chapter-7.mdx`:**
+**1. Create `content/docs/Books/AI-Engineering/(chapter-notes)/chapter-7.mdx`:**
 
 ```mdx
 ---
@@ -85,13 +85,13 @@ description: "Optional one-line summary, shown under the title"
 Your notes…
 ```
 
-The file name becomes the URL: `/Books/AI-Engineering/chapter-7/`. Use lowercase-with-dashes for new files. Case matters in URLs.
+The file name becomes the URL: `/Books/AI-Engineering/chapter-7/` (a folder in parentheses is not part of the URL, see section 5). Use lowercase-with-dashes for new files. Case matters in URLs.
 
-**2. Add the file name (without `.mdx`) to the folder's `meta.json`**, where it should appear in the sidebar:
+**2. Add the file name (without `.mdx`) to the folder's `meta.json`** (`(chapter-notes)/meta.json`), where it should appear in the sidebar:
 
 ```json
 {
-  "title": "AI Engineering",
+  "title": "Chapter Notes",
   "pages": ["chapter-1", "chapter-5", "chapter-6-a", "chapter-6-b", "chapter-7"]
 }
 ```
@@ -104,21 +104,42 @@ The file name becomes the URL: `/Books/AI-Engineering/chapter-7/`. Use lowercase
 |---|---|---|
 | `title` | yes | sidebar label, page heading, browser tab |
 | `description` | no | subtitle under the title, and the page's meta description |
+| `icon` | no | sidebar icon (a Lucide name registered in `sectionIcons` in `lib/sections.tsx`). Used only for overview pages: `BookMarked` on section overviews, one icon per group overview |
 | `hideToc: true` | no | hides the "On this page" table of contents |
 
-## 5. Add a sub-folder (a group in the sidebar)
+## 5. Add a group: a book, course or series
+
+Every section's sidebar follows the same pattern:
+
+```
+Overview                      ← section overview (index.mdx, icon BookMarked)
+AI ENGINEERING                ← separator: a non-clickable heading
+  AI Engineering              ← the group's overview page, with its own icon
+  ▸ Chapter Notes             ← the group's notes, in collapsible folders
+DESIGNING ML SYSTEMS
+  …
+```
+
+Separators are only labels: adding, renaming or moving them never changes a URL. Variants in `pages`: `"---Label---"`, `"---[Icon]Label---"` (icon registered in `lib/sections.tsx`) and `"---"` (a plain line).
 
 Example: a second book, `content/docs/Books/Designing-ML-Systems/`.
 
-1. Create the folder with its pages, plus a `meta.json`:
+1. **Group overview:** create `Designing-ML-Systems/index.mdx` with `title: "Designing ML Systems"` and an `icon:` (add the icon to `sectionIcons` in `lib/sections.tsx`). Give it an intro and a card per chapter, like `Books/AI-Engineering/index.mdx`.
+2. **Notes folder:** put the chapters in `Designing-ML-Systems/(chapter-notes)/` with a `meta.json`:
    ```json
-   { "title": "Designing ML Systems", "pages": ["chapter-1", "chapter-2"] }
+   { "title": "Chapter Notes", "pages": ["chapter-1", "chapter-2"] }
    ```
-2. List the folder name in the parent's `meta.json` (`content/docs/Books/meta.json`): `"pages": ["index", "AI-Engineering", "Designing-ML-Systems"]`.
-3. To make the folder itself clickable, add an `index.mdx` in it and list `"index"` first in its `pages`. Without one, the folder is a collapsible group.
-4. The Books overview (`content/docs/Books/index.mdx`) has a card per book. Add an `href` to the "Designing ML Systems" card once its notes exist.
+   The parentheses make it a sidebar group without a URL segment: the pages stay at `/Books/Designing-ML-Systems/chapter-1/`. Use a normal folder name (e.g. `notes/`, `notebooks/`) when the folder should be part of the URL, as in Academy.
+3. **Group `meta.json`** (`Designing-ML-Systems/meta.json`): `{ "title": "Designing ML Systems", "pages": ["index", "(chapter-notes)"] }`.
+4. **Section `meta.json`** (`Books/meta.json`): add a separator and the folder with `...` in front, which shows its overview and sub-folders right under the separator instead of nesting them:
+   ```json
+   "pages": ["index", "---AI Engineering---", "...AI-Engineering", "---Designing ML Systems---", "...Designing-ML-Systems"]
+   ```
+5. **Section overview:** the Books overview (`Books/index.mdx`) has a card per book. Add an `href` to the "Designing ML Systems" card (pointing to `/Books/Designing-ML-Systems/`) once its notes exist.
 
-**A new course in Academy** works the same way: a folder such as `content/docs/Academy/<Course>/` with `index`, `notes/` and `notebooks/` (see `Agentic-AI/`), listed in `content/docs/Academy/meta.json`. Then add a course card to `content/docs/Academy/index.mdx`:
+Neural Networks is the exception: the Zero to Hero lessons are listed one by one under `---Zero to Hero Series---` (after its `zero-to-hero-series` overview page). A second series there gets its own separator and overview page.
+
+**A new course in Academy** works the same way: a folder such as `content/docs/Academy/<Course>/` with `index` (with an `icon`), `notes/` and `notebooks/` (see `Agentic-AI/`), listed in `content/docs/Academy/meta.json` as `"---<Course name>---", "...<Course>"`. Then add a course card to `content/docs/Academy/index.mdx`:
 
 ```mdx
 <CourseCards>

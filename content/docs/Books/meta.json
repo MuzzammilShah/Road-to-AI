@@ -5,6 +5,7 @@
   "root": true,
   "pages": [
     "index",
-    "AI-Engineering"
+    "---AI Engineering---",
+    "...AI-Engineering"
   ]
 }

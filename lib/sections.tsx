@@ -1,11 +1,33 @@
-import { Brain, GraduationCap, Hammer, LibraryBig, type LucideIcon } from 'lucide-react';
+import {
+  BookMarked,
+  Bot,
+  Brain,
+  Feather,
+  GraduationCap,
+  Hammer,
+  LibraryBig,
+  type LucideIcon,
+  Rocket,
+} from 'lucide-react';
 
 /**
- * Icons for the sidebar section dropdown, by the `icon` name in each root meta.json.
- * Each icon gets its section's accent colour via `[data-section-icon]` in app/global.css, where the
- * `--section-*` colours are defined.
+ * Icons used by the page tree, by name:
+ * - sections (`icon` in each root meta.json): Brain, LibraryBig, GraduationCap, Hammer. Each gets its
+ *   section's accent colour via `[data-section-icon]` in app/global.css, where the `--section-*`
+ *   colours are defined;
+ * - sidebar pages (`icon` in front matter): BookMarked on every section overview, and one icon per
+ *   group overview (the page right below each `---Separator---`).
  */
-const sectionIcons: Record<string, LucideIcon> = { Brain, LibraryBig, GraduationCap, Hammer };
+const sectionIcons: Record<string, LucideIcon> = {
+  Brain,
+  LibraryBig,
+  GraduationCap,
+  Hammer,
+  BookMarked,
+  Rocket,
+  Feather,
+  Bot,
+};
 
 export function resolveIcon(name: string | undefined) {
   if (!name) return;

@@ -51,8 +51,12 @@ for (const dir of folders) {
   else problems.push(`${dir}/ has no meta.json`);
 }
 
-/** Is `name` listed in the meta.json of `dir`? Top-level folders must be roots instead. */
-const isListed = (dir, name) => metas.get(dir)?.pages?.includes(name) ?? false;
+/**
+ * Is `name` listed in the meta.json of `dir`? `...name` (a folder whose items are shown inline in
+ * the parent) counts too. Top-level folders must be roots instead.
+ */
+const isListed = (dir, name) =>
+  metas.get(dir)?.pages?.some((entry) => entry === name || entry === `...${name}`) ?? false;
 let listed = 0;
 for (const page of pages) {
   const dir = posix.dirname(page);
@@ -69,12 +73,12 @@ for (const dir of folders) {
     problems.push(`${dir}/ is not listed in ${parent}/meta.json`);
   }
 }
-// Fumadocs syntax that is not a page: ---Separator---, ..., !excluded, [Link](url), external:...
-const NOT_A_PAGE = /^(---.*---|z?\.\.\.a?|!.*|\[.*\]\(.*\)|external:.*)$/;
+// Fumadocs syntax that is not a page: ---Separator---, ---, ..., !excluded, [Link](url), external:...
+const NOT_A_PAGE = /^(---.*---|---|z?\.\.\.a?|!.*|\[.*\]\(.*\)|external:.*)$/;
 for (const [dir, meta] of metas) {
   for (const entry of meta.pages ?? []) {
     if (NOT_A_PAGE.test(entry)) continue;
-    const target = join(CONTENT_DIR, dir, entry);
+    const target = join(CONTENT_DIR, dir, entry.replace(/^\.\.\./, ''));
     if (!existsSync(`${target}.mdx`) && !(existsSync(target) && statSync(target).isDirectory())) {
       problems.push(`${dir}/meta.json lists "${entry}", which does not exist`);
     }

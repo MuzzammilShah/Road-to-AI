@@ -58,18 +58,27 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 ## Content structure
 
 - **`content/docs/`** holds the docs content, with one root folder per sidebar section. Root folders show up in the section dropdown at the top of the sidebar.
-  - `ZeroToHero/` is "Neural Networks". It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`.
-  - `Books/` is "Library". It contains `AI-Engineering/`.
+  - `ZeroToHero/` is "Neural Networks". `index.mdx` is the section overview; the series overview is `zero-to-hero-series.mdx`. It contains `Micrograd/`, `Makemore-part1..5/`, `GPT-1/`, `GPT-2/`, `GPT-Tokenizer/` and `General-MISC/`, listed flat under the `---Zero to Hero Series---` separator.
+  - `Books/` is "Library". It contains `AI-Engineering/`: `index.mdx` (book overview) and `(chapter-notes)/` (the chapters; the parentheses keep the folder out of the URL, so they stay at `/Books/AI-Engineering/chapter-1/`).
   - `Academy/` is "Academy" (course notes). Its overview uses `CourseCards`/`CourseCard`. It contains `Agentic-AI/`, which has `notes/` (one page per module, from the old blog post) and `notebooks/<Category>/` (generated, plus a hand-written `index.mdx` per category).
   - `Workshop/` is "Workshop" (software engineering). Its overview is a `Cards` list like Library's; no content yet.
+- **Sidebar pattern** (every section):
+  1. `index.mdx` ("Overview", `icon: BookMarked`) is the section overview, listing everything in the section;
+  2. then one `---Separator---` per group (a book, a course, a series);
+  3. under it, the group's overview page with its own icon;
+  4. then the group's notes in collapsible folders.
+  - In Library/Academy (and later Workshop), each group is one folder listed as `"...<Folder>"`: its `index.mdx` and sub-folders show directly under the separator.
+  - Neural Networks lists its series pages and folders individually instead.
 - **`content/docs/meta.json`** (root) only sets the section order in the dropdown: `ZeroToHero`, `Books`, `Academy`, `Workshop`.
 - **`meta.json`** in each folder controls the sidebar. They are all hand-maintained (no generator any more):
   - `title` and `pages` set order and labels;
-  - `"---Label---"` adds a separator;
+  - `"---Label---"` adds a separator (non-clickable heading); `"---[Icon]Label---"` adds one with an icon, and `"---"` a plain line;
+  - `"...<Folder>"` shows a sub-folder's index and items inline instead of as a nested folder;
+  - a folder named `(name)` is a sidebar group without a URL segment;
   - listing `"index"` makes the folder's index a child item;
   - `"root": true` marks a section;
   - root folders also have `icon` and `description` for the dropdown.
-- **Page front matter:** `title`, optional `description`, and `hideToc: true` to hide the table of contents.
+- **Page front matter:** `title`, optional `description`, optional `icon` (sidebar icon; must be in `sectionIcons` in `lib/sections.tsx`), and `hideToc: true` to hide the table of contents.
 - **`notebooks/`** holds the executed `.ipynb` files at the same relative paths as their pages (`notebooks/ZeroToHero/GPT-1/gpt-dev.ipynb` → `content/docs/ZeroToHero/GPT-1/gpt-dev.mdx`). `notebooks/titles.json` maps each notebook path to its page title. The generated MDX carries a "Generated from notebooks/…" banner: never edit those pages by hand, edit the notebook and re-run the converter.
 - **`public/`:**
   - `assets/images/` holds images referenced by pages (`academy/<course>/` for course slides and thumbnails, `academy/providers/` for provider logos);
