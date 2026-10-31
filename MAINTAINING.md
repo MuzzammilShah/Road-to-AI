@@ -66,13 +66,13 @@ Then:
 | Landing page | `app/(home)/page.tsx` |
 | Deploy workflow | `.github/workflows/deploy.yml` |
 
-The three current sections, in dropdown order, are `ZeroToHero/` ("Neural Networks"), `Books/` ("Library") and `Academy/` ("Academy", course notes).
+The four current sections, in dropdown order, are `NeuralNetworks/` ("Neural Networks"), `Library/` ("Library"), `Academy/` ("Academy", course notes) and `Workshop/` ("Workshop", software engineering).
 
 ## 4. Add a page
 
 Example: a new chapter in the AI Engineering book.
 
-**1. Create `content/docs/Books/AI-Engineering/chapter-7.mdx`:**
+**1. Create `content/docs/Library/AI-Engineering/(chapter-notes)/chapter-7.mdx`:**
 
 ```mdx
 ---
@@ -85,13 +85,13 @@ description: "Optional one-line summary, shown under the title"
 Your notes…
 ```
 
-The file name becomes the URL: `/Books/AI-Engineering/chapter-7/`. Use lowercase-with-dashes for new files. Case matters in URLs.
+The file name becomes the URL: `/Library/AI-Engineering/chapter-7/` (a folder in parentheses is not part of the URL, see section 5). Use lowercase-with-dashes for new files. Case matters in URLs.
 
-**2. Add the file name (without `.mdx`) to the folder's `meta.json`**, where it should appear in the sidebar:
+**2. Add the file name (without `.mdx`) to the folder's `meta.json`** (`(chapter-notes)/meta.json`), where it should appear in the sidebar:
 
 ```json
 {
-  "title": "AI Engineering",
+  "title": "Chapter Notes",
   "pages": ["chapter-1", "chapter-5", "chapter-6-a", "chapter-6-b", "chapter-7"]
 }
 ```
@@ -104,21 +104,44 @@ The file name becomes the URL: `/Books/AI-Engineering/chapter-7/`. Use lowercase
 |---|---|---|
 | `title` | yes | sidebar label, page heading, browser tab |
 | `description` | no | subtitle under the title, and the page's meta description |
+| `icon` | no | sidebar icon (a Lucide name registered in `sectionIcons` in `lib/sections.tsx`). Used only for the `List` icon on each section's "Contents" page (group icons go on their separators, see section 5) |
+| `sidebarTitle` | no | shorter label for the sidebar and breadcrumbs, e.g. `"Overview"` while the title is `"AI Engineering – Overview"` |
 | `hideToc: true` | no | hides the "On this page" table of contents |
 
-## 5. Add a sub-folder (a group in the sidebar)
+## 5. Add a group: a book, course or series
 
-Example: a second book, `content/docs/Books/Designing-ML-Systems/`.
+Every section's sidebar follows the same pattern:
 
-1. Create the folder with its pages, plus a `meta.json`:
+```
+Contents                      ← section contents (index.mdx, icon List), titled "Library – Contents"
+🪶 AI ENGINEERING             ← separator: a non-clickable heading, with the group's icon
+  Overview                    ← the group's overview page
+  ▸ Chapter Notes             ← the group's notes, in collapsible folders
+DESIGNING ML SYSTEMS
+  …
+```
+
+Separators are only labels: adding, renaming or moving them never changes a URL. Variants in `pages`: `"---Label---"`, `"---[Icon]Label---"` (icon registered in `lib/sections.tsx`) and `"---"` (a plain line).
+
+Example: a second book, `content/docs/Library/Designing-ML-Systems/`.
+
+1. **Group overview:** create `Designing-ML-Systems/index.mdx` with `title: "Designing ML Systems – Overview"`, `sidebarTitle: "Overview"` and a `description`. Give it an intro and a card per chapter, like `Library/AI-Engineering/index.mdx`.
+2. **Notes folder:** put the chapters in `Designing-ML-Systems/(chapter-notes)/` with a `meta.json`:
    ```json
-   { "title": "Designing ML Systems", "pages": ["chapter-1", "chapter-2"] }
+   { "title": "Chapter Notes", "pages": ["chapter-1", "chapter-2"] }
    ```
-2. List the folder name in the parent's `meta.json` (`content/docs/Books/meta.json`): `"pages": ["index", "AI-Engineering", "Designing-ML-Systems"]`.
-3. To make the folder itself clickable, add an `index.mdx` in it and list `"index"` first in its `pages`. Without one, the folder is a collapsible group.
-4. The Books overview (`content/docs/Books/index.mdx`) has a card per book. Add an `href` to the "Designing ML Systems" card once its notes exist.
+   The parentheses make it a sidebar group without a URL segment: the pages stay at `/Library/Designing-ML-Systems/chapter-1/`. Use a normal folder name (e.g. `notes/`, `notebooks/`) when the folder should be part of the URL, as in Academy.
+3. **Group `meta.json`** (`Designing-ML-Systems/meta.json`): `{ "title": "Designing ML Systems", "pages": ["index", "(chapter-notes)"] }`.
+4. **Section `meta.json`** (`Library/meta.json`): add a separator with the group's icon, and the folder with `...` in front, which shows its overview and sub-folders right under the separator instead of nesting them:
+   ```json
+   "pages": ["index", "---[Feather]AI Engineering---", "...AI-Engineering", "---[Bird]Designing ML Systems---", "...Designing-ML-Systems"]
+   ```
+   The icon is a Lucide name and must be added to `sectionIcons` in `lib/sections.tsx` (the build fails with "Unknown icon" otherwise).
+5. **Section contents:** the Library contents page (`Library/index.mdx`) has a card per book. Add an `href` to the "Designing ML Systems" card (pointing to `/Library/Designing-ML-Systems/`) once its notes exist.
 
-**A new course in Academy** works the same way: a folder such as `content/docs/Academy/<Course>/` with `index`, `notes/` and `notebooks/` (see `Agentic-AI/`), listed in `content/docs/Academy/meta.json`. Then add a course card to `content/docs/Academy/index.mdx`:
+Neural Networks is the exception: the Zero to Hero lessons are listed one by one under `---[Rocket]Zero to Hero Series---` (after its `Zero-To-Hero-Series` "Overview" page). A second series there gets its own separator and overview page.
+
+**A new course in Academy** works the same way: a folder such as `content/docs/Academy/<Course>/` with `index` ("Overview"), `notes/` and `notebooks/` (see `Agentic-AI/`), listed in `content/docs/Academy/meta.json` as `"---[Icon]<Course name>---", "...<Course>"`. Then add a course card to `content/docs/Academy/index.mdx`:
 
 ```mdx
 <CourseCards>
@@ -149,12 +172,12 @@ Example: a second book, `content/docs/Books/Designing-ML-Systems/`.
 
 Notebooks are never run by the site. It converts their **saved outputs**, so run and save the notebook in Jupyter first.
 
-1. Save it as `notebooks/<Section>/<path>/<name>.ipynb`, for example `notebooks/ZeroToHero/GPT-2/section-3.ipynb`.
+1. Save it as `notebooks/<Section>/<path>/<name>.ipynb`, for example `notebooks/NeuralNetworks/GPT-2/section-3.ipynb`.
 2. Add its sidebar title to `notebooks/titles.json`:
    ```json
-   "ZeroToHero/GPT-2/section-3.ipynb": "Section 3"
+   "NeuralNetworks/GPT-2/section-3.ipynb": "Section 3"
    ```
-3. Add `section-3` to `content/docs/ZeroToHero/GPT-2/meta.json`.
+3. Add `section-3` to `content/docs/NeuralNetworks/GPT-2/meta.json`.
 4. Run `npm run notebooks`. This creates:
    - `content/docs/…/section-3.mdx` (the page);
    - output images in `public/notebook-outputs/…`;
@@ -176,7 +199,7 @@ Notebooks are never run by the site. It converts their **saved outputs**, so run
 
 Example: a "Papers" section next to Neural Networks and Library. It shows up in the sidebar's section dropdown with its own icon and accent colour.
 
-**1. Content:** add the folder name to the root `content/docs/meta.json` at the position it should have in the dropdown (`"pages": ["ZeroToHero", "Books", "Academy", "Papers"]`). Then create `content/docs/Papers/meta.json`:
+**1. Content:** add the folder name to the root `content/docs/meta.json` at the position it should have in the dropdown (`"pages": ["NeuralNetworks", "Library", "Academy", "Workshop", "Papers"]`). Then create `content/docs/Papers/meta.json`:
 
 ```json
 {
@@ -202,8 +225,8 @@ import { Brain, LibraryBig, type LucideIcon, ScrollText } from 'lucide-react';
 const sectionIcons: Record<string, LucideIcon> = { Brain, LibraryBig, ScrollText };
 
 const sections: Record<string, { accent: string; landing?: string }> = {
-  ZeroToHero: { accent: 'var(--section-neural-networks)', landing: 'Zero to Hero: …' },
-  Books: { accent: 'var(--section-library)', landing: 'Notes from AI/ML books, …' },
+  NeuralNetworks: { accent: 'var(--section-neural-networks)', landing: 'Zero to Hero: …' },
+  Library: { accent: 'var(--section-library)', landing: 'Notes from AI/ML books, …' },
   // key = folder name; `landing` is optional
   Papers: { accent: 'var(--section-papers)', landing: 'Notes on research papers, starting with …' },
 };
@@ -232,7 +255,7 @@ The build fails with "Unknown icon" if the `meta.json` icon isn't registered her
 }
 ```
 
-In `oklch(lightness chroma hue)`, the last number is the hue: 268 is indigo (Neural Networks), 55–70 is amber (Library), 152 is green (Academy), 25 is red. Keep chroma low (around 0.12–0.19) for a subtle accent.
+In `oklch(lightness chroma hue)`, the last number is the hue: 268 is indigo (Neural Networks), 55–70 is amber (Library), 152 is green (Academy), 92–95 is yellow (Workshop), 25 is red. Keep chroma low (around 0.12–0.19) for a subtle accent.
 
 **4. Optional:**
 - **Navbar link:** add `{ text: 'Papers', url: '/Papers/', icon: <ScrollText />, active: 'nested-url' }` to `links` in `lib/layout.shared.tsx`.
@@ -249,9 +272,21 @@ MDX is Markdown plus components. Everything normal works: headings, lists, table
 - `style={{ width: '50%' }}` instead of `style="width:50%"`;
 - self-close tags: `<img />`, `<br />`.
 
+**Divider line:** a line with only `---`, with an empty line above and below it:
+
+```mdx
+Some paragraph.
+
+---
+
+## Next heading
+```
+
+Without the empty line above, Markdown turns `---` into an underline for the text before it, making that text a heading. Use dividers sparingly; headings already separate sections.
+
 **Links and images:**
 ```mdx
-[Chapter 1](/Books/AI-Engineering/chapter-1/)          ← absolute, with trailing slash
+[Chapter 1](/Library/AI-Engineering/chapter-1/)          ← absolute, with trailing slash
 [a heading on this page](#when-to-finetune)
 ![Diagram](/assets/images/books-assets/diagram.png)
 ```
@@ -272,10 +307,10 @@ MDX is Markdown plus components. Everything normal works: headings, lists, table
 </Accordions>
 
 <Cards>
-  <Card title="AI Engineering" href="/Books/AI-Engineering/chapter-1/">Short description</Card>
+  <Card title="AI Engineering" href="/Library/AI-Engineering/chapter-1/">Short description</Card>
 </Cards>
 
-<Icon name="Sparkle" />   {/* Sparkle, CircleCheckBig, CircleAlert, CornerDownRight, LibraryBig, Bird, Feather, FileText */}
+<Icon name="Sparkle" />   {/* Sparkle, CircleCheckBig, CircleAlert, CornerDownRight, LibraryBig, Bird, Feather, FileText, Network */}
 
 <Tweet url="https://twitter.com/<user>/status/<id>" />
 
@@ -289,7 +324,7 @@ MDX is Markdown plus components. Everything normal works: headings, lists, table
 
 ## 9. Things not to do
 
-- **Don't rename or move published pages or folders.** The URL comes from the path, so old links (and Google) would get a 404. The site is a static export and has no redirects. If you must, ask an agent to add a redirect page for the old URL. `scripts/old-urls.txt` lists the URLs that must always work, and `check:parity` enforces them.
+- **Don't rename or move published pages or folders.** The URL comes from the path, so old links (and Google) would get a 404. The site is a static export, so redirects are pages written by `scripts/write-redirects.mjs` during `npm run build` (that's how `/ZeroToHero/…` now forwards to `/NeuralNetworks/…`). If you must rename, add the old → new prefix there. `scripts/old-urls.txt` lists the URLs that must always work, and `check:parity` enforces them.
 - **Don't edit generated notebook pages.** Edit the notebook and re-run `npm run notebooks`.
 - **Don't delete or push to the `gh-pages` branch.** It holds the old MkDocs site and is the emergency rollback.
 - **Don't install packages globally** (`npm i -g`, `sudo`, `brew`). Everything is local to the project. New npm packages are pinned to exact versions (`.npmrc` does this) and `package-lock.json` is committed.

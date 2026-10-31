@@ -1,0 +1,11 @@
+{
+  "title": "Library",
+  "description": "Notes from AI/ML books",
+  "icon": "LibraryBig",
+  "root": true,
+  "pages": [
+    "index",
+    "---[Feather]AI Engineering---",
+    "...AI-Engineering"
+  ]
+}

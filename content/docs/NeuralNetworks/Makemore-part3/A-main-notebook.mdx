@@ -1,0 +1,317 @@
+---
+title: "Jupyter Notebook"
+---
+
+{/* Generated from notebooks/NeuralNetworks/Makemore-part3/A-main-notebook.ipynb by scripts/convert-notebooks.mjs. Do not edit: edit the notebook and run `npm run notebooks`. */}
+
+<NotebookDownload href="/notebooks/NeuralNetworks/Makemore-part3/A-main-notebook.ipynb" />
+
+```python
+import torch
+import torch.nn.functional as F
+import matplotlib.pyplot as plt # for making figures
+%matplotlib inline
+```
+
+```python
+# read in all the words
+words = open('names.txt', 'r').read().splitlines()
+words[:8]
+```
+
+```text title="Output"
+['emma', 'olivia', 'ava', 'isabella', 'sophia', 'charlotte', 'mia', 'amelia']
+```
+
+```python
+len(words)
+```
+
+```text title="Output"
+32033
+```
+
+```python
+# build the vocabulary of characters and mappings to/from integers
+chars = sorted(list(set(''.join(words))))
+stoi = {s:i+1 for i,s in enumerate(chars)}
+stoi['.'] = 0
+itos = {i:s for s,i in stoi.items()}
+vocab_size = len(itos)
+print(itos)
+print(vocab_size)
+```
+
+```text title="Output"
+{1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'f', 7: 'g', 8: 'h', 9: 'i', 10: 'j', 11: 'k', 12: 'l', 13: 'm', 14: 'n', 15: 'o', 16: 'p', 17: 'q', 18: 'r', 19: 's', 20: 't', 21: 'u', 22: 'v', 23: 'w', 24: 'x', 25: 'y', 26: 'z', 0: '.'}
+27
+```
+
+```python
+# build the dataset
+block_size = 3 # context length: how many characters do we take to predict the next one?
+
+def build_dataset(words):  
+  X, Y = [], []
+  
+  for w in words:
+    context = [0] * block_size
+    for ch in w + '.':
+      ix = stoi[ch]
+      X.append(context)
+      Y.append(ix)
+      context = context[1:] + [ix] # crop and append
+
+  X = torch.tensor(X)
+  Y = torch.tensor(Y)
+  print(X.shape, Y.shape)
+  return X, Y
+
+import random
+random.seed(42)
+random.shuffle(words)
+n1 = int(0.8*len(words))
+n2 = int(0.9*len(words))
+
+Xtr,  Ytr  = build_dataset(words[:n1])     # 80%
+Xdev, Ydev = build_dataset(words[n1:n2])   # 10%
+Xte,  Yte  = build_dataset(words[n2:])     # 10%
+```
+
+```text title="Output"
+torch.Size([182625, 3]) torch.Size([182625])
+torch.Size([22655, 3]) torch.Size([22655])
+torch.Size([22866, 3]) torch.Size([22866])
+```
+
+```python
+# MLP revisited
+n_embd = 10 # the dimensionality of the character embedding vectors
+n_hidden = 200 # the number of neurons in the hidden layer of the MLP
+
+g = torch.Generator().manual_seed(2147483647) # for reproducibility
+C  = torch.randn((vocab_size, n_embd),            generator=g)
+W1 = torch.randn((n_embd * block_size, n_hidden), generator=g) * (5/3)/((n_embd * block_size)**0.5) #* 0.2
+#b1 = torch.randn(n_hidden,                        generator=g) * 0.01
+W2 = torch.randn((n_hidden, vocab_size),          generator=g) * 0.01
+b2 = torch.randn(vocab_size,                      generator=g) * 0
+
+# BatchNorm parameters
+bngain = torch.ones((1, n_hidden))
+bnbias = torch.zeros((1, n_hidden))
+bnmean_running = torch.zeros((1, n_hidden))
+bnstd_running = torch.ones((1, n_hidden))
+
+parameters = [C, W1, W2, b2, bngain, bnbias]
+print(sum(p.nelement() for p in parameters)) # number of parameters in total
+for p in parameters:
+  p.requires_grad = True
+```
+
+```text title="Output"
+11897
+```
+
+```python
+# same optimization as last time
+max_steps = 200000
+batch_size = 32
+lossi = []
+
+for i in range(max_steps):
+  
+  # minibatch construct
+  ix = torch.randint(0, Xtr.shape[0], (batch_size,), generator=g)
+  Xb, Yb = Xtr[ix], Ytr[ix] # batch X,Y
+  
+  # forward pass
+  emb = C[Xb] # embed the characters into vectors
+  embcat = emb.view(emb.shape[0], -1) # concatenate the vectors
+  hpreact = embcat @ W1 #+ b1 # hidden layer pre-activation
+  
+  #hpreact = bngain * (hpreact - hpreact.mean(0, keepdim=True)) / (hpreact.std(0, keepdim=True)) + bnbias #batch normalisation layer
+  #----------------
+  # BatchNorm layer
+  #----------------
+  bnmeani = hpreact.mean(0, keepdim=True)
+  bnstdi = hpreact.std(0, keepdim=True)
+    
+  hpreact = bngain * (hpreact - bnmeani) / bnstdi + bnbias
+    
+  with torch.no_grad():
+    bnmean_running = 0.999 * bnmean_running + 0.001 * bnmeani
+    bnstd_running = 0.999 * bnstd_running + 0.001 * bnstdi
+  #----------------
+
+  h = torch.tanh(hpreact) # hidden layer
+  logits = h @ W2 + b2 # output layer
+  loss = F.cross_entropy(logits, Yb) # loss function
+  
+  # backward pass
+  for p in parameters:
+    p.grad = None
+  loss.backward()
+  
+  # update
+  lr = 0.1 if i < 100000 else 0.01 # step learning rate decay
+  for p in parameters:
+    p.data += -lr * p.grad
+
+  # track stats
+  if i % 10000 == 0: # print every once in a while
+    print(f'{i:7d}/{max_steps:7d}: {loss.item():.4f}')
+  lossi.append(loss.log10().item())
+
+  #break #Add this while experienting so you dont have to print all the steps
+```
+
+```text title="Output"
+      0/ 200000: 3.2342
+  10000/ 200000: 1.8947
+  20000/ 200000: 1.8914
+  30000/ 200000: 1.9489
+  40000/ 200000: 2.1701
+  50000/ 200000: 2.0639
+  60000/ 200000: 2.0728
+  70000/ 200000: 2.3965
+  80000/ 200000: 2.4142
+  90000/ 200000: 2.2257
+ 100000/ 200000: 2.2824
+ 110000/ 200000: 1.8584
+ 120000/ 200000: 2.1613
+ 130000/ 200000: 1.9009
+ 140000/ 200000: 1.8430
+ 150000/ 200000: 2.3324
+ 160000/ 200000: 2.2026
+ 170000/ 200000: 1.6905
+ 180000/ 200000: 1.9502
+ 190000/ 200000: 2.0909
+```
+
+-----------------
+
+Used for lecture : [00:12:59](https://www.youtube.com/watch?v=P6sfmUTpUmc&t=779s) fixing the saturated tanh
+
+```python
+#plt.hist(h.view(-1).tolist(), 50)
+```
+
+```python
+#plt.hist(hpreact.view(-1).tolist(), 50)
+```
+
+```python
+#plt.figure(figsize=(20,10))
+#plt.imshow(h.abs() > 0.99, cmap='gray', interpolation='nearest')
+```
+
+End of Used for lecture : [00:12:59](https://www.youtube.com/watch?v=P6sfmUTpUmc&t=779s) fixing the saturated tanh 
+
+----------------
+
+```python
+plt.plot(lossi)
+```
+
+```text title="Output"
+[<matplotlib.lines.Line2D at 0x21a782d9720>]
+```
+
+![Cell 12 output](/notebook-outputs/NeuralNetworks/Makemore-part3/A-main-notebook/cell-12-1.png)
+
+```python
+# # calibrate the batch norm at the end of training
+
+# with torch.no_grad():
+#   # pass the training set through
+#   emb = C[Xtr]
+#   embcat = emb.view(emb.shape[0], -1)
+#   hpreact = embcat @ W1 # + b1
+#   # measure the mean/std over the entire training set
+#   bnmean = hpreact.mean(0, keepdim=True)
+#   bnstd = hpreact.std(0, keepdim=True)
+```
+
+```python
+@torch.no_grad() # this decorator disables gradient tracking
+def split_loss(split):
+  x,y = {
+    'train': (Xtr, Ytr),
+    'val': (Xdev, Ydev),
+    'test': (Xte, Yte),
+  }[split]
+  emb = C[x] # (N, block_size, n_embd)
+  embcat = emb.view(emb.shape[0], -1) # concat into (N, block_size * n_embd)
+  hpreact = embcat @ W1 #+ b1
+  #hpreact = bngain * (hpreact - hpreact.mean(0, keepdim=True)) / (hpreact.std(0, keepdim=True)) + bnbias #batch normalisation layer
+  hpreact = bngain * (hpreact - bnmean_running) / bnstd_running + bnbias
+  h = torch.tanh(hpreact) # (N, n_hidden)
+  logits = h @ W2 + b2 # (N, vocab_size)
+  loss = F.cross_entropy(logits, y)
+  print(split, loss.item())
+
+split_loss('train')
+split_loss('val')
+```
+
+```text title="Output"
+train 2.037672996520996
+val 2.107128620147705
+```
+
+```python
+#The initial loss value that we expect
+-torch.tensor(1/27.0).log()
+```
+
+```text title="Output"
+tensor(3.2958)
+```
+
+```python
+# sample from the model
+g = torch.Generator().manual_seed(2147483647 + 10)
+
+for _ in range(20):
+    
+    out = []
+    context = [0] * block_size # initialize with all ...
+    while True:
+      # forward pass the neural net
+      emb = C[torch.tensor([context])] # (1,block_size,d)
+      h = torch.tanh(emb.view(1, -1) @ W1 + b1)
+      logits = h @ W2 + b2
+      probs = F.softmax(logits, dim=1)
+      # sample from the distribution
+      ix = torch.multinomial(probs, num_samples=1, generator=g).item()
+      context = context[1:] + [ix]
+      out.append(ix)
+      # if we sample the special '.' token, break
+      if ix == 0:
+        break
+    
+    print(''.join(itos[i] for i in out)) # decode and print the generated word
+```
+
+```text title="Output"
+mora.
+mayah.
+see.
+mel.
+rylee.
+emmadiejd.
+leg.
+adelyn.
+elin.
+shi.
+jen.
+eden.
+estanar.
+kayziquetta.
+noshir.
+roshiriel.
+kendreth.
+konnie.
+casube.
+ged.
+```

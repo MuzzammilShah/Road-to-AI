@@ -1,0 +1,21 @@
+{
+  "title": "Neural Networks",
+  "description": "Zero to Hero: from backprop to GPT",
+  "icon": "Brain",
+  "root": true,
+  "pages": [
+    "index",
+    "---[Rocket]Zero to Hero Series---",
+    "Zero-To-Hero-Series",
+    "Micrograd",
+    "Makemore-part1",
+    "Makemore-part2",
+    "Makemore-part3",
+    "Makemore-part4",
+    "Makemore-part5",
+    "GPT-1",
+    "GPT-2",
+    "GPT-Tokenizer",
+    "General-MISC"
+  ]
+}

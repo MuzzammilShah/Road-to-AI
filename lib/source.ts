@@ -12,6 +12,9 @@ const docs = defineDocs({
     schema: pageSchema.extend({
       // `hideToc: true` hides the table of contents (MkDocs `hide: [toc]`).
       hideToc: z.boolean().default(false),
+      // Shorter label for the sidebar (and breadcrumbs) when the page title is longer, e.g. the
+      // group overviews: title "AI Engineering – Overview", sidebar "Overview".
+      sidebarTitle: z.string().optional(),
     }),
     mdxOptions: applyMdxPreset({
       remarkImageOptions: {
@@ -28,13 +31,27 @@ const docs = defineDocs({
   },
 });
 
-// Docs are served from the site root (`/ZeroToHero/...`, `/Books/...`) to keep the old MkDocs URLs.
+// Docs are served from the site root (`/NeuralNetworks/...`, `/Library/...`), as on the old MkDocs site.
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
   baseUrl: docsRoute,
   source: docs.toFumadocsSource(),
   icon: resolveIcon,
-  plugins: [],
+  plugins: [
+    {
+      name: 'sidebar-title',
+      transformPageTree: {
+        file(node, filePath) {
+          const file = filePath ? this.storage.read(filePath) : undefined;
+          const sidebarTitle =
+            file?.format === 'page'
+              ? (file.data as { sidebarTitle?: string }).sidebarTitle
+              : undefined;
+          return sidebarTitle ? { ...node, name: sidebarTitle } : node;
+        },
+      },
+    },
+  ],
 });
 
 type Page = ReturnType<typeof source.getPages>[number];

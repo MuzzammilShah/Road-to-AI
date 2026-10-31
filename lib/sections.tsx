@@ -1,11 +1,33 @@
-import { Brain, GraduationCap, LibraryBig, type LucideIcon } from 'lucide-react';
+import {
+  Bot,
+  Brain,
+  Feather,
+  GraduationCap,
+  Hammer,
+  LibraryBig,
+  List,
+  type LucideIcon,
+  Rocket,
+} from 'lucide-react';
 
 /**
- * Icons for the sidebar section dropdown, by the `icon` name in each root meta.json.
- * Each icon gets its section's accent colour via `[data-section-icon]` in app/global.css, where the
- * `--section-*` colours are defined.
+ * Icons used by the page tree, by name:
+ * - sections (`icon` in each root meta.json): Brain, LibraryBig, GraduationCap, Hammer. Each gets its
+ *   section's accent colour via `[data-section-icon]` in app/global.css, where the `--section-*`
+ *   colours are defined;
+ * - the "Contents" page of every section (`icon: List` in front matter);
+ * - group separators (`---[Icon]Label---` in meta.json): Rocket, Feather, Bot.
  */
-const sectionIcons: Record<string, LucideIcon> = { Brain, LibraryBig, GraduationCap };
+const sectionIcons: Record<string, LucideIcon> = {
+  Brain,
+  LibraryBig,
+  GraduationCap,
+  Hammer,
+  List,
+  Rocket,
+  Feather,
+  Bot,
+};
 
 export function resolveIcon(name: string | undefined) {
   if (!name) return;
@@ -21,17 +43,22 @@ export function resolveIcon(name: string | undefined) {
  *   `description`, which stays short for the dropdown).
  */
 const sections: Record<string, { accent: string; landing?: string }> = {
-  ZeroToHero: {
+  NeuralNetworks: {
     accent: 'var(--section-neural-networks)',
     landing: 'Zero to Hero: Micrograd, Makemore, GPT-1, GPT-2, tokenizers and more.',
   },
-  Books: {
+  Library: {
     accent: 'var(--section-library)',
     landing: 'Notes from AI/ML books, starting with AI Engineering by Chip Huyen.',
   },
   Academy: {
     accent: 'var(--section-academy)',
     landing: 'Notes from AI/ML courses, starting with Agentic AI by DeepLearning.AI.',
+  },
+  Workshop: {
+    accent: 'var(--section-workshop)',
+    landing:
+      'Exploring the craft of software engineering, starting with software architecture and system design.',
   },
 };
 
