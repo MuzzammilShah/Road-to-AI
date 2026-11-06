@@ -70,6 +70,7 @@ Where things live:
 - `content/docs/`: the pages (MDX) and the sidebar order (`meta.json`)
 - `notebooks/`: the executed notebooks; `npm run notebooks` turns them into pages
 - `public/assets/images/`: images used by the pages
+- `components/landing/`: the interactive home page (the Earth and its orbiting sections, the section cards, the blue computer, the falling-letter footer); **[LANDING.md](LANDING.md)** explains how it's built and how to change it
 
 Every merge to `main` is built, checked and deployed to GitHub Pages by GitHub Actions (`.github/workflows/deploy.yml`).
 

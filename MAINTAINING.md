@@ -20,6 +20,7 @@ Every recipe below was tested end to end (build + all checks) before it was writ
 9. [Things not to do](#9-things-not-to-do)
 10. [Deployment and rollback](#10-deployment-and-rollback)
 11. [When a check fails](#11-when-a-check-fails)
+12. [Change the landing page](#12-change-the-landing-page)
 
 ## 1. Setup (once per machine)
 
@@ -63,7 +64,7 @@ Then:
 | Images for pages | `public/assets/images/…` → referenced as `/assets/images/…` |
 | Section icons and colours | `lib/sections.tsx` + `app/global.css` |
 | Navbar links | `lib/layout.shared.tsx` |
-| Landing page | `app/(home)/page.tsx` |
+| Landing page | `app/(home)/page.tsx` (its data) and `components/landing/` (its figures, see section 12) |
 | Deploy workflow | `.github/workflows/deploy.yml` |
 
 The four current sections, in dropdown order, are `NeuralNetworks/` ("Neural Networks"), `Library/` ("Library"), `Academy/` ("Academy", course notes) and `Workshop/` ("Workshop", software engineering).
@@ -232,7 +233,7 @@ const sections: Record<string, { accent: string; landing?: string }> = {
 };
 ```
 
-- `accent` colours the docs pages of the section and the glow on its landing card.
+- `accent` colours the docs pages of the section, the glow on its landing card and the solar panels of its satellite round the landing's globe.
 - `landing` is the description on the landing card. Without it, the card uses the (shorter) `description` from meta.json.
 
 The build fails with "Unknown icon" if the `meta.json` icon isn't registered here.
@@ -259,7 +260,7 @@ In `oklch(lightness chroma hue)`, the last number is the hue: 268 is indigo (Neu
 
 **4. Optional:**
 - **Navbar link:** add `{ text: 'Papers', url: '/Papers/', icon: <ScrollText />, active: 'nested-url' }` to `links` in `lib/layout.shared.tsx`.
-- **Landing card:** nothing to do. The landing page builds one card per section from the sidebar data (title, icon, link), in dropdown order. Set `landing` in step 2 for a longer description.
+- **Landing page:** nothing to do. It builds everything per section from the sidebar data (title, icon, link), in dropdown order: a card on the board and a satellite round the globe (the first section in the dropdown is the moon). Set `landing` in step 2 for a longer card description. The card shows a generic "page being written" animation until the section gets its own (section 12).
 
 ## 8. Writing MDX: cheat sheet
 
@@ -360,3 +361,48 @@ Without the empty line above, Markdown turns `---` into an underline for the tex
 | `check:parity` | a page not listed in `meta.json` (or listed but missing), a notebook without a title or not re-converted, or an old URL gone | add the `meta.json` entry / `titles.json` entry, run `npm run notebooks`, restore the old page |
 
 On GitHub, open the failed check on the PR → the red step shows the same message as locally.
+
+## 12. Change the landing page
+
+The landing page's figures live in `components/landing/`; [LANDING.md](LANDING.md) explains how each one works. They are adapted from the fumadocs.dev landing page (MIT licence: keep the header at the top of each ported file and `components/landing/LICENSE-fumadocs.txt`). Each part below is a constant in one file; change it, then run the checks and look at `/` in `npx serve out -l 4173`, in light and dark mode.
+
+**What the character says:** `LINES` in `components/landing/hero/talk.ts`, two short lines per bubble:
+
+```ts
+export const LINES = [
+  ['Welcome! These are my notes', 'on the road to AI :)'],
+  ['From micrograd to GPT-2,', 'built one step at a time.'],
+  // …
+];
+```
+
+He shows them in turn, then ends on the first one again.
+
+**The character himself:** the `SPRITE` grid in `components/landing/character/sprite.ts`, one string per row of 30 cells: `.` empty, `#` outline/dark, `w` light, `:` grey dither, `y` accent, `o` the laptop logo (flickers on the beat). Keep every row 30 characters long. Row 40 is where he sits; his eyes are the 4×3 cells inside each lens (`EYES` below the grid).
+
+**A section's animation on its card:** `components/landing/sections/mechanisms.tsx`. Each section has a small pixel scene keyed by its folder name (`NeuralNetworks`, `Library`, …):
+
+```tsx
+const mechanisms = {
+  NeuralNetworks: () => <NeuralNetworksMechanism />,
+  // Papers: () => <PapersMechanism />,
+};
+```
+
+A section without an entry gets `FallbackMechanism` (a page whose lines type in). To make one, copy an existing mechanism: draw with `rect`/`frame`/`art` on the 96×40 grid, and time its parts with `choreograph(name, ticks, rest, tracks)`, where a tick is 125 ms and `rest` is the tick it ends on. Its readout (`states`) and spec label sit under it.
+
+**The computer's screen (a macOS Terminal window running a training loop):** `components/landing/start/data.ts`. The window's title (`TITLE`), the zsh prompt (`PROMPT`) and the "Last login" line are at the top of the file. The numbers are copied from the saved outputs of `notebooks/NeuralNetworks/Makemore-part5/Main-notebook-part-5.ipynb` (the notebook is never run). If you add a character outside plain ASCII, also draw it in `SHAPES` in `components/landing/start/scene.ts`, otherwise it shows as a space.
+
+**Where the pin on the globe points:** `HOME` in `components/landing/hero/engine.ts` (latitude and longitude in degrees, Bangalore now) and its label in `components/landing/hero/stage.tsx`.
+
+**The Earth's, the moon's and the computer's colours:** the `--lp-ocean*`, `--lp-land*`, `--lp-moon*` and `--lp-mac-*` tokens on `.landing-surface` in `app/global.css`. They are the same in both themes.
+
+**The links in the footer:** `components/landing/footer/footer.tsx`; the addresses are in `lib/shared.ts` (`githubUrl`, `websiteUrl`, `blogUrl`).
+
+**The footer wordmark's falling characters:** `GLYPHS` in `components/landing/footer/wordmark.tsx`. Use only characters the site's Inter font has (Latin and Greek); others would fall back to a different font.
+
+**Things to keep:**
+- Colours come from the `--lp-*` tokens on `.landing-surface` in `app/global.css`; don't hard-code colours in the figures.
+- Never add `:has(...)` selectors for the landing (see `CLAUDE.md`, performance notes).
+- Check with reduced motion too (Chrome DevTools → Rendering → "prefers-reduced-motion: reduce"): every figure must show a still, finished picture.
+
