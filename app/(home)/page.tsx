@@ -3,6 +3,7 @@ import { LandingFooter } from '@/components/landing/footer/footer';
 import { Hero } from '@/components/landing/hero';
 import { Board } from '@/components/landing/sections/board';
 import { mechanismFor } from '@/components/landing/sections/mechanisms';
+import { Start } from '@/components/landing/start';
 import { getSection } from '@/lib/sections';
 import { source } from '@/lib/source';
 
@@ -24,6 +25,11 @@ function getLandingSections() {
 
 export default function HomePage() {
   const sections = getLandingSections();
+  /** a section by folder for the closing call to action, the first without one */
+  const pick = (key?: string) => {
+    const section = key ? sections.find((s) => s.key === key) : sections[0];
+    return section && { title: section.name, url: section.url };
+  };
   return (
     <>
       <Hero
@@ -58,6 +64,8 @@ export default function HomePage() {
           }))}
         />
       </section>
+
+      <Start start={pick('NeuralNetworks') ?? pick()} browse={pick('Library')} />
 
       <LandingFooter sections={sections} />
     </>
