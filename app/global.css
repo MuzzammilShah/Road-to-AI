@@ -205,6 +205,24 @@ html {
   scrollbar-gutter: stable;
 }
 
+/*
+ * The theme switch (Fumadocs UI wraps it in document.startViewTransition) crossfades the whole page,
+ * a little slower and smoother than the browser's default. The landing's canvases redraw
+ * synchronously when <html>'s class changes, so the new snapshot already has the new palette.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 350ms;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
 /* From the Fumadocs template: has to beat the scroll-lock library's inline styles. */
 html > body[data-scroll-locked] {
   /* biome-ignore lint/complexity/noImportantStyles: overrides inline style */
