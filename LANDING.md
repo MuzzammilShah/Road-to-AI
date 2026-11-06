@@ -27,7 +27,7 @@ From top to bottom:
 
 | Part | What you see | What makes it move |
 |---|---|---|
-| **Hero** | The logo, the site's description, "Start reading" and "GitHub". On the right, a pixel Earth in a star field, with a pin on Bangalore. Neural Networks circles it as a moon and the other sections as satellites, each with a label that links to its section. A pixel character with curly hair, headphones and a hoodie sits on top with a laptop and says hello in speech bubbles. | WebGL2 (one canvas), a small Canvas2D for the character, and HTML labels pinned to the 3D positions. |
+| **Hero** | The logo, the site's description, "Start reading" and "GitHub". On the right, a pixel Earth in a star field, with a pin on Bangalore. Neural Networks circles it as a moon and the other sections as satellites, each with a label that links to its section. A pixel character in a red cap, shades, headphones and a hoodie sits on top with a laptop and says hello in speech bubbles. | WebGL2 (one canvas), a small Canvas2D for the character, and HTML labels pinned to the 3D positions. |
 | **Section board** | "Jump into any part of my journey": one rounded card per section. Each card has a small pixel animation (a neural net training, a book being read, a course being completed, a system being designed). | CSS keyframes, with SVG cables for the entrance. |
 | **The computer** | A Bondi-blue, arched, translucent all-in-one computer in a dithered landscape. Its screen is a macOS Terminal window replaying a real training run from the notebooks. Scrolling pulls the camera out of the screen and round to "Feel free to explore my journey!" and three buttons. | WebGL2: the whole scene is one fragment shader. |
 | **Footer** | "Road to AI" written in falling characters that settle into the letters and scatter from the mouse; then GitHub, Website, Blog and the copyright. | Canvas2D, a falling-sand simulation. |
@@ -169,17 +169,15 @@ types/topojson-client.d.ts       minimal types for topojson-client
 
 **The character** (`character/sprite.ts`, `character/paint.ts`)
 
-- **What he is:** an original 30×57-cell pixel sprite: curly hair under amber headphones, rectangular glasses, rosy cheeks, a small smile, a blue hoodie with drawstrings, a laptop on his lap, dark trousers and light-soled sneakers.
+- **What he is:** an original 30×57-cell pixel sprite of a cool developer: a red baseball cap with a few curls at his temples, amber headphones, dark shades, a small smile, a blue hoodie with drawstrings, a laptop on his lap, dark trousers and light-soled sneakers.
 - **The format:** the grid is written as text, one character per cell:
   - `.` clear, `#` outline/dark, `w` light, `:` grey dither;
-  - `y` accent (the headphones), `h` hoodie, `H` hoodie shade, `b` blush;
+  - `y` accent (the headphones), `r` cap, `R` its shade (the brim), `h` hoodie, `H` hoodie shade;
   - `o` the laptop logo.
 - **Painting:** `paint.ts` draws him onto a tiny canvas in the page's colours, with a one-cell paper outline, and the browser scales it up with `image-rendering: pixelated`.
 - **Size and seat:** he is an eighth of the globe's width. Row 40 sits on the globe's crown and his legs hang down its face.
 - **Alive:**
-  - he blinks every 33 ticks;
-  - his eyes look left or right when the mouse is more than 60 px to that side;
-  - his glasses glint every 47 ticks;
+  - his shades glint every 47 ticks (his eyes are behind them, so the blink and glance frames the clock still computes don't show);
   - the laptop logo flickers on the beat.
 
 **Speech bubbles** (`hero/talk.ts`)
@@ -303,7 +301,7 @@ types/topojson-client.d.ts       minimal types for topojson-client
 | `--lp-yellow`, `--lp-on-yellow` | highlights (pushed grains, text selection) | `--section-workshop` |
 | `--lp-ocean`, `--lp-ocean-night`, `--lp-land`, `--lp-land-night` | the Earth | same in both themes |
 | `--lp-moon`, `--lp-moon-dark`, `--lp-pin` | the moon, the Bangalore pin | same in both themes |
-| `--lp-hoodie`, `--lp-hoodie-dark`, `--lp-blush` | the character | same in both themes |
+| `--lp-cap`, `--lp-cap-dark`, `--lp-hoodie`, `--lp-hoodie-dark` | the character | same in both themes |
 | `--lp-mac-*` | the computer and its Terminal window | same in both themes |
 
 The section colours (`--section-*`) tint the cards, the satellites' panels and the labels.
@@ -441,6 +439,10 @@ Judge speed on the export, not on `npm run dev`.
 - the arched back of the computer, after a photo of the original, with the camera swung further round and the light moved to show it;
 - the character redrawn with curly hair, headphones, a cuter face and a hoodie;
 - stars carried over the hero's text column.
+
+**Third review:**
+
+- the character as a cool developer: a red baseball cap and dark shades instead of glasses, no blush.
 
 ## 14. Known limits and ideas
 

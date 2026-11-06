@@ -378,7 +378,7 @@ export const LINES = [
 
 He shows them in turn, then ends on the first one again.
 
-**The character himself:** the `SPRITE` grid in `components/landing/character/sprite.ts`, one string per row of 30 cells: `.` empty, `#` outline/dark, `w` light, `:` grey dither, `y` accent (his headphones), `h` hoodie, `H` hoodie shade, `b` blush, `o` the laptop logo (flickers on the beat). The hoodie and blush colours are `--lp-hoodie`, `--lp-hoodie-dark` and `--lp-blush` in `app/global.css`. Keep every row 30 characters long. Row 40 is where he sits; his eyes are the 4×3 cells inside each lens (`EYES` below the grid).
+**The character himself:** the `SPRITE` grid in `components/landing/character/sprite.ts`, one string per row of 30 cells: `.` empty, `#` outline/dark, `w` light, `:` grey dither, `y` accent (his headphones), `r` cap, `R` cap shade (the brim), `h` hoodie, `H` hoodie shade, `o` the laptop logo (flickers on the beat). The cap and hoodie colours are `--lp-cap`, `--lp-cap-dark`, `--lp-hoodie` and `--lp-hoodie-dark` in `app/global.css`. Keep every row 30 characters long. Row 40 is where he sits; the glint on his shades is `GLINT` below the grid.
 
 **A section's animation on its card:** `components/landing/sections/mechanisms.tsx`. Each section has a small pixel scene keyed by its folder name (`NeuralNetworks`, `Library`, …):
 
