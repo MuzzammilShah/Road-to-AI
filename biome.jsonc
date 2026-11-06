@@ -1,0 +1,74 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.6.4/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "app/**",
+      "components/**",
+      "lib/**",
+      "scripts/**",
+      "types/**",
+      "*.mjs",
+      "*.ts",
+      "biome.jsonc",
+      "package.json",
+      "tsconfig.json"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended"
+    },
+    "domains": {
+      "next": "recommended",
+      "react": "recommended"
+    }
+  },
+  "css": {
+    "parser": {
+      // Tailwind's `@theme` / `@plugin` directives in app/global.css
+      "tailwindDirectives": true
+    }
+  },
+  "overrides": [
+    {
+      // components/landing/ is ported from the Fumadocs landing (see its LICENSE-fumadocs.txt) and
+      // keeps that code's style so it can be compared with the original: non-null assertions on
+      // lookups it knows succeed, assignments and commas in expressions. `gl.useProgram()` and
+      // similar WebGL calls are not React hooks, but their `use` prefix trips the hook rule.
+      "includes": ["components/landing/**"],
+      "linter": {
+        "rules": {
+          "style": { "noNonNullAssertion": "off" },
+          "suspicious": { "noAssignInExpressions": "off" },
+          "complexity": { "noCommaOperator": "off" },
+          "correctness": { "useHookAtTopLevel": "off" }
+        }
+      }
+    }
+  ],
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
+}

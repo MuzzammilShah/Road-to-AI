@@ -50,7 +50,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - route handlers set `dynamic = 'force-static'`.
 - **URL parity with the old MkDocs site.** Docs are served at the site root (`baseUrl: '/'`), and folder and file names, including their case, are the URLs. Never rename content files or folders without adding redirects. `scripts/old-urls.txt` lists the URLs that must keep working. Redirects live in `scripts/write-redirects.mjs` (run by `npm run build` after `next build`): for a renamed prefix it writes a small forwarding page (meta refresh + JS that keeps `#anchor`) at every old path. `ZeroToHero/` → `NeuralNetworks/` and `Books/` → `Library/` were renamed this way; the old `/ZeroToHero/` itself goes to `/NeuralNetworks/Zero-To-Hero-Series/` (it used to be that page). Old `/notebooks/ZeroToHero/*.ipynb` download links are not redirected. Headings carry explicit MkDocs-style ids (`## Title [#id]`), so old `#anchor` links keep working too.
 - **Notebooks are never executed.** The converter only reads the saved outputs.
-- **Biome is limited by an allow-list** in `biome.json`. It also formats YAML and Markdown, so keep `content/`, `notebooks/`, `archive/`, `*.md` and `.github/` out of its scope.
+- **Biome is limited by an allow-list** in `biome.jsonc`. It also formats YAML and Markdown, so keep `content/`, `notebooks/`, `archive/`, `*.md` and `.github/` out of its scope.
 - **Read the versioned docs before using framework APIs:**
   - Next.js docs ship in `node_modules/next/dist/docs/` (see `AGENTS.md`).
   - Fumadocs: https://www.fumadocs.dev/docs, but trust the installed package source and types in `node_modules/fumadocs-*` when they differ.
