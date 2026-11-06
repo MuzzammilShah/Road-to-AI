@@ -4,7 +4,7 @@
 import { bayer8 } from '../lib/dither';
 import type { Vec3 } from '../lib/mesh';
 import { mix, type Rect } from '../lib/motion';
-import { COLS, type Frame, ROWS } from './data';
+import { COLS, type Frame, ROWS, TITLE } from './data';
 
 /**
  * The session's symbols in their cell, 60 by 125 units with the font's math axis at 64.5, drawn by
@@ -26,6 +26,10 @@ const SHAPES: Record<string, string> = {
   '▏': 'M0-100h7.5V225H0z',
   '▕': 'M52.5-100H60V225h-7.5z',
   '·': 'M24 64.5a6 6 0 0 0 12 0 6 6 0 0 0-12 0z',
+  // the window's title: its buttons and the macOS title's dash and times sign
+  '●': 'M8 64.5a22 22 0 0 0 44 0 22 22 0 0 0-44 0z',
+  '—': 'M-2 60.25h64v8.5H-2z',
+  '×': 'M12 52.5l6-6 12 12 12-12 6 6-12 12 12 12-6 6-12-12-12 12-6-6 12-12z',
 };
 const SYMBOLS = Object.keys(SHAPES).join('');
 const ASCII = 95;
@@ -34,14 +38,14 @@ const ATLAS_COLUMNS = 16;
 /** texels of padding round each glyph's box, so its mips to level 4 stay its own */
 const PAD = 16;
 
-/** world units, the terminal stands on y = 0 and faces +z */
-const SCREEN = { c: [0, 2.2, 1.3], b: [1.89, 1.08] } as const;
+/** world units, the computer stands on y = 0 and faces +z; its screen is 4:3 */
+const SCREEN = { c: [0, 2.3, 1.3], b: [1.45, 1.09] } as const;
 /** half size of the 80x24 cell grid on the glass */
-const GRID = [1.38, 0.8625] as const;
+const GRID = [1.36, 0.85] as const;
 /** the glass bulges out to this z at its centre */
 const GLASS_Z = 1.22;
 /** visible extent, for framing */
-const BOUNDS = { min: [-2.3, 0, -2.35], max: [2.3, 3.6, 1.3] } as const;
+const BOUNDS = { min: [-2.45, 0, -2.2], max: [2.45, 3.85, 1.3] } as const;
 
 /**
  * The whole figure, drawn as the mesh's backdrop: the terminal's solid traced in its box, shaded on
@@ -53,6 +57,8 @@ export const backdrop = `
 uniform vec2 uResolution, uShift, uHorizon;
 uniform float uDpr, uYaw, uFocal, uNight, uOpen;
 uniform vec3 uEye, uLit, uShade, uAccent;
+// the computer's colours, and the macOS Terminal window's title bar and buttons
+uniform vec3 uBlue, uBlueDark, uIce, uIceDark, uBar, uBarText, uRed, uAmber, uGreen;
 // uClear: the call to action's edges and foot (stage px), and how far the valley under it is open
 uniform vec4 uMoon, uClear, uGlyph;
 uniform sampler2D uAtlas, uChars;
@@ -63,25 +69,27 @@ uniform float uRestYaw;
 ${bayer8}
 // from the front right and above
 const vec3 LIGHT = vec3(sin(0.85) * cos(0.62), sin(0.62), cos(0.85) * cos(0.62));
-const vec3 BODY_C = vec3(0.0, 2.05, 0.0);
-const vec3 BODY_B = vec3(2.3, 1.55, 1.3);
-const float BODY_R = 0.2;
-const vec3 REAR_C = vec3(0.0, 2.0, -1.65);
-const vec3 REAR_B = vec3(1.6, 1.15, 0.7);
-const float REAR_R = 0.4;
-const vec3 NECK_C = vec3(0.0, 0.32, -0.2);
-const vec3 NECK_B = vec3(0.6, 0.22, 0.5);
-const vec3 FOOT_C = vec3(0.0, 0.06, -0.1);
-const vec3 FOOT_B = vec3(1.35, 0.06, 1.05);
+// the all-in-one: a rounded front block (its face the pale bezel round the screen), merged into a
+// deep egg of a back shell with a carry handle cut through its top, on a low foot
+const vec3 BODY_C = vec3(0.0, 1.95, 0.75);
+const vec3 BODY_B = vec3(2.05, 1.85, 0.55);
+const float BODY_R = 0.5;
+const vec3 EGG_C = vec3(0.0, 2.05, -0.55);
+const vec3 EGG_R = vec3(1.85, 1.75, 1.6);
+const vec3 HANDLE_C = vec3(0.0, 3.5, -1.15);
+const vec3 HANDLE_B = vec3(0.7, 0.16, 0.5);
+const vec3 FOOT_C = vec3(0.0, 0.06, 0.1);
+const vec3 FOOT_B = vec3(1.2, 0.06, 1.0);
 const vec3 SCREEN_C = vec3(${SCREEN.c.join(', ')});
 const vec2 SCREEN_B = vec2(${SCREEN.b.join(', ')});
 const vec2 GRID_B = vec2(${GRID.join(', ')});
 const float GLASS_Z = ${GLASS_Z};
 const float GLASS_R = 20.0;
-const vec3 SLOT_C = vec3(1.0, 0.82, 1.3);
-const vec3 SLOT_B = vec3(0.6, 0.05, 0.1);
-const vec3 BOX_MIN = vec3(-2.4, -0.05, -2.45);
-const vec3 BOX_MAX = vec3(2.4, 3.7, 1.4);
+// the disc slot under the screen
+const vec3 SLOT_C = vec3(0.0, 0.62, 1.3);
+const vec3 SLOT_B = vec3(0.7, 0.04, 0.1);
+const vec3 BOX_MIN = vec3(-2.6, -0.05, -2.25);
+const vec3 BOX_MAX = vec3(2.6, 3.95, 1.4);
 // three ridges around the terminal, near to far: radius, height, features per radian, ink density
 const float RIDGE_R[3] = float[3](70.0, 130.0, 240.0);
 const float RIDGE_H[3] = float[3](2.4, 9.0, 30.0);
@@ -94,13 +102,29 @@ float sdRoundBox(vec3 p, vec3 b, float r) {
 }
 
 float sdRecess(vec3 p) { return sdRoundBox(p - SCREEN_C, vec3(SCREEN_B, 0.3), 0.12); }
+
+/** a bound on the distance to the ellipsoid of radii r (iq) */
+float sdEllipsoid(vec3 p, vec3 r) {
+  float k0 = length(p / r);
+  float k1 = length(p / (r * r));
+  return k0 * (k0 - 1.0) / k1;
+}
+
+float smin(float a, float b, float k) {
+  float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
+  return mix(b, a, h) - k * h * (1.0 - h);
+}
+
+float sdShell(vec3 p) {
+  float shell = smin(sdRoundBox(p - BODY_C, BODY_B, BODY_R), sdEllipsoid(p - EGG_C, EGG_R), 0.35);
+  return max(shell, -sdRoundBox(p - HANDLE_C, HANDLE_B, 0.12));
+}
 float sdBulge(vec3 p) { return length(p - vec3(SCREEN_C.xy, GLASS_Z - GLASS_R)) - GLASS_R; }
 
 float field(vec3 p) {
   float recess = sdRecess(p);
-  float shell = min(sdRoundBox(p - BODY_C, BODY_B, BODY_R), sdRoundBox(p - REAR_C, REAR_B, REAR_R));
-  shell = max(max(shell, -recess), -sdRoundBox(p - SLOT_C, SLOT_B, 0.04));
-  float stand = min(sdRoundBox(p - NECK_C, NECK_B, 0.06), sdRoundBox(p - FOOT_C, FOOT_B, 0.05));
+  float shell = max(max(sdShell(p), -recess), -sdRoundBox(p - SLOT_C, SLOT_B, 0.04));
+  float stand = sdRoundBox(p - FOOT_C, FOOT_B, 0.05);
   return min(min(shell, stand), max(sdBulge(p), recess));
 }
 
@@ -224,6 +248,9 @@ vec3 screen(vec3 p, float w, float facing) {
   vec3 bg = uShade;
   if (style == 3) { bg = uAccent; fg = uShade; }
   if (style == 4) { bg = uLit; fg = uShade; }
+  // the window's title bar: its title, then its close, minimise and zoom buttons
+  if (style == 5) { bg = uBar; fg = uBarText; }
+  if (style >= 6) { bg = uBar; fg = style == 6 ? uRed : style == 7 ? uAmber : uGreen; }
   return mix(bg, fg, cov);
 }
 
@@ -305,8 +332,7 @@ vec4 backdrop(vec2 at) {
     float recess = sdRecess(p);
     float bulge = sdBulge(p);
     float body = sdRoundBox(p - BODY_C, BODY_B, BODY_R);
-    float rear = sdRoundBox(p - REAR_C, REAR_B, REAR_R);
-    float neck = sdRoundBox(p - NECK_C, NECK_B, 0.06);
+    float shell = sdShell(p);
     float foot = sdRoundBox(p - FOOT_C, FOOT_B, 0.05);
     float slot = sdRoundBox(p - SLOT_C, SLOT_B, 0.04);
     // world units a CSS px spans across the face here, wider on faces seen at a grazing angle
@@ -319,16 +345,25 @@ vec4 backdrop(vec2 at) {
       float v = lambert > 0.0 ? lambert * lit(p + n * 2.0 * w, LIGHT, BOX_MIN, BOX_MAX) : lambert;
       // solid, quarters, solid, on 2 px cells as they lie at rest
       tone = floor(clamp((v - 0.12) / 0.3, 0.0, 1.0) * 4.0 + 0.5) / 4.0;
-      col = bayer8(floor(rest(p, px) / 2.0)) < tone ? uLit : uShade;
+      // the pale bezel on the flat of its face, with a speaker grille either side under the
+      // screen; the rest the translucent blue shell, its shade the deeper blue
+      bool ice = p.z > 1.2 && abs(p.x) < 1.62 && p.y > 0.32 && p.y < 3.55 && abs(body) < 2.0 * w;
+      // the translucent shell lets light through even in its shade: never under a quarter lit
+      if (!ice) tone = max(tone, 0.25);
+      vec3 hi = ice ? uIce : uBlue;
+      vec3 lo = ice ? uIceDark : uBlueDark;
+      vec2 hole = mod(p.xy, 0.11) - 0.055;
+      if (ice && p.y > 0.42 && p.y < 1.0 && abs(p.x) > 0.85 && abs(p.x) < 1.45 && dot(hole, hole) < 0.0009)
+        hi = lo;
+      col = bayer8(floor(rest(p, px) / 2.0)) < tone ? hi : lo;
     }
     // creases 1.5 CSS px across: where two parts meet, and the middle of each rounded edge
-    float d = min(min(max(abs(body), abs(recess)), max(abs(bulge), abs(recess))),
-      min(min(max(abs(body), abs(rear)), max(abs(body), abs(slot))),
-        min(max(abs(neck), abs(foot)), max(abs(neck), abs(body)))));
-    if (abs(body) < across) d = min(d, crease(abs(p - BODY_C) - (BODY_B - BODY_R)));
-    if (abs(rear) < across) d = min(d, crease(abs(p - REAR_C) - (REAR_B - REAR_R)));
+    float d = min(min(max(abs(shell), abs(recess)), max(abs(bulge), abs(recess))),
+      min(max(abs(shell), abs(slot)), max(abs(foot), abs(shell))));
+    if (abs(body) < across && p.z > 0.9) d = min(d, crease(abs(p - BODY_C) - (BODY_B - BODY_R)));
     if (abs(foot) < across) d = min(d, crease(abs(p - FOOT_C) - (FOOT_B - 0.05)));
-    col = mix(col, glass ? uLit : (tone > 0.5 ? uShade : uLit), band(d / across, 0.75));
+    vec3 seam = p.z > 1.2 && abs(p.x) < 1.62 ? uIceDark : uBlueDark;
+    col = mix(col, glass ? uLit : seam, band(d / across, 0.75));
   } else {
     // the ridges near to far, each edge blended over what lies past it, then the ground or the sky
     vec4 acc = vec4(0.0);
@@ -399,14 +434,14 @@ vec4 backdrop(vec2 at) {
   // the silhouette, a band 1.25 CSS px out
   if (edgeT < depth) col = mix(col, pen, clamp((1.25 - edge) * uDpr + 0.5, 0.0, 1.0));
 
-  // the ground line at the foot of the near ridge, with ticks, drawn out from under the terminal
+  // the ground line at the foot of the near ridge, drawn out from under the terminal
   if (!terminal && abs(px.x - uHorizon.x) < uHorizon.y) {
     vec2 d = normalize(rd.xz);
     float b = dot(ro.xz, d);
     float base = -b + sqrt(max(b * b - dot(ro.xz, ro.xz) + RIDGE_R[0] * RIDGE_R[0], 0.0));
     vec3 v = vec3(d.x * base, -ro.y, d.y * base);
     float y = px.y - (centre.y - v.y / dot(v, fwd) * uFocal);
-    col = mix(col, pen, max(band(y, 0.5), y > 0.0 && y < 6.0 && mod(px.x, 24.0) < 1.0 ? 1.0 : 0.0));
+    col = mix(col, pen, band(y, 0.5));
   }
   return vec4(col, 1.0);
 }
@@ -618,7 +653,8 @@ export function paint(frame: Frame, data: Uint8ClampedArray, density: Uint8Array
   for (let r = 0; r < ROWS; r++) {
     let o = (ROWS - 1 - r) * COLS * 4;
     const end = o + COLS * 4;
-    for (const [text, style] of frame.lines[frame.top + r] ?? []) {
+    // the window's title bar on the first row, the session under it
+    for (const [text, style] of (r === 0 ? TITLE : frame.lines[frame.top + r - 1]) ?? []) {
       for (let i = 0; i < text.length && o < end; i++, o += 4) write(o, glyphOf(text[i]), style);
     }
     // glyph 0 is the space

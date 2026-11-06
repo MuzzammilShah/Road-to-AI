@@ -1,6 +1,8 @@
 // Adapted from Fumadocs (https://github.com/fuma-nama/fumadocs, commit 55decd9),
 // apps/docs/app/(landing)/sections/integrations/stage.tsx. MIT License, Copyright (c) 2023 Fuma.
 // See components/landing/LICENSE-fumadocs.txt.
+//
+// Road to AI: no screws or rulers round the stage.
 import type { CSSProperties, ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 import { BAYER4 } from '../lib/dither';
@@ -173,9 +175,6 @@ function box(x: number, y: number, w: number | undefined, h: number | undefined)
   };
 }
 
-/** a slotted screw head, 3x3 cells */
-const SCREW = ['###', '#.#', '###'];
-
 interface StageProps {
   c: Choreography;
   /** the unit's readout: a status a frame, rolled by `status`, the lamp lit by `lamp` */
@@ -188,39 +187,21 @@ interface StageProps {
 }
 
 /**
- * A mechanism's unit, 120x56 cells: its 96x40 cell stage on a plate screwed at its corners, a
- * ruler down either side, and under it the readout, a lamp lit while it works, its status in the
+ * A mechanism's unit, 120x56 cells: its 96x40 cell stage, and under it the readout, a lamp lit while it works, its status in the
  * machine's voice and what it runs on. Its parts draw still ones first: the compositor takes a
  * moving part to cover anything drawn after it in its clip, the unit at most.
  */
 export function Stage({ c, states, status, lamp, spec, children }: StageProps) {
-  let rulers = rect(4, 8, 1, 40) + rect(115, 8, 1, 40);
-  for (let y = 8; y <= 48; y += 4) {
-    const tick = y % 8 === 0 ? 3 : 2;
-    rulers += rect(5 - tick, y, tick, 1) + rect(115, y, tick, 1);
-  }
   return (
     <span
       aria-hidden
-      className="relative block h-42 w-90 overflow-clip text-(--bt-ink) *:absolute @max-[26rem]:[zoom:0.9] @max-[22.5rem]:[zoom:0.8]"
+      className="relative block h-42 w-90 overflow-clip text-(--bt-ink) *:absolute @max-[26rem]:[zoom:0.9] @max-[22.5rem]:[zoom:0.8] @max-[20rem]:[zoom:0.7]"
       style={{ '--bt-dur': `${c.dur}ms` } as CSSProperties}
     >
       <style href={`bt-${c.name}`} precedence="default">
         {c.css}
       </style>
-      <Px
-        w={120}
-        h={56}
-        ink={
-          art(SCREW, 0, 0) +
-          art(SCREW, 117, 0) +
-          art(SCREW, 0, 53) +
-          art(SCREW, 117, 53) +
-          rulers +
-          rect(12, 50, 96, 1)
-        }
-        className="opacity-55"
-      />
+      <Px w={120} h={56} ink={rect(12, 50, 96, 1)} className="opacity-55" />
       <Layer x={12} y={6} w={96} h={40}>
         {children}
       </Layer>

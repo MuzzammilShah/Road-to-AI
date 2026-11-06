@@ -21,7 +21,7 @@ Personal documentation site (notes, Jupyter notebooks, book notes on AI), served
 - **Docs layout:** the Fumadocs **spacious** layout (as on fumadocs.dev). It adds two pieces of the classic layout: the collapsed-sidebar pill and the `'normal'` TOC style.
 - **Styling:** Tailwind CSS 4, the Fumadocs `neutral` preset, the Inter font (`next/font`), #121212 dark background, subtle per-section accent colours.
 - **Search:** Orama static search. The index is exported to `/api/search.json`.
-- **Landing page:** `HomeLayout` with interactive figures ported from the fumadocs.dev landing (MIT, see "Landing page" below): a hand-written WebGL2 renderer (no three.js), Canvas2D, CSS keyframes. Extra dependencies: `motion` (springs, easing, reduced-motion hook), `world-atlas` + `topojson-client` (the globe's land, imported dynamically). Fonts on the landing only: Geist Pixel (small machine text) and JetBrains Mono (code, the CRT), both via `next/font`.
+- **Landing page:** `HomeLayout` with interactive figures ported from the fumadocs.dev landing (MIT, see "Landing page" below): a hand-written WebGL2 renderer (no three.js), Canvas2D, CSS keyframes. Extra dependencies: `motion` (springs, easing, reduced-motion hook), `world-atlas` + `topojson-client` (the globe's land, imported dynamically), `geist` (Geist Pixel, OFL). Fonts on the landing only: Geist Pixel (small machine text, as a local font from `geist/font/pixel/square`: loaded from Google Fonts, Turbopack warns on every build that it has no fallback metrics for it) and JetBrains Mono (the CRT's terminal, via `next/font/google`).
 - **Tooling:** TypeScript (strict) and Biome (lint + format). npm only.
 
 ## Commands
@@ -130,19 +130,20 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 
 - **Where:** `components/landing/`, adapted from the fumadocs.dev landing (Fumadocs commit `55decd9`). Every ported file starts with a licence header; the MIT text is in `components/landing/LICENSE-fumadocs.txt`. The Fumadocs mascot, wordmark, copy and assets were not copied. The character, the mechanisms, the globe's shading and the CRT session are this site's own.
   - `lib/`: `mesh.ts` (the WebGL2 renderer: instanced parts, shadow map, outline pass, 8×8 Bayer dither), `dither.ts`, `motion.ts` (the 120 bpm tick grid, `TICK` = 125 ms), `theme.ts` (`onTheme`, `cssRgb`, which converts `oklch()`/`hsl()`/`color-mix()` through a cached 1×1 canvas), `script.ts` (`mount`/`nearby`, clocks, pops), `cable.ts`, `status.ts` (a no-op stub: no status bar here).
-  - `ui/`: `window.tsx` (rounded window), `chip.tsx` (the hero's section links), `text.tsx` (`Roller`), `command.tsx` (copyable command), `github-icon.tsx`.
-  - `hero/`: `index.tsx` (text column, buttons, horizon), `stage.tsx`, `engine.ts` (boot on `BEAT_AT`, pointer sun, satellites, set on scroll via `ViewTimeline`), `scene.ts` (globe, ring and star shaders; `satellites()`), `earth.ts` (the land mask), `glitch.tsx`, `talk.ts` (speech bubbles).
+  - `ui/`: `chip.tsx` (the hero's section links), `github-icon.tsx`.
+  - `hero/`: `index.tsx` (text column, buttons, horizon line), `stage.tsx` (canvases, bubble, the Bangalore pin, section labels), `engine.ts` (boot on `BEAT_AT`, pointer sun, the moon and satellites, the pin, set on scroll via `ViewTimeline`), `scene.ts` (Earth, ring, moon, solar panel and star shaders; `orbiters()`: the first section is the moon, every other one a satellite), `earth.ts` (the land mask), `talk.ts` (speech bubbles).
   - `character/`: `sprite.ts` (the pixel character as an ASCII grid), `paint.ts`.
   - `sections/`: `board.tsx`, `engine.ts` (the entrance and cables), `stage.tsx` (the mechanism helpers), `mechanisms.tsx`.
-  - `start/`: the pinned CRT scene (`index.tsx`, `stage.tsx`, `engine.ts`, `scene.ts`, `data.ts`).
-  - `footer/`: `wordmark.tsx` (falling glyphs), `footer.tsx`.
-- **Tokens:** the engines read `--lp-*` from `.landing-surface` with `getComputedStyle`; never scope them with `:root:has(...)` as Fumadocs does. The accent (globe land, CRT numbers) is `--lp-sun` = `--section-library`; highlights are `--lp-yellow` = `--section-workshop`.
+  - `start/`: the pinned scene of a Bondi-blue all-in-one computer (no Apple logo) running a macOS Terminal window (`index.tsx`, `stage.tsx`, `engine.ts`, `scene.ts` (the computer is a signed-distance shape there), `data.ts`).
+  - `footer/`: `wordmark.tsx` (falling glyphs), `footer.tsx` (GitHub, Website and Blog links; `lib/shared.ts` has the URLs).
+- **Tokens:** the engines read `--lp-*` from `.landing-surface` with `getComputedStyle`; never scope them with `:root:has(...)` as Fumadocs does. The accent (CRT numbers, the moon behind the hills) is `--lp-sun` = `--section-library`; highlights are `--lp-yellow` = `--section-workshop`. Fixed colours that are the same in both themes are tokens too: the Earth and its moon (`--lp-ocean*`, `--lp-land*`, `--lp-moon*`, `--lp-pin`) and the computer and its Terminal window (`--lp-mac-*`).
 - **Edit the content:**
   - speech bubbles: `LINES` in `hero/talk.ts` (two lines each);
   - the character: `SPRITE` in `character/sprite.ts` (`.` clear, `#` line, `w` lit, `:` half tone, `y` accent, `o` the laptop logo; eyes and glint positions below it);
   - a section's mechanism: `mechanisms` in `sections/mechanisms.tsx`, keyed by folder name (96×40-cell stage, `choreograph` tracks on the tick grid);
   - the CRT session: `start/data.ts`; its numbers are copied from the saved outputs of `notebooks/NeuralNetworks/Makemore-part5/Main-notebook-part-5.ipynb`. Any non-ASCII glyph it uses needs a hand-drawn path in `SHAPES` in `start/scene.ts`;
-  - the wordmark's grains: `GLYPHS` in `footer/wordmark.tsx`, only characters in Inter's loaded subsets (latin, greek).
+  - the wordmark's grains: `GLYPHS` in `footer/wordmark.tsx`, only characters in Inter's loaded subsets (latin, greek);
+  - the pin: `HOME` (latitude, longitude) in `hero/engine.ts`, its label in `hero/stage.tsx`.
 - **Check by hand** on `npx serve out -l 4173` after changing it: light and dark, 375/768/1280/1440 px, reduced motion (DevTools → Rendering), and with WebGL off; no console errors (the mesh logs shader compile errors there).
 
 ## Deployment
@@ -170,7 +171,7 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
   - each WebGL figure draws only when something changed (`invalidate()`), pauses off screen (`IntersectionObserver`), asks for a `low-power` context without antialiasing, renders at most 2 device px a dot and drops to 1 while the GPU lags;
   - scripts are created about a screen before they're reached (`mount`/`nearby` in `lib/script.ts`); the board's mechanisms are CSS keyframes and pause off screen (`data-paused`);
   - every figure has a still final state with reduced motion, and without WebGL the figure is simply absent (the text, links and buttons are real DOM);
-  - idle with the board on screen, no `requestAnimationFrame` runs. The hero draws every frame while visible (its satellites move).
+  - idle with the board on screen, no `requestAnimationFrame` runs. The hero draws every frame while visible (the moon and satellites move).
 - **Judge speed on the export:** use `npm run build && npx serve out -l 4173`, not `npm run dev`.
 
 ## How to add a page
@@ -188,7 +189,7 @@ A new sub-folder needs its own `meta.json` (`title`, `pages`) and must be listed
 
 1. Create `content/docs/<Section>/meta.json` with `"root": true`, `title`, `description`, `icon` and `pages`, and add the folder to the root `content/docs/meta.json` (dropdown order).
 2. In `lib/sections.tsx`, add the Lucide icon to `sectionIcons` and add the folder name to `sections` with its `accent` colour (used by `SectionAccent` and the landing card) and, optionally, a longer `landing` description for the landing card (otherwise the meta.json `description` is used). In `app/global.css`, define the `--section-*` colour (light and dark) and its `[data-section-icon]` rule.
-3. Optionally add a navbar link in `lib/layout.shared.tsx`. On the landing page the section appears automatically: a board card (1 column on phones, 2 from `md`, 3 from `xl` when the count is odd) with the fallback mechanism until it gets its own in `components/landing/sections/mechanisms.tsx`, a satellite round the hero's globe (up to 8 are tinted), a link on the hero's "Sections" line and in the footer.
+3. Optionally add a navbar link in `lib/layout.shared.tsx`. On the landing page the section appears automatically: a board card (1 column on phones, 2 from `md`, 3 from `xl` when the count is odd) with the fallback mechanism until it gets its own in `components/landing/sections/mechanisms.tsx`, a satellite round the hero's globe with solar panels in its accent (the first section is the moon; up to 8 are tinted).
 
 The build fails with "Unknown icon" if the `meta.json` icon is missing from `sectionIcons`. The MDX `<Icon>` component has its own short list in `components/mdx/icon.tsx`.
 

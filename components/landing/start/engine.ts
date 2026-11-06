@@ -2,11 +2,13 @@
 // apps/docs/app/(landing)/sections/start/engine.ts. MIT License, Copyright (c) 2023 Fuma.
 // See components/landing/LICENSE-fumadocs.txt.
 //
-// Road to AI: the glass shows a training loop (./data.ts); its caret blinks once the session has
+// Road to AI: the terminal is a Bondi blue all-in-one, its glass a macOS Terminal window running a
+// training loop (./data.ts); its caret blinks once the session has
 // played, while the stage is on screen; the mono font is read off the stage, not the root.
 import { createMesh, type Vec3 } from '../lib/mesh';
 import { clamp, easeInOut, rectIn, smoothstep, TICK } from '../lib/motion';
 import { report } from '../lib/status';
+import { cssRgb } from '../lib/theme';
 import { COLS, createSession, type Frame, ROWS } from './data';
 import {
   backdrop,
@@ -62,6 +64,20 @@ export function createStart(pin: HTMLElement): () => void {
       // the landing's accent in both themes, as the globe's land is
       mesh!.uniform('uAccent', sun);
       mesh!.uniform('uNight', night ? 1 : 0);
+      // the computer's own colours and the Terminal window's, the same in both themes
+      const style = getComputedStyle(canvas);
+      for (const [uniform, token] of [
+        ['uBlue', 'mac-blue'],
+        ['uBlueDark', 'mac-blue-dark'],
+        ['uIce', 'mac-ice'],
+        ['uIceDark', 'mac-ice-dark'],
+        ['uBar', 'mac-bar'],
+        ['uBarText', 'mac-bar-text'],
+        ['uRed', 'mac-red'],
+        ['uAmber', 'mac-yellow'],
+        ['uGreen', 'mac-green'],
+      ])
+        mesh!.uniform(uniform, cssRgb(style.getPropertyValue(`--lp-${token}`)));
       return undefined;
     },
   });

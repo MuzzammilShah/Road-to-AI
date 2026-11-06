@@ -6,17 +6,16 @@
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import type { CSSProperties, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { appDescription, githubUrl } from '@/lib/shared';
 import { GithubIcon } from '../ui/github-icon';
-import { Glitch } from './glitch';
 import { type Satellite, Stage } from './stage';
 
 export interface HeroSection extends Satellite {
   title: ReactNode;
 }
 
-/** the term of the site's description set in the accent, glitching once on load */
+/** the term of the site's description set apart, in the site's muted grey */
 const KEY = 'Artificial Intelligence';
 const [before, after] = appDescription.split(KEY);
 
@@ -55,9 +54,7 @@ export function Hero({ sections }: { sections: HeroSection[] }) {
             {before}
             {after !== undefined && (
               <>
-                <span className="font-semibold text-lp-orange">
-                  <Glitch>{KEY}</Glitch>
-                </span>
+                <span className="font-semibold text-fd-muted-foreground">{KEY}</span>
                 {after}
               </>
             )}
@@ -77,29 +74,11 @@ export function Hero({ sections }: { sections: HeroSection[] }) {
               GitHub
             </a>
           </div>
-          <p className="mt-5 text-sm text-lp-ink-2">
-            Sections:{' '}
-            {sections.map((section, i) => (
-              <span key={section.url}>
-                {i > 0 && <> ·&nbsp;</>}
-                <Link
-                  href={section.url}
-                  className="rounded-sm whitespace-nowrap text-lp-ink underline decoration-lp-line underline-offset-4 transition-colors hover:text-(--accent) hover:decoration-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fd-ring"
-                  style={{ '--accent': section.accent } as CSSProperties}
-                >
-                  {section.title}
-                </Link>
-              </span>
-            ))}
-          </p>
         </div>
         <Stage satellites={sections} />
       </div>
-      {/* the horizon: a ruler's ticks, every 24px and every 240px */}
-      <div aria-hidden className="relative h-16 border-t border-lp-line-strong">
-        <div className="h-1.5 bg-[repeating-linear-gradient(to_right,var(--lp-line-strong)_0_1px,transparent_1px_24px)] bg-position-[1rem]" />
-        <div className="absolute inset-x-0 top-0 h-2.5 bg-[repeating-linear-gradient(to_right,var(--lp-line-strong)_0_1px,transparent_1px_240px)] bg-position-[1rem]" />
-      </div>
+      {/* the horizon: the globe sets behind it as the hero scrolls away */}
+      <div aria-hidden className="h-16 border-t border-lp-line" />
       <a
         href="#intro"
         aria-label="Scroll to content"

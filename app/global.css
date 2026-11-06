@@ -66,6 +66,28 @@
   /* ink on the yellow, the same dark in both themes */
   --lp-on-yellow: #121212;
 
+  /* the hero's Earth, the same in both themes: oceans and land by day, then their night side; its
+     moon; the pin on Bangalore */
+  --lp-ocean: #1f4e9c;
+  --lp-ocean-night: #0f2856;
+  --lp-land: #2f8a3f;
+  --lp-land-night: #17482a;
+  --lp-moon: #d6d5cf;
+  --lp-moon-dark: #8a8984;
+  --lp-pin: #e5484d;
+
+  /* the pre-footer computer: a Bondi blue translucent shell, its pale front bezel, and the macOS
+     Terminal window on its screen (title bar, title, the three window buttons) */
+  --lp-mac-blue: #0aa0bf;
+  --lp-mac-blue-dark: #05627a;
+  --lp-mac-ice: #eef3f4;
+  --lp-mac-ice-dark: #a9bcc2;
+  --lp-mac-bar: #353535;
+  --lp-mac-bar-text: #a6a6a6;
+  --lp-mac-red: #ff5f57;
+  --lp-mac-yellow: #febc2e;
+  --lp-mac-green: #28c840;
+
   /* layout: the h-14 navbar, no status bar on this site */
   --lp-max: var(--fd-layout-width, 1400px);
   --lp-gutter: 1rem;
@@ -102,7 +124,7 @@
   --color-lp-yellow: var(--lp-yellow);
   --color-lp-on-yellow: var(--lp-on-yellow);
   /* the machine's voice (Geist Pixel): small machine text only, never headings or body */
-  --font-pixel: var(--font-geist-pixel), ui-sans-serif, system-ui, sans-serif;
+  --font-pixel: var(--font-geist-pixel-square), ui-sans-serif, system-ui, sans-serif;
   --text-pixel: 13.16px;
   --text-pixel--line-height: 1rem;
   --animate-lp-caret: lp-caret 1s steps(1, end) infinite;
@@ -111,13 +133,6 @@
     50% {
       opacity: 0;
     }
-  }
-}
-
-/* a `Roller` cell's strip, from its first character to the one it rests on */
-@keyframes lp-roll {
-  from {
-    translate: 0 0;
   }
 }
 

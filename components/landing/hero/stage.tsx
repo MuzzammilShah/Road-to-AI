@@ -2,8 +2,10 @@
 // apps/docs/app/(landing)/sections/hero/stage.tsx. MIT License, Copyright (c) 2023 Fuma.
 // See components/landing/LICENSE-fumadocs.txt.
 //
-// Road to AI: the satellites' labels are links to the site's sections, and the bubble is rounded.
+// Road to AI: the satellites' labels are links to the site's sections, a pin marks Bangalore, and
+// the bubble is rounded.
 'use client';
+import { MapPin } from 'lucide-react';
 import { useReducedMotion } from 'motion/react';
 import { type CSSProperties, type ReactNode, useCallback } from 'react';
 import { LEGS, MATE_H, MATE_W } from '../character/sprite';
@@ -88,6 +90,23 @@ export function Stage({ satellites }: { satellites: Satellite[] }) {
             className="invisible absolute bottom-(--feet) [image-rendering:pixelated]"
           />
           <Bubble />
+        </div>
+        {/* where he's from: the engine keeps the dot's centre on Bangalore as the globe turns, and
+            hides the pin on the far side */}
+        <div
+          data-home
+          style={{ transform: 'scale(0)' }}
+          className="pointer-events-none absolute top-0 left-0 flex flex-col items-center"
+        >
+          <span className="flex items-center gap-1 rounded-md border border-lp-line bg-lp-paper/90 px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap text-lp-ink shadow-sm backdrop-blur-sm">
+            <MapPin aria-hidden className="size-3 text-(--lp-pin)" />
+            Bangalore, India
+          </span>
+          <span aria-hidden className="h-2.5 w-px bg-(--lp-pin)" />
+          <span
+            aria-hidden
+            className="size-2 rounded-full bg-(--lp-pin) shadow-[0_0_0_2px_var(--lp-paper)]"
+          />
         </div>
         {satellites.map((s) => (
           <Chip

@@ -19,18 +19,25 @@ export const HORIZON = 0.76;
 export const CROWN = HORIZON + 1;
 /** the dither's cell at rest, CSS px: the globe's dots and the stars */
 export const CELL = 3;
-/** the most satellites (sections) the shader tints */
+/** the most sections the shader tints, the moon included */
 export const MAX_SATELLITES = 8;
 
-export interface Satellite {
-  /** half sizes of its prism, globe radii */
-  size: readonly [number, number, number];
+/** one body round the globe: the first section's moon, then a satellite per section */
+export interface Orbiter {
+  kind: 'moon' | 'satellite';
+  /** the moon's radius, or the satellite body's half size, globe radii: what its label sits over */
+  reach: number;
   /** turns round the ring from its right end (0.25 its front) */
   phase: number;
-  /** the unit axis it tumbles round, and seconds a turn of it */
+  /** the unit axis a satellite turns round, and seconds a turn of it */
   axis: readonly [number, number, number];
   spin: number;
 }
+
+/** the moon's radius and a satellite's half sizes (body, then each solar panel), globe radii */
+export const MOON_RADIUS = 0.12;
+export const SAT_BODY = [0.04, 0.045, 0.04] as const;
+export const SAT_PANEL = [0.085, 0.045, 0.005] as const;
 
 /** a number in [0, 1) from `i` and `salt`, the same on every load */
 function hash01(i: number, salt: number): number {
@@ -41,55 +48,56 @@ function hash01(i: number, salt: number): number {
 }
 
 /**
- * The satellites, one per section in the order they pop: evenly round the ring, starting 0.12 of a
- * turn from its right end; each prism's size, tumble axis and pace varied by its index, the same on
- * every load. With reduced motion (`still`) they never move, so they spread over the ring's front
- * half instead, where none is behind the globe and every label shows.
+ * What orbits the globe, one per section in the order they pop: the first section's moon, then a
+ * satellite for each other section, evenly round the ring from 0.12 of a turn past its right end;
+ * each satellite's turning axis and pace varied by its index, the same on every load. With reduced
+ * motion (`still`) they never move, so they spread over the ring's front half instead, where none
+ * is behind the globe and every label shows.
  */
-export function satellites(count: number, still = false): Satellite[] {
-  const out: Satellite[] = [];
+export function orbiters(count: number, still = false): Orbiter[] {
+  const out: Orbiter[] = [];
   for (let i = 0; i < count; i++) {
-    const long = 0.09 + 0.07 * hash01(i, 1);
-    const mid = 0.05 + 0.05 * hash01(i, 2);
-    const flat = 0.035 + 0.05 * hash01(i, 3);
-    const ax = [hash01(i, 4) - 0.3, hash01(i, 5) + 0.2, hash01(i, 6) - 0.3];
+    const ax = [hash01(i, 4) - 0.5, hash01(i, 5) + 0.6, hash01(i, 6) - 0.5];
     const l = Math.hypot(ax[0], ax[1], ax[2]);
     out.push({
-      size: [long, mid, flat],
+      kind: i === 0 ? 'moon' : 'satellite',
+      reach: i === 0 ? MOON_RADIUS : SAT_PANEL[0] * 0.6,
       phase: still ? 0.02 + (0.46 * (i + 0.5)) / count : (0.12 + i / count) % 1,
       axis: [ax[0] / l, ax[1] / l, ax[2] / l],
-      spin: 16 + 10 * hash01(i, 7),
+      spin: 24 + 12 * hash01(i, 7),
     });
   }
   return out;
 }
 
-/** the globe's and the ring's materials, then each satellite's, the figure's own */
+/** the globe's, the ring's and the moon's materials, then each section's satellite panels, the
+ * figure's own (a satellite's body is the mesh's grey) */
 export const GLOBE = MATERIAL.figure;
 export const RING = MATERIAL.figure + 1;
-export const SATELLITE = MATERIAL.figure + 2;
+export const MOON = MATERIAL.figure + 2;
+export const SATELLITE = MATERIAL.figure + 3;
 
 /** the Earth's axial tilt, radians: its north pole leans right, as on a desk globe */
 export const TILT = (23.4 * Math.PI) / 180;
 
 /**
- * The globe's, the ring's and the satellites' materials, in the scene's globe radii (x right, y up,
- * z toward the viewer, the globe's centre at the origin). The globe: a true circle with a pen a dot
- * wide round it, shaded on cells counted from its middle so they rise with it: 2 dots at rest,
- * `uCell` in the boot's mosaic. Its surface point turns to a longitude and latitude through its
- * tilt and `uSpin`; land is the accent with ink dots for shade, ocean sparse ink dots, a crisp
- * terminator into a darker night side, and faint graticule dots every 30°. Lit by the pointer's sun
- * as the moon was. Before the land mask arrives (`uLandReady` 0) it is the plain lit sphere.
+ * The globe's, the ring's, the moon's and the satellites' materials, in the scene's globe radii
+ * (x right, y up, z toward the viewer, the globe's centre at the origin). The globe: a true circle
+ * with a pen a dot wide round it, shaded on cells counted from its middle so they rise with it: 2
+ * dots at rest, `uCell` in the boot's mosaic. Its surface point turns to a longitude and latitude
+ * through its tilt and `uSpin`: green land and blue ocean by day, their darker shades by night,
+ * the terminator dithered between them, and faint graticule dots every 30° on the day side's ocean.
+ * Lit by the pointer's sun. Before the land mask arrives (`uLandReady` 0) it is all ocean.
  */
 export const figureShader = `
 uniform sampler2D uLand;
 uniform float uLandReady;
 uniform float uRadius;
 uniform float uCell;
-uniform float uDark;
 uniform float uSpin;
 uniform vec4 uOrbit;
-uniform vec3 uInk, uPaper, uLandInk;
+uniform vec3 uInk, uPaper;
+uniform vec3 uOcean, uOceanNight, uLandDay, uLandNight, uMoonLit, uMoonDark;
 uniform vec3 uSat[${MAX_SATELLITES}];
 
 const float TAU = 6.2831853;
@@ -105,9 +113,6 @@ vec3 surface(vec2 at) {
   vec2 p = pc / max(1.0, length(pc));
   vec3 n = vec3(p, sqrt(max(0.0, 1.0 - dot(p, p))));
   float sun = dot(n, uLight);
-  // a crisp terminator: day falls to night over a few degrees
-  float day = smoothstep(-0.03, 0.09, sun);
-  float lit = clamp(sun, 0.0, 1.0) * day;
 
   // the point on the Earth: the tilt undone (round the view axis), then the spin round its axis
   float c = cos(TILT), s = sin(TILT);
@@ -127,17 +132,15 @@ vec3 surface(vec2 at) {
   float dLon = abs(lon - every * floor(lon / every + 0.5)) * cos(lat);
   bool grid = min(dLat, dLon) < reach && mod(cell.x + cell.y, 2.0) < 0.5 && abs(lat) < 1.4;
 
-  if (land > 0.5) {
-    // land: the accent by day, ink dots for its shade; ink dots on paper by night
-    float shade = 0.45 * (1.0 - clamp(lit / 0.7, 0.0, 1.0));
-    vec3 dim = uDark > 0.5 ? uPaper : uInk;
-    if (day > 0.5) return threshold < shade ? dim : uLandInk;
-    return threshold < (uDark > 0.5 ? 0.22 : 0.62) ? uInk : uPaper;
-  }
-  // ocean: sparse ink dots, denser on the night side in the light theme, sparser in the dark
-  float sea = day > 0.5 ? (uDark > 0.5 ? 0.16 : 0.1) : (uDark > 0.5 ? 0.04 : 0.36);
-  if (grid && day > 0.5) sea = max(sea, 0.4);
-  return threshold < sea ? uInk : uPaper;
+  // day by its colours, night by their darker shades, the terminator dithered between them, and a
+  // few dots of shade where the sun is low on the day side
+  float day = smoothstep(-0.06, 0.14, sun);
+  float low = 0.35 * (1.0 - clamp(sun / 0.6, 0.0, 1.0));
+  bool lit = threshold < day && threshold >= low;
+  bool ground = land > 0.5;
+  if (!lit) return ground ? uLandNight : uOceanNight;
+  if (grid && !ground) return uOceanNight;
+  return ground ? uLandDay : uOcean;
 }
 
 vec4 globe(vec2 at) {
@@ -163,8 +166,20 @@ vec4 ring(vec2 at) {
   return vec4(mix(uPaper, uInk, clamp((0.5 - gap) * uDot + 0.5, 0.0, 1.0)), 1.0);
 }
 
-/** a satellite's prism in its section's accent, shaded in the dither as the parts are */
-vec4 satellite(int k, vec3 normal) {
+/** the moon: grey, lit in the dither, three craters on its near side */
+vec4 moon(vec3 normal) {
+  float lambert = dot(normal, uLight);
+  float tone = floor(clamp((lambert + 0.1) / 0.6, 0.0, 1.0) * 4.0 + 0.5) / 4.0;
+  float crater = max(
+    max(step(0.97, dot(normal, normalize(vec3(0.45, 0.5, 0.74)))),
+      step(0.985, dot(normal, normalize(vec3(-0.55, -0.15, 0.82))))),
+    step(0.975, dot(normal, normalize(vec3(0.05, -0.62, 0.78)))));
+  vec3 face = crater > 0.5 ? mix(uMoonLit, uMoonDark, 0.55) : uMoonLit;
+  return vec4(threshold < tone ? face : uMoonDark, 1.0);
+}
+
+/** a satellite's solar panel in its section's accent, shaded in the dither as the parts are */
+vec4 panel(int k, vec3 normal) {
   float lambert = dot(normal, uLight);
   float tone = floor(clamp((lambert - 0.12) / 0.3, 0.0, 1.0) * 4.0 + 0.5) / 4.0;
   tone = max(tone, 0.25);
@@ -173,7 +188,8 @@ vec4 satellite(int k, vec3 normal) {
 }
 
 bool figure(int material, vec3 world, vec3 normal, vec2 px, inout vec4 color) {
-  if (material >= ${SATELLITE}) color = satellite(material - ${SATELLITE}, normal);
+  if (material >= ${SATELLITE}) color = panel(material - ${SATELLITE}, normal);
+  else if (material == ${MOON}) color = moon(normal);
   else color = material == ${GLOBE} ? globe(world.xy) : ring(world.xy);
   return true;
 }

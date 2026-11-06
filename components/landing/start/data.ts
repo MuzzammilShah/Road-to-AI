@@ -5,7 +5,8 @@
 // Road to AI: the session is a training loop printing its loss, with real numbers: every value is
 // a saved output of notebooks/NeuralNetworks/Makemore-part5/Main-notebook-part-5.ipynb (the
 // WaveNet-style makemore model; notebooks are never executed). The command line itself is
-// illustrative. The GPT-1 notebook has no step-by-step loss log, so it isn't used.
+// illustrative. The GPT-1 notebook has no step-by-step loss log, so it isn't used. It runs in a
+// macOS Terminal window: its title bar is the screen's first row, then zsh.
 import { TICK } from '../lib/motion';
 
 /** the terminal: 80 columns by 24 rows */
@@ -21,6 +22,8 @@ const dim = (text: string): Span => [text, 1];
 const accent = (text: string): Span => [text, 2];
 const inverse = (text: string): Span => [text, 3];
 const caret = (text: string): Span => [text, 4];
+// the title bar: its text, then its close, minimise and zoom buttons
+const bar = (text: string): Span => [text, 5];
 
 export interface Frame {
   at: number;
@@ -31,6 +34,26 @@ export interface Frame {
 }
 
 const COMMAND = 'python train.py --model wavenet --data names.txt';
+/** zsh's prompt on macOS: user@host, the folder, `%` */
+const PROMPT = 'muzzammil@MacBook Road-to-AI % ';
+const LOGIN = 'Last login: Thu Nov  6 09:41:12 on ttys000';
+
+/** the Terminal window's title bar, the screen's first row: its three buttons, its title centred */
+export const TITLE: Line = (() => {
+  const title = 'muzzammil — python — 80×24';
+  const left = Math.floor((COLS - title.length) / 2);
+  return [
+    bar(' '),
+    ['●', 6],
+    bar(' '),
+    ['●', 7],
+    bar(' '),
+    ['●', 8],
+    bar(' '.repeat(left - 6)),
+    bar(title),
+    bar(' '.repeat(COLS - left - title.length)),
+  ];
+})();
 /** cell 5, 9: the dataset and the model */
 const SETUP = 'vocab 27 · context 8 · 76579 params · 182625 examples';
 const STEPS = 200000;
@@ -116,15 +139,17 @@ export function createSession() {
 
   function show(live: Line[], wait: number, status?: string) {
     const lines = log.concat(live);
-    top = Math.max(top, lines.length - ROWS);
+    // the title bar takes the first row
+    top = Math.max(top, lines.length - (ROWS - 1));
     frames.push({ at, lines, top, status });
     at += wait;
   }
 
   function shell(typed: string, cursor: boolean): Line[] {
-    return [[dim('$ '), plain(typed), ...(cursor ? [caret(' ')] : [])]];
+    return [[plain(PROMPT), plain(typed), ...(cursor ? [caret(' ')] : [])]];
   }
 
+  log.push([plain(LOGIN)]);
   show(shell('', true), 2 * TICK);
   for (let i = 1; i <= COMMAND.length; i++)
     show(shell(COMMAND.slice(0, i), true), 28, i === 1 ? `typing ${COMMAND}` : undefined);

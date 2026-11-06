@@ -233,7 +233,7 @@ const sections: Record<string, { accent: string; landing?: string }> = {
 };
 ```
 
-- `accent` colours the docs pages of the section, the glow on its landing card and its satellite round the landing's globe.
+- `accent` colours the docs pages of the section, the glow on its landing card and the solar panels of its satellite round the landing's globe.
 - `landing` is the description on the landing card. Without it, the card uses the (shorter) `description` from meta.json.
 
 The build fails with "Unknown icon" if the `meta.json` icon isn't registered here.
@@ -260,7 +260,7 @@ In `oklch(lightness chroma hue)`, the last number is the hue: 268 is indigo (Neu
 
 **4. Optional:**
 - **Navbar link:** add `{ text: 'Papers', url: '/Papers/', icon: <ScrollText />, active: 'nested-url' }` to `links` in `lib/layout.shared.tsx`.
-- **Landing page:** nothing to do. It builds everything per section from the sidebar data (title, icon, link), in dropdown order: a card on the board, a satellite round the globe, a link on the hero's "Sections" line and in the footer. Set `landing` in step 2 for a longer card description. The card shows a generic "page being written" animation until the section gets its own (section 12).
+- **Landing page:** nothing to do. It builds everything per section from the sidebar data (title, icon, link), in dropdown order: a card on the board and a satellite round the globe (the first section in the dropdown is the moon). Set `landing` in step 2 for a longer card description. The card shows a generic "page being written" animation until the section gets its own (section 12).
 
 ## 8. Writing MDX: cheat sheet
 
@@ -391,7 +391,13 @@ const mechanisms = {
 
 A section without an entry gets `FallbackMechanism` (a page whose lines type in). To make one, copy an existing mechanism: draw with `rect`/`frame`/`art` on the 96×40 grid, and time its parts with `choreograph(name, ticks, rest, tracks)`, where a tick is 125 ms and `rest` is the tick it ends on. Its readout (`states`) and spec label sit under it.
 
-**The old computer's screen (the training loop):** `components/landing/start/data.ts`. The numbers are copied from the saved outputs of `notebooks/NeuralNetworks/Makemore-part5/Main-notebook-part-5.ipynb` (the notebook is never run). If you add a character outside plain ASCII, also draw it in `SHAPES` in `components/landing/start/scene.ts`, otherwise it shows as a space.
+**The computer's screen (a macOS Terminal window running a training loop):** `components/landing/start/data.ts`. The window's title (`TITLE`), the zsh prompt (`PROMPT`) and the "Last login" line are at the top of the file. The numbers are copied from the saved outputs of `notebooks/NeuralNetworks/Makemore-part5/Main-notebook-part-5.ipynb` (the notebook is never run). If you add a character outside plain ASCII, also draw it in `SHAPES` in `components/landing/start/scene.ts`, otherwise it shows as a space.
+
+**Where the pin on the globe points:** `HOME` in `components/landing/hero/engine.ts` (latitude and longitude in degrees, Bangalore now) and its label in `components/landing/hero/stage.tsx`.
+
+**The Earth's, the moon's and the computer's colours:** the `--lp-ocean*`, `--lp-land*`, `--lp-moon*` and `--lp-mac-*` tokens on `.landing-surface` in `app/global.css`. They are the same in both themes.
+
+**The links in the footer:** `components/landing/footer/footer.tsx`; the addresses are in `lib/shared.ts` (`githubUrl`, `websiteUrl`, `blogUrl`).
 
 **The footer wordmark's falling characters:** `GLYPHS` in `components/landing/footer/wordmark.tsx`. Use only characters the site's Inter font has (Latin and Greek); others would fall back to a different font.
 

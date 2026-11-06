@@ -2,10 +2,10 @@
 // apps/docs/app/(landing)/sections/hero/engine.ts. MIT License, Copyright (c) 2023 Fuma.
 // See components/landing/LICENSE-fumadocs.txt.
 //
-// Road to AI: the moon is a spinning, tilted Earth (./earth.ts, ./scene.ts) whose land mask loads
-// after the page; its satellites are the site's sections, as many as there are, each prism in its
-// section's accent and each label a link that stays shown while it has keyboard focus; the
-// character on its crown is new (../character).
+// Road to AI: the moon is a spinning, tilted Earth in its real colours (./earth.ts, ./scene.ts),
+// its land mask loading after the page, with a pin on Bangalore; round it, the first section is a
+// moon and every other one a satellite with solar panels in its section's accent, each label a link
+// that stays shown while it has keyboard focus; the character on its crown is new (../character).
 import { springValue } from 'motion/react';
 import { type MateInk, mateAt, mateInk, paintMate } from '../character/paint';
 import { LEGS, MATE_H, MATE_W } from '../character/sprite';
@@ -15,6 +15,7 @@ import {
   identity,
   MATERIAL,
   type Mat4,
+  multiply,
   type PartSpec,
   transform,
   type Vec3,
@@ -31,11 +32,16 @@ import {
   GLOBE,
   HORIZON,
   MAX_SATELLITES,
+  MOON,
+  MOON_RADIUS,
+  orbiters,
   REACH,
   RING,
+  SAT_BODY,
+  SAT_PANEL,
   SATELLITE,
-  satellites,
   skyShader,
+  TILT,
 } from './scene';
 import { createTalk } from './talk';
 
@@ -43,7 +49,6 @@ import { createTalk } from './talk';
 export const BEAT_AT = {
   ring: 2,
   satellites: 6,
-  glitch: 9,
   mate: 10,
   ready: 13,
   /** his first bubble */
@@ -157,6 +162,22 @@ function mix32(n: number): number {
   return (k ^ (k >>> 16)) >>> 0;
 }
 
+/** where the pin stands: Bangalore, the author's home town, latitude and longitude in radians */
+const HOME = { lat: (12.97 * Math.PI) / 180, lon: (77.59 * Math.PI) / 180 };
+
+/** a satellite's parts in its own frame: its body, then its two solar panels either side */
+const SAT_PARTS: Mat4[] = [
+  transform(identity(), [0, 0, 0], [0, 0, 0], [2 * SAT_BODY[0], 2 * SAT_BODY[1], 2 * SAT_BODY[2]]),
+  ...[-1, 1].map((side) =>
+    transform(
+      identity(),
+      [side * (SAT_BODY[0] + SAT_PANEL[0] + 0.01), 0, 0],
+      [0, 0, 0],
+      [2 * SAT_PANEL[0], 2 * SAT_PANEL[1], 2 * SAT_PANEL[2]],
+    ),
+  ),
+];
+
 /** an empty land mask, till the real one is in */
 let blank: HTMLCanvasElement | undefined;
 
@@ -168,6 +189,7 @@ export function createHero(stage: HTMLElement, reduced: boolean): (() => void) |
   const drawing = canvas?.nextElementSibling;
   const mate = drawing?.firstElementChild;
   const labels = scene?.querySelectorAll<HTMLElement>(':scope > [data-satellite]');
+  const home = scene?.querySelector<HTMLElement>(':scope > [data-home]');
   // a Fast Refresh can pair this engine with other markup for a moment: no sky until they match
   if (
     !(scene instanceof HTMLElement) ||
@@ -175,26 +197,39 @@ export function createHero(stage: HTMLElement, reduced: boolean): (() => void) |
     !(drawing instanceof HTMLElement) ||
     !(mate instanceof HTMLCanvasElement) ||
     !labels ||
-    labels.length === 0
+    labels.length === 0 ||
+    !home
   )
     return;
   // a page out of canvas memory gets no contexts: the hero is its text then
   const pen = mate.getContext('2d');
   if (!pen) return;
-  const SATELLITES = satellites(Math.min(labels.length, MAX_SATELLITES), reduced);
-  /** the globe, the satellites' prisms, then the ring's plane; the globe and the ring are never
-   * outlined (id 0) */
-  const parts: PartSpec[] = [
-    { shape: 'sphere', id: 0, material: GLOBE, shadow: false },
-    ...SATELLITES.map((_, i) => ({
-      shape: 'box' as const,
-      id: i + 1,
-      material: SATELLITE + i,
-      shadow: false,
-    })),
-    { shape: 'box', id: 0, material: RING, shadow: false },
-  ];
-  const ringPart = SATELLITES.length + 1;
+  const SATELLITES = orbiters(Math.min(labels.length, MAX_SATELLITES), reduced);
+  /** the globe, then each orbiter's parts (the moon's sphere; a satellite's body and two panels, one
+   * solid to the outline), then the ring's plane; the globe and the ring are never outlined (id 0) */
+  const parts: PartSpec[] = [{ shape: 'sphere', id: 0, material: GLOBE, shadow: false }];
+  /** each orbiter's part indices, and what each part is made of when it isn't flashing */
+  const partsOf: number[][] = [];
+  const materials: number[] = [GLOBE];
+  for (let i = 0; i < SATELLITES.length; i++) {
+    const own: number[] = [];
+    const specs =
+      SATELLITES[i].kind === 'moon'
+        ? [{ shape: 'sphere' as const, material: MOON }]
+        : [
+            { shape: 'box' as const, material: MATERIAL.grey },
+            { shape: 'box' as const, material: SATELLITE + i },
+            { shape: 'box' as const, material: SATELLITE + i },
+          ];
+    for (const spec of specs) {
+      own.push(parts.length);
+      materials.push(spec.material);
+      parts.push({ ...spec, id: i + 1, shadow: false });
+    }
+    partsOf.push(own);
+  }
+  const ringPart = parts.length;
+  parts.push({ shape: 'box', id: 0, material: RING, shadow: false });
   if (!blank) {
     blank = document.createElement('canvas');
     blank.width = blank.height = 1;
@@ -212,11 +247,19 @@ export function createHero(stage: HTMLElement, reduced: boolean): (() => void) |
     theme(page) {
       mesh!.uniform('uInk', page.ink);
       mesh!.uniform('uPaper', page.paper);
-      // the land, in the landing's accent
-      mesh!.uniform('uLandInk', page.sun);
+      // the Earth's and the moon's own colours, the same in both themes
+      const style = getComputedStyle(canvas);
+      for (const [uniform, token] of [
+        ['uOcean', 'ocean'],
+        ['uOceanNight', 'ocean-night'],
+        ['uLandDay', 'land'],
+        ['uLandNight', 'land-night'],
+        ['uMoonLit', 'moon'],
+        ['uMoonDark', 'moon-dark'],
+      ])
+        mesh!.uniform(uniform, cssRgb(style.getPropertyValue(`--lp-${token}`)));
       // the stars' sparkles: a yellow one would vanish on light paper
       mesh!.uniform('uSun', page.night ? page.yellow : page.sun);
-      mesh!.uniform('uDark', page.night ? 1 : 0);
       // each satellite in its section's accent, read off its label
       for (let i = 0; i < SATELLITES.length; i++) {
         const accent = getComputedStyle(labels[i]).getPropertyValue('--sat-accent');
@@ -253,13 +296,17 @@ export function createHero(stage: HTMLElement, reduced: boolean): (() => void) |
   const light: Vec3 = [0, 0, 1];
   const shoot: [number, number, number, number] = [0, 0, 0, 0];
   const orbit: [number, number, number, number] = [ORBIT.a, ORBIT.b, ORBIT.tilt, 0];
-  const prisms = SATELLITES.map(() => identity());
+  /** each orbiter's own frame, and a part's matrix in the scene */
+  const frames = SATELLITES.map(() => identity());
+  const placed = identity();
+  /** the pin's place on the globe, and its size */
+  const homeAt = identity();
+  let homeSize = { w: 0, h: 0 };
+  const homePin = mesh.anchor(home, homeAt);
   /** each label's place, the satellite's centre, and its size */
   const places = SATELLITES.map(() => identity());
   const sizes = SATELLITES.map(() => ({ w: 0, h: 0 }));
-  const pins = SATELLITES.map((s, i) =>
-    mesh.anchor(labels[i], places[i], [0, Math.hypot(...s.size), 0]),
-  );
+  const pins = SATELLITES.map((s, i) => mesh.anchor(labels[i], places[i], [0, s.reach, 0]));
   /** the label with keyboard focus: shown wherever its satellite is */
   let focused = -1;
   let ink: MateInk | undefined;
@@ -273,14 +320,14 @@ export function createHero(stage: HTMLElement, reduced: boolean): (() => void) |
   const sized = new ResizeObserver((entries) => {
     for (const entry of entries) {
       const [box] = entry.borderBoxSize;
-      sizes[Array.prototype.indexOf.call(labels, entry.target)] = {
-        w: box.inlineSize,
-        h: box.blockSize,
-      };
+      const size = { w: box.inlineSize, h: box.blockSize };
+      if (entry.target === home) homeSize = size;
+      else sizes[Array.prototype.indexOf.call(labels, entry.target)] = size;
     }
     mesh.invalidate();
   });
   for (let i = 0; i < SATELLITES.length; i++) sized.observe(labels[i]);
+  sized.observe(home);
 
   const onFocusIn = (event: FocusEvent) => {
     focused = Array.prototype.indexOf.call(labels, event.target);
@@ -385,7 +432,22 @@ export function createHero(stage: HTMLElement, reduced: boolean): (() => void) |
 
     mesh.uniform('uCell', MOSAIC[clamp(Math.floor(t / TICK), 0, MOSAIC.length - 1)]);
     if (t < RISE_MS) look((1 - easeOut(t / RISE_MS)) * RISE);
-    mesh.uniform('uSpin', SPIN_START - (reduced ? 0 : (time / SPIN_S) * Math.PI * 2));
+    const spin = SPIN_START - (reduced ? 0 : (time / SPIN_S) * Math.PI * 2);
+    mesh.uniform('uSpin', spin);
+
+    // the pin on Bangalore: the city's point on the turning, tilted globe, its tip on it, hidden on
+    // the far side and close to the rim
+    const d = HOME.lon - spin;
+    const qx = Math.cos(HOME.lat) * Math.sin(d);
+    const qy = Math.sin(HOME.lat);
+    const qz = Math.cos(HOME.lat) * Math.cos(d);
+    homeAt[12] = Math.cos(TILT) * qx + Math.sin(TILT) * qy;
+    homeAt[13] = -Math.sin(TILT) * qx + Math.cos(TILT) * qy;
+    homeAt[14] = qz;
+    homePin.offset[0] = -homeSize.w / 2;
+    // the dot's centre, 4px over the pin's foot, on the city
+    homePin.offset[1] = 4 - homeSize.h;
+    homePin.shown = qz > 0.2 && t >= BEAT_AT.mate * TICK;
 
     const turn = Math.PI / 4 + time * 0.2;
     const sx = touch ? Math.cos(turn) * 1.22 : sunX.get();
@@ -423,10 +485,29 @@ export function createHero(stage: HTMLElement, reduced: boolean): (() => void) |
       const s = SATELLITES[i];
       const at = onRing(s.phase, reduced ? 0 : time);
       const due = (BEAT_AT.satellites + i) * TICK;
-      boxAt(prisms[i], at, s.size, s.axis, 2 * ((reduced ? 1 : time / s.spin) * Math.PI + i * 1.3));
-      mesh.place(i + 1, prisms[i]);
-      mesh.show(i + 1, t >= due);
-      mesh.material(i + 1, t < due + POP_MS ? MATERIAL.ink : SATELLITE + i);
+      const own = partsOf[i];
+      if (s.kind === 'moon') {
+        // the moon only orbits: its craters keep facing the viewer
+        mesh.place(
+          own[0],
+          transform(placed, at, [0, 0, 0], Array(3).fill(2 * MOON_RADIUS) as Vec3),
+        );
+      } else {
+        // a satellite turns slowly round its own axis as it orbits
+        boxAt(
+          frames[i],
+          at,
+          [0.5, 0.5, 0.5],
+          s.axis,
+          2 * ((reduced ? 0.15 : time / s.spin) * Math.PI + i * 1.3),
+        );
+        for (let k = 0; k < own.length; k++)
+          mesh.place(own[k], multiply(placed, frames[i], SAT_PARTS[k]));
+      }
+      for (const part of own) {
+        mesh.show(part, t >= due);
+        mesh.material(part, t < due + POP_MS ? MATERIAL.ink : materials[part]);
+      }
 
       const pin = pins[i];
       const { w, h } = sizes[i];

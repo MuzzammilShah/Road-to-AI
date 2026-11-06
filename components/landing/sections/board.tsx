@@ -4,17 +4,13 @@
 //
 // Road to AI: the board holds the site's sections (one card per root folder of the docs) as
 // separate rounded cards, each one link, with the site's corner-glow hover instead of Fumadocs'
-// colour inversion; the "install" window became an "open" window that rolls in `cd /<Section>/`.
+// colour inversion; no "install" window.
 'use client';
-import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button';
-import { ArrowUpRight, Check, Clipboard } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
-import { type CSSProperties, type ReactNode, useId, useState } from 'react';
+import { type CSSProperties, type ReactNode, useId } from 'react';
 import { cn } from '@/lib/cn';
-import { siteUrl } from '@/lib/shared';
 import { mount, reduce } from '../lib/script';
-import { Roller } from '../ui/text';
-import { Window } from '../ui/window';
 import { createEntrance } from './engine';
 
 export interface BoardSection {
@@ -34,15 +30,12 @@ export interface BoardSection {
 
 /**
  * The board of sections, each card's mechanism played once as the card comes in and again as it's
- * pointed at or focused, else resting on its payoff. The open window shows the path of the card
- * last pointed at or focused.
+ * pointed at or focused, else resting on its payoff.
  */
 export function Board({ header, sections }: { header: ReactNode; sections: BoardSection[] }) {
-  const [inspected, setInspected] = useState(0);
   const id = useId();
 
-  function enter(card: HTMLElement, i: number) {
-    setInspected(i);
+  function enter(card: HTMLElement) {
     // its mechanism once more, unless it's still playing or yet to come in; a card queued for its
     // turn leaves the queue
     if (card.hasAttribute('data-play') || card.hasAttribute('data-waiting') || reduce()) return;
@@ -50,11 +43,9 @@ export function Board({ header, sections }: { header: ReactNode; sections: Board
     card.dataset.play = 'fast';
   }
 
-  const paths: string[] = [];
   const cells = [];
   for (let i = 0; i < sections.length; i++) {
     const section = sections[i];
-    paths.push(section.url);
     const title = `${id}-${i}-title`;
     const description = `${id}-${i}-description`;
     cells.push(
@@ -66,11 +57,11 @@ export function Board({ header, sections }: { header: ReactNode; sections: Board
         aria-describedby={description}
         // a mouse points at a card; a tap opens it
         onPointerEnter={(event) => {
-          if (event.pointerType === 'mouse') enter(event.currentTarget, i);
+          if (event.pointerType === 'mouse') enter(event.currentTarget);
         }}
         onFocus={(event) => {
           if (!event.target.matches(':focus-visible')) return;
-          enter(event.currentTarget, i);
+          enter(event.currentTarget);
         }}
         // played through: it rests on its payoff, its animations gone
         onAnimationEnd={(event) => {
@@ -121,10 +112,7 @@ export function Board({ header, sections }: { header: ReactNode; sections: Board
   const odd = sections.length % 2 === 1;
   return (
     <div ref={playOnScreen} className="flex flex-col">
-      <div className="flex flex-col gap-8 pb-10 md:pb-12 lg:flex-row lg:items-end lg:justify-between">
-        {header}
-        <Open paths={paths} path={sections[inspected]?.url ?? '/'} />
-      </div>
+      <div className="pb-10 md:pb-12">{header}</div>
       <div
         ref={entrance}
         className={cn(
@@ -155,44 +143,4 @@ function playOnScreen(board: HTMLDivElement) {
   });
   for (const el of board.querySelectorAll('[data-card]')) observer.observe(el);
   return () => observer.disconnect();
-}
-
-/** the "open" window: `cd` into the section last pointed at or focused, its URL copyable */
-function Open({ paths, path }: { paths: string[]; path: string }) {
-  const [copied, onCopy] = useCopyButton(() => navigator.clipboard.writeText(`${siteUrl}${path}`));
-  // as wide as the longest command, so the window keeps its size as the command changes
-  const sizers = [];
-  for (const item of paths) {
-    sizers.push(
-      <span key={item} aria-hidden className="invisible col-start-1 row-start-1">
-        cd {item}
-      </span>,
-    );
-  }
-
-  return (
-    // below 1024 the window would sit screens above most cards
-    <Window
-      title={<span className="font-pixel text-pixel antialiased">open</span>}
-      className="shrink-0 max-lg:hidden"
-    >
-      <div className="flex items-center gap-3 px-3 py-2.5 font-mono text-sm">
-        <span aria-hidden className="text-lp-ink-2">
-          $
-        </span>
-        <span className="grid min-w-0 flex-1 whitespace-pre">
-          {sizers}
-          <Roller value={`cd ${path}`} step={24} stagger={6} className="col-start-1 row-start-1" />
-        </span>
-        <button
-          type="button"
-          onClick={onCopy}
-          aria-label={copied ? 'Copied' : `Copy the link to ${path}`}
-          className="flex size-7 shrink-0 items-center justify-center rounded-md border border-lp-line text-lp-ink-2 transition-colors hover:bg-fd-accent hover:text-fd-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fd-ring"
-        >
-          {copied ? <Check className="size-3.5" /> : <Clipboard className="size-3.5" />}
-        </button>
-      </div>
-    </Window>
-  );
 }

@@ -1,14 +1,12 @@
 import { HomeLayout } from 'fumadocs-ui/layouts/home';
-import { Geist_Pixel, JetBrains_Mono } from 'next/font/google';
+import { GeistPixelSquare } from 'geist/font/pixel/square';
+import { JetBrains_Mono } from 'next/font/google';
 import { baseOptions } from '@/lib/layout.shared';
 
-// The landing's machine voice (speech bubble, mechanism readouts): the default square pixels only.
-const pixel = Geist_Pixel({
-  subsets: ['latin'],
-  variable: '--font-geist-pixel',
-  // no metrics exist to size a fallback for it
-  adjustFontFallback: false,
-});
+// The landing's machine voice (speech bubble, mechanism readouts): Geist Pixel's square pixels, from
+// Vercel's `geist` package (OFL) as a local font. Loaded from Google Fonts instead, Turbopack warns
+// that it has no fallback metrics for it on every build.
+const pixel = GeistPixelSquare;
 
 // Code on the landing (commands, the CRT terminal's glyph atlas).
 const mono = JetBrains_Mono({

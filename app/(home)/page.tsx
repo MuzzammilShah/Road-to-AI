@@ -4,6 +4,7 @@ import { Hero } from '@/components/landing/hero';
 import { Board } from '@/components/landing/sections/board';
 import { mechanismFor } from '@/components/landing/sections/mechanisms';
 import { Start } from '@/components/landing/start';
+import { cn } from '@/lib/cn';
 import { getSection } from '@/lib/sections';
 import { source } from '@/lib/source';
 
@@ -44,7 +45,11 @@ export default function HomePage() {
       {/* Section board: one card per root folder of the docs, each with its own mechanism. */}
       <section
         id="intro"
-        className="mx-auto w-full max-w-(--fd-layout-width) scroll-mt-14 px-4 py-20 md:py-24"
+        className={cn(
+          'mx-auto w-full scroll-mt-14 px-4 py-20 md:py-24',
+          // two columns of cards; three (when the count is odd) need a little more room
+          sections.length % 2 === 1 ? 'max-w-6xl' : 'max-w-5xl',
+        )}
       >
         <Board
           header={
@@ -67,7 +72,7 @@ export default function HomePage() {
 
       <Start start={pick('NeuralNetworks') ?? pick()} browse={pick('Library')} />
 
-      <LandingFooter sections={sections} />
+      <LandingFooter />
     </>
   );
 }

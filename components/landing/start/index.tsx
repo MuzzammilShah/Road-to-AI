@@ -7,7 +7,6 @@
 import Link from 'next/link';
 import { cn } from '@/lib/cn';
 import { githubUrl } from '@/lib/shared';
-import { Command } from '../ui/command';
 import { GithubIcon } from '../ui/github-icon';
 import { Stage } from './stage';
 
@@ -25,13 +24,8 @@ export function Start({ start, browse }: { start?: Target; browse?: Target }) {
     <section aria-label="Get started" className="relative border-t border-lp-line">
       <Stage>
         <h2 className="max-w-[30ch] text-[clamp(1.625rem,1rem+2vw,2.5rem)] leading-tight font-light tracking-tight text-balance">
-          Every model starts with a{' '}
-          <span className="font-medium whitespace-nowrap text-lp-orange">high loss</span>.
+          Feel free to explore my journey!
         </h2>
-        <Command
-          command="git clone https://github.com/MuzzammilShah/Road-to-AI"
-          className="w-full"
-        />
         {/* a row of equal buttons, the last on a row of its own when they don't fit */}
         <div className="flex flex-wrap gap-2 *:min-w-max *:flex-1">
           {start && (
