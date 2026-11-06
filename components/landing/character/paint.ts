@@ -3,7 +3,7 @@
 // See components/landing/LICENSE-fumadocs.txt.
 //
 // Road to AI: paints the new character (./sprite.ts). The halo ring and the orbiting mini-moon are
-// gone; the glint on his glasses and the laptop's flicker are new.
+// gone; the glint on his glasses, the laptop's flicker, his hoodie and his blush are new.
 import { BAYER4 } from '../lib/dither';
 import { cssRgb, isDark } from '../lib/theme';
 import { cellOf, MATE_H, MATE_PAD, MATE_W } from './sprite';
@@ -18,14 +18,17 @@ const GLANCE = 60;
 
 type Rgb = readonly [number, number, number];
 
-/** what he is painted in: his dark clothes, his outline (the ink of either theme), his shirt and
- * skin, the accent, and the page (a cell round him) */
+/** what he is painted in: his dark clothes, his outline (the ink of either theme), his skin and
+ * the light parts, the accent, the page (a cell round him), his hoodie and its shade, his blush */
 export interface MateInk {
   line: Rgb;
   pen: Rgb;
   lit: Rgb;
   accent: Rgb;
   paper: Rgb;
+  hoodie: Rgb;
+  hoodieShade: Rgb;
+  blush: Rgb;
 }
 
 /** his colours from the page's tokens: a light shirt, dark clothes, ink lines in either theme */
@@ -39,6 +42,9 @@ export function mateInk(style: CSSStyleDeclaration): MateInk {
     lit: night ? ink : paper,
     accent: bytes(cssRgb(style.getPropertyValue('--lp-sun'))),
     paper,
+    hoodie: bytes(cssRgb(style.getPropertyValue('--lp-hoodie'))),
+    hoodieShade: bytes(cssRgb(style.getPropertyValue('--lp-hoodie-dark'))),
+    blush: bytes(cssRgb(style.getPropertyValue('--lp-blush'))),
   };
 }
 
@@ -90,6 +96,9 @@ export function paintMate(
       else if (ch === 'w') out = ink.lit;
       else if (ch === ':') out = BAYER4[(sy % 4) * 4 + (sx % 4)] < 8 ? ink.line : ink.lit;
       else if (ch === 'y') out = ink.accent;
+      else if (ch === 'h') out = ink.hoodie;
+      else if (ch === 'H') out = ink.hoodieShade;
+      else if (ch === 'b') out = ink.blush;
       else if (neighbours(frame, glint, sx, sy) > 0) out = ink.paper;
       const i = (y * MATE_W + x) * 4;
       if (!out) {

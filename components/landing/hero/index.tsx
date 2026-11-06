@@ -10,6 +10,7 @@ import type { ReactNode } from 'react';
 import { appDescription, githubUrl } from '@/lib/shared';
 import { GithubIcon } from '../ui/github-icon';
 import { type Satellite, Stage } from './stage';
+import { Starfield } from './starfield';
 
 export interface HeroSection extends Satellite {
   title: ReactNode;
@@ -31,6 +32,9 @@ export function Hero({ sections }: { sections: HeroSection[] }) {
       aria-label="Road to AI"
       className="relative flex min-h-[calc(100svh-var(--lp-menu-h))] flex-col"
     >
+      {/* the sky's stars carried over the text column, under everything */}
+      {/* stopping at the horizon, and clear of the text block in the middle of the column */}
+      <Starfield className="pointer-events-none absolute top-0 left-0 hidden h-[calc(100%-4rem)] w-1/2 [mask-image:linear-gradient(to_bottom,black_calc(50%-190px),transparent_calc(50%-160px),transparent_calc(50%+150px),black_calc(50%+180px))] lg:block" />
       <div className="@container mx-auto grid w-full max-w-(--fd-layout-width) flex-1 grid-rows-[auto_1fr] gap-x-12 px-4 lg:grid-cols-2 lg:grid-rows-1">
         <div className="py-8 lg:self-center">
           <h1 className="sr-only">Road to AI</h1>

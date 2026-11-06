@@ -75,6 +75,10 @@
   --lp-moon: #d6d5cf;
   --lp-moon-dark: #8a8984;
   --lp-pin: #e5484d;
+  /* the character's hoodie, its shade, and his rosy cheeks */
+  --lp-hoodie: #5b6ee1;
+  --lp-hoodie-dark: #3a47a8;
+  --lp-blush: #f19aa5;
 
   /* the pre-footer computer: a Bondi blue translucent shell, its pale front bezel, and the macOS
      Terminal window on its screen (title bar, title, the three window buttons) */
@@ -128,6 +132,17 @@
   --text-pixel: 13.16px;
   --text-pixel--line-height: 1rem;
   --animate-lp-caret: lp-caret 1s steps(1, end) infinite;
+  /* a star in the hero's text column dims for a tick now and then (components/landing/hero/starfield.tsx) */
+  --animate-lp-twinkle: lp-twinkle 3s steps(1, end) infinite;
+
+  @keyframes lp-twinkle {
+    92% {
+      opacity: 0.2;
+    }
+    96% {
+      opacity: 1;
+    }
+  }
 
   @keyframes lp-caret {
     50% {

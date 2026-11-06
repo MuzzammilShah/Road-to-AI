@@ -45,7 +45,7 @@ const GRID = [1.36, 0.85] as const;
 /** the glass bulges out to this z at its centre */
 const GLASS_Z = 1.22;
 /** visible extent, for framing */
-const BOUNDS = { min: [-2.45, 0, -2.2], max: [2.45, 3.85, 1.3] } as const;
+const BOUNDS = { min: [-2.45, 0, -2.8], max: [2.45, 3.85, 1.3] } as const;
 
 /**
  * The whole figure, drawn as the mesh's backdrop: the terminal's solid traced in its box, shaded on
@@ -67,17 +67,20 @@ uniform vec3 uRestEye;
 uniform vec2 uRestShift;
 uniform float uRestYaw;
 ${bayer8}
-// from the front right and above
-const vec3 LIGHT = vec3(sin(0.85) * cos(0.62), sin(0.62), cos(0.85) * cos(0.62));
-// the all-in-one: a rounded front block (its face the pale bezel round the screen), merged into a
-// deep egg of a back shell with a carry handle cut through its top, on a low foot
+// from the front left and above, so the side the camera swings round to is lit
+const vec3 LIGHT = vec3(-sin(0.85) * cos(0.62), sin(0.62), cos(0.85) * cos(0.62));
+// the all-in-one: a rounded front block (the pale frame round the screen), merged into the arched
+// back: in profile a quarter ellipse from the top of the front down to the rear of its base, swept
+// across its width and rounded at the sides; frosted white below BAND, the blue shell above
 const vec3 BODY_C = vec3(0.0, 1.95, 0.75);
 const vec3 BODY_B = vec3(2.05, 1.85, 0.55);
 const float BODY_R = 0.5;
-const vec3 EGG_C = vec3(0.0, 2.05, -0.55);
-const vec3 EGG_R = vec3(1.85, 1.75, 1.6);
-const vec3 HANDLE_C = vec3(0.0, 3.5, -1.15);
-const vec3 HANDLE_B = vec3(0.7, 0.16, 0.5);
+// the arch's centre (z, y) and radii (z, y), its half width and the rounding of its sides
+const vec2 ARCH_C = vec2(0.3, 0.12);
+const vec2 ARCH_R = vec2(3.0, 3.6);
+const float ARCH_HALF = 1.6;
+const float ARCH_ROUND = 0.42;
+const float BAND = 1.3;
 const vec3 FOOT_C = vec3(0.0, 0.06, 0.1);
 const vec3 FOOT_B = vec3(1.2, 0.06, 1.0);
 const vec3 SCREEN_C = vec3(${SCREEN.c.join(', ')});
@@ -88,7 +91,7 @@ const float GLASS_R = 20.0;
 // the disc slot under the screen
 const vec3 SLOT_C = vec3(0.0, 0.62, 1.3);
 const vec3 SLOT_B = vec3(0.7, 0.04, 0.1);
-const vec3 BOX_MIN = vec3(-2.6, -0.05, -2.25);
+const vec3 BOX_MIN = vec3(-2.6, -0.05, -2.9);
 const vec3 BOX_MAX = vec3(2.6, 3.95, 1.4);
 // three ridges around the terminal, near to far: radius, height, features per radian, ink density
 const float RIDGE_R[3] = float[3](70.0, 130.0, 240.0);
@@ -103,11 +106,15 @@ float sdRoundBox(vec3 p, vec3 b, float r) {
 
 float sdRecess(vec3 p) { return sdRoundBox(p - SCREEN_C, vec3(SCREEN_B, 0.3), 0.12); }
 
-/** a bound on the distance to the ellipsoid of radii r (iq) */
-float sdEllipsoid(vec3 p, vec3 r) {
-  float k0 = length(p / r);
-  float k1 = length(p / (r * r));
-  return k0 * (k0 - 1.0) / k1;
+/** the arched back: its profile's ellipse (a bound, iq's), swept across and rounded, flat on its
+ * base and nothing in front of the front block's middle */
+float sdArch(vec3 p) {
+  vec2 q = vec2(p.z, p.y) - ARCH_C;
+  float k0 = length(q / ARCH_R);
+  float k1 = length(q / (ARCH_R * ARCH_R));
+  vec2 w = vec2(k0 * (k0 - 1.0) / k1 + ARCH_ROUND, abs(p.x) - ARCH_HALF);
+  float d = min(max(w.x, w.y), 0.0) + length(max(w, 0.0)) - ARCH_ROUND;
+  return max(max(d, 0.12 - p.y), p.z - 0.8);
 }
 
 float smin(float a, float b, float k) {
@@ -116,8 +123,7 @@ float smin(float a, float b, float k) {
 }
 
 float sdShell(vec3 p) {
-  float shell = smin(sdRoundBox(p - BODY_C, BODY_B, BODY_R), sdEllipsoid(p - EGG_C, EGG_R), 0.35);
-  return max(shell, -sdRoundBox(p - HANDLE_C, HANDLE_B, 0.12));
+  return smin(sdRoundBox(p - BODY_C, BODY_B, BODY_R), sdArch(p), 0.3);
 }
 float sdBulge(vec3 p) { return length(p - vec3(SCREEN_C.xy, GLASS_Z - GLASS_R)) - GLASS_R; }
 
@@ -339,21 +345,28 @@ vec4 backdrop(vec2 at) {
     float across = w / max(abs(dot(rd, n)), 0.2);
     bool glass = max(bulge, recess) < 0.5 * w;
     float tone = 0.0;
+    // the white front frame and the frosted lower band of the back; the rest the blue shell
+    bool ice = p.z > 0.3 || p.y < BAND;
     if (glass) col = screen(p, w, abs(dot(rd, n)));
     else {
       float lambert = dot(n, LIGHT);
       float v = lambert > 0.0 ? lambert * lit(p + n * 2.0 * w, LIGHT, BOX_MIN, BOX_MAX) : lambert;
       // solid, quarters, solid, on 2 px cells as they lie at rest
       tone = floor(clamp((v - 0.12) / 0.3, 0.0, 1.0) * 4.0 + 0.5) / 4.0;
-      // the pale bezel on the flat of its face, with a speaker grille either side under the
-      // screen; the rest the translucent blue shell, its shade the deeper blue
-      bool ice = p.z > 1.2 && abs(p.x) < 1.62 && p.y > 0.32 && p.y < 3.55 && abs(body) < 2.0 * w;
       // the translucent shell lets light through even in its shade: never under a quarter lit
       if (!ice) tone = max(tone, 0.25);
       vec3 hi = ice ? uIce : uBlue;
       vec3 lo = ice ? uIceDark : uBlueDark;
-      vec2 hole = mod(p.xy, 0.11) - 0.055;
-      if (ice && p.y > 0.42 && p.y < 1.0 && abs(p.x) > 0.85 && abs(p.x) < 1.45 && dot(hole, hole) < 0.0009)
+      // a round blue speaker grille either side under the screen, pierced with holes
+      vec2 speaker = vec2(abs(p.x) - 1.2, p.y - 0.62);
+      vec2 hole = mod(p.xy, 0.09) - 0.045;
+      if (p.z > 1.2 && dot(speaker, speaker) < 0.04) {
+        hi = dot(hole, hole) < 0.0006 ? uBlueDark : uBlue;
+        lo = uBlueDark;
+      }
+      // the vent grille on the side of the blue shell
+      vec2 vent = mod(p.zy, 0.12) - 0.06;
+      if (!ice && abs(p.x) > 1.7 && p.y > 1.7 && p.y < 3.0 && p.z > -1.7 && p.z < -0.3 && dot(vent, vent) < 0.0011)
         hi = lo;
       col = bayer8(floor(rest(p, px) / 2.0)) < tone ? hi : lo;
     }
@@ -362,7 +375,9 @@ vec4 backdrop(vec2 at) {
       min(max(abs(shell), abs(slot)), max(abs(foot), abs(shell))));
     if (abs(body) < across && p.z > 0.9) d = min(d, crease(abs(p - BODY_C) - (BODY_B - BODY_R)));
     if (abs(foot) < across) d = min(d, crease(abs(p - FOOT_C) - (FOOT_B - 0.05)));
-    vec3 seam = p.z > 1.2 && abs(p.x) < 1.62 ? uIceDark : uBlueDark;
+    // where the blue shell meets the frosted band
+    if (p.z < 0.3) d = min(d, abs(p.y - BAND));
+    vec3 seam = ice ? uIceDark : uBlueDark;
     col = mix(col, glass ? uLit : seam, band(d / across, 0.75));
   } else {
     // the ridges near to far, each edge blended over what lies past it, then the ground or the sky
@@ -457,8 +472,8 @@ export interface View {
 }
 
 const FOV = (30 * Math.PI) / 180;
-/** where the camera ends up, to the left of the terminal */
-const YAW = -0.5;
+/** where the camera ends up, to the left of the terminal: far enough round to show its arched back */
+const YAW = -0.85;
 
 function focalOf(height: number): number {
   return height / 2 / Math.tan(FOV / 2);

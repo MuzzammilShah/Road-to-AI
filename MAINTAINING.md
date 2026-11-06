@@ -364,7 +364,7 @@ On GitHub, open the failed check on the PR → the red step shows the same messa
 
 ## 12. Change the landing page
 
-The landing page's figures live in `components/landing/`. They are adapted from the fumadocs.dev landing page (MIT licence: keep the header at the top of each ported file and `components/landing/LICENSE-fumadocs.txt`). Each part below is a constant in one file; change it, then run the checks and look at `/` in `npx serve out -l 4173`, in light and dark mode.
+The landing page's figures live in `components/landing/`; [LANDING.md](LANDING.md) explains how each one works. They are adapted from the fumadocs.dev landing page (MIT licence: keep the header at the top of each ported file and `components/landing/LICENSE-fumadocs.txt`). Each part below is a constant in one file; change it, then run the checks and look at `/` in `npx serve out -l 4173`, in light and dark mode.
 
 **What the character says:** `LINES` in `components/landing/hero/talk.ts`, two short lines per bubble:
 
@@ -378,7 +378,7 @@ export const LINES = [
 
 He shows them in turn, then ends on the first one again.
 
-**The character himself:** the `SPRITE` grid in `components/landing/character/sprite.ts`, one string per row of 30 cells: `.` empty, `#` outline/dark, `w` light, `:` grey dither, `y` accent, `o` the laptop logo (flickers on the beat). Keep every row 30 characters long. Row 40 is where he sits; his eyes are the 4×3 cells inside each lens (`EYES` below the grid).
+**The character himself:** the `SPRITE` grid in `components/landing/character/sprite.ts`, one string per row of 30 cells: `.` empty, `#` outline/dark, `w` light, `:` grey dither, `y` accent (his headphones), `h` hoodie, `H` hoodie shade, `b` blush, `o` the laptop logo (flickers on the beat). The hoodie and blush colours are `--lp-hoodie`, `--lp-hoodie-dark` and `--lp-blush` in `app/global.css`. Keep every row 30 characters long. Row 40 is where he sits; his eyes are the 4×3 cells inside each lens (`EYES` below the grid).
 
 **A section's animation on its card:** `components/landing/sections/mechanisms.tsx`. Each section has a small pixel scene keyed by its folder name (`NeuralNetworks`, `Library`, …):
 

@@ -5,6 +5,7 @@ Personal documentation site (notes, Jupyter notebooks, book notes on AI), served
 - **Docs for this repo:**
   - `MAINTAINING.md` is the step-by-step guide for humans (pages, notebooks, sections, deploy, rollback). Keep it in sync when a workflow changes.
   - `archive/` holds the MkDocs config/theme and the migration history (`archive/MIGRATION_NOTES.md`). Nothing there is used by the site.
+  - `LANDING.md` is the full write-up of the landing page (`/`): what each part is, how it works, its tokens, dependencies, performance and history. Keep it in sync when the landing changes.
 - **How changes ship:**
   1. Work on a branch.
   2. Open a PR to `main`; CI runs the build and all checks.
@@ -128,18 +129,19 @@ npm run check:parity      # after build: old MkDocs URLs exist, pages/folders = 
 
 ## Landing page
 
+- **Full write-up:** `LANDING.md`. The essentials follow.
 - **Where:** `components/landing/`, adapted from the fumadocs.dev landing (Fumadocs commit `55decd9`). Every ported file starts with a licence header; the MIT text is in `components/landing/LICENSE-fumadocs.txt`. The Fumadocs mascot, wordmark, copy and assets were not copied. The character, the mechanisms, the globe's shading and the CRT session are this site's own.
   - `lib/`: `mesh.ts` (the WebGL2 renderer: instanced parts, shadow map, outline pass, 8×8 Bayer dither), `dither.ts`, `motion.ts` (the 120 bpm tick grid, `TICK` = 125 ms), `theme.ts` (`onTheme`, `cssRgb`, which converts `oklch()`/`hsl()`/`color-mix()` through a cached 1×1 canvas), `script.ts` (`mount`/`nearby`, clocks, pops), `cable.ts`, `status.ts` (a no-op stub: no status bar here).
   - `ui/`: `chip.tsx` (the hero's section links), `github-icon.tsx`.
-  - `hero/`: `index.tsx` (text column, buttons, horizon line), `stage.tsx` (canvases, bubble, the Bangalore pin, section labels), `engine.ts` (boot on `BEAT_AT`, pointer sun, the moon and satellites, the pin, set on scroll via `ViewTimeline`), `scene.ts` (Earth, ring, moon, solar panel and star shaders; `orbiters()`: the first section is the moon, every other one a satellite), `earth.ts` (the land mask), `talk.ts` (speech bubbles).
+  - `hero/`: `index.tsx` (text column, buttons, horizon line), `starfield.tsx` (static stars over the text column), `stage.tsx` (canvases, bubble, the Bangalore pin, section labels), `engine.ts` (boot on `BEAT_AT`, pointer sun, the moon and satellites, the pin, set on scroll via `ViewTimeline`), `scene.ts` (Earth, ring, moon, solar panel and star shaders; `orbiters()`: the first section is the moon, every other one a satellite), `earth.ts` (the land mask), `talk.ts` (speech bubbles).
   - `character/`: `sprite.ts` (the pixel character as an ASCII grid), `paint.ts`.
   - `sections/`: `board.tsx`, `engine.ts` (the entrance and cables), `stage.tsx` (the mechanism helpers), `mechanisms.tsx`.
   - `start/`: the pinned scene of a Bondi-blue all-in-one computer (no Apple logo) running a macOS Terminal window (`index.tsx`, `stage.tsx`, `engine.ts`, `scene.ts` (the computer is a signed-distance shape there), `data.ts`).
   - `footer/`: `wordmark.tsx` (falling glyphs), `footer.tsx` (GitHub, Website and Blog links; `lib/shared.ts` has the URLs).
-- **Tokens:** the engines read `--lp-*` from `.landing-surface` with `getComputedStyle`; never scope them with `:root:has(...)` as Fumadocs does. The accent (CRT numbers, the moon behind the hills) is `--lp-sun` = `--section-library`; highlights are `--lp-yellow` = `--section-workshop`. Fixed colours that are the same in both themes are tokens too: the Earth and its moon (`--lp-ocean*`, `--lp-land*`, `--lp-moon*`, `--lp-pin`) and the computer and its Terminal window (`--lp-mac-*`).
+- **Tokens:** the engines read `--lp-*` from `.landing-surface` with `getComputedStyle`; never scope them with `:root:has(...)` as Fumadocs does. The accent (CRT numbers, the moon behind the hills) is `--lp-sun` = `--section-library`; highlights are `--lp-yellow` = `--section-workshop`. Fixed colours that are the same in both themes are tokens too: the Earth and its moon (`--lp-ocean*`, `--lp-land*`, `--lp-moon*`, `--lp-pin`), the character's hoodie and blush (`--lp-hoodie*`, `--lp-blush`) and the computer and its Terminal window (`--lp-mac-*`).
 - **Edit the content:**
   - speech bubbles: `LINES` in `hero/talk.ts` (two lines each);
-  - the character: `SPRITE` in `character/sprite.ts` (`.` clear, `#` line, `w` lit, `:` half tone, `y` accent, `o` the laptop logo; eyes and glint positions below it);
+  - the character: `SPRITE` in `character/sprite.ts` (`.` clear, `#` line, `w` lit, `:` half tone, `y` accent (headphones), `h`/`H` hoodie and its shade, `b` blush, `o` the laptop logo; eyes and glint positions below it);
   - a section's mechanism: `mechanisms` in `sections/mechanisms.tsx`, keyed by folder name (96×40-cell stage, `choreograph` tracks on the tick grid);
   - the CRT session: `start/data.ts`; its numbers are copied from the saved outputs of `notebooks/NeuralNetworks/Makemore-part5/Main-notebook-part-5.ipynb`. Any non-ASCII glyph it uses needs a hand-drawn path in `SHAPES` in `start/scene.ts`;
   - the wordmark's grains: `GLYPHS` in `footer/wordmark.tsx`, only characters in Inter's loaded subsets (latin, greek);
