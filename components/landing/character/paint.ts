@@ -3,12 +3,12 @@
 // See components/landing/LICENSE-fumadocs.txt.
 //
 // Road to AI: paints the new character (./sprite.ts). The halo ring and the orbiting mini-moon are
-// gone; the glint on his shades, the laptop's flicker, his cap and his hoodie are new.
+// gone; the glint on his glasses and the laptop's flicker are new.
 import { BAYER4 } from '../lib/dither';
 import { cssRgb, isDark } from '../lib/theme';
 import { cellOf, MATE_H, MATE_PAD, MATE_W } from './sprite';
 
-/** ticks: he blinks for one every BLINK (behind his shades), they glint for two every GLINT, his laptop's
+/** ticks: he blinks for one every BLINK, his glasses glint for two every GLINT, his laptop's
  * screen flickers off for one each beat of FLICKER ticks */
 const BLINK = 33;
 const GLINT = 47;
@@ -18,18 +18,14 @@ const GLANCE = 60;
 
 type Rgb = readonly [number, number, number];
 
-/** what he is painted in: his dark clothes, his outline (the ink of either theme), his skin and
- * the light parts, the accent, the page (a cell round him), his cap and hoodie and their shades */
+/** what he is painted in: his dark clothes, his outline (the ink of either theme), his shirt and
+ * skin, the accent, and the page (a cell round him) */
 export interface MateInk {
   line: Rgb;
   pen: Rgb;
   lit: Rgb;
   accent: Rgb;
   paper: Rgb;
-  cap: Rgb;
-  capShade: Rgb;
-  hoodie: Rgb;
-  hoodieShade: Rgb;
 }
 
 /** his colours from the page's tokens: a light shirt, dark clothes, ink lines in either theme */
@@ -43,10 +39,6 @@ export function mateInk(style: CSSStyleDeclaration): MateInk {
     lit: night ? ink : paper,
     accent: bytes(cssRgb(style.getPropertyValue('--lp-sun'))),
     paper,
-    cap: bytes(cssRgb(style.getPropertyValue('--lp-cap'))),
-    capShade: bytes(cssRgb(style.getPropertyValue('--lp-cap-dark'))),
-    hoodie: bytes(cssRgb(style.getPropertyValue('--lp-hoodie'))),
-    hoodieShade: bytes(cssRgb(style.getPropertyValue('--lp-hoodie-dark'))),
   };
 }
 
@@ -56,7 +48,7 @@ function bytes([r, g, b]: Rgb): Rgb {
 
 /** how he looks `ticks` into his clock (`null` with reduced motion: still, eyes open, screen on):
  * he blinks (1), or looks ahead (0), left (2) or right (3) at what lies `look` px across from his
- * head (behind his shades, so unseen); his shades glint; his screen flickers on the beat */
+ * head; his glasses glint; his screen flickers on the beat */
 export function mateAt(ticks: number | null, look: number) {
   const blink = ticks !== null && ticks % BLINK === 0;
   const eyes = blink ? 1 : look < -GLANCE ? 2 : look > GLANCE ? 3 : 0;
@@ -76,7 +68,7 @@ function neighbours(frame: number, glint: boolean, x: number, y: number): number
 }
 
 /**
- * Paints him into `image`, a pixel a cell: his eyes' `frame`, the glint on his shades, his
+ * Paints him into `image`, a pixel a cell: his eyes' `frame`, the glint on his glasses, his
  * laptop's screen on or off, and a cell of paper round him
  */
 export function paintMate(
@@ -98,10 +90,6 @@ export function paintMate(
       else if (ch === 'w') out = ink.lit;
       else if (ch === ':') out = BAYER4[(sy % 4) * 4 + (sx % 4)] < 8 ? ink.line : ink.lit;
       else if (ch === 'y') out = ink.accent;
-      else if (ch === 'h') out = ink.hoodie;
-      else if (ch === 'H') out = ink.hoodieShade;
-      else if (ch === 'r') out = ink.cap;
-      else if (ch === 'R') out = ink.capShade;
       else if (neighbours(frame, glint, sx, sy) > 0) out = ink.paper;
       const i = (y * MATE_W + x) * 4;
       if (!out) {
