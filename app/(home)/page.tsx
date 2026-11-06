@@ -4,10 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { HeroGlobe } from '@/components/home/hero-globe';
-import { Copyright } from '@/components/site-footer';
+import { LandingFooter } from '@/components/landing/footer/footer';
 import { cn } from '@/lib/cn';
 import { getSection } from '@/lib/sections';
-import { appDescription, websiteUrl } from '@/lib/shared';
+import { appDescription } from '@/lib/shared';
 import { source } from '@/lib/source';
 
 /** The sections (root folders) as in the sidebar dropdown, in the order of content/docs/meta.json. */
@@ -105,18 +105,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TODO(landing): footer content */}
-      <footer className="mt-auto border-t">
-        <div className="mx-auto flex w-full max-w-(--fd-layout-width) flex-col items-center justify-between gap-2 px-4 py-6 sm:flex-row">
-          <Copyright />
-          <a
-            href={websiteUrl}
-            className="text-xs text-fd-muted-foreground transition-colors hover:text-fd-foreground"
-          >
-            Website
-          </a>
-        </div>
-      </footer>
+      <LandingFooter sections={sections} />
     </>
   );
 }
