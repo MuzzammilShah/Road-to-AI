@@ -1,11 +1,10 @@
 import { getSidebarTabs } from 'fumadocs-ui/components/sidebar/tabs';
-import { ArrowUpRight, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
-import type { CSSProperties } from 'react';
 import { HeroGlobe } from '@/components/home/hero-globe';
 import { LandingFooter } from '@/components/landing/footer/footer';
-import { cn } from '@/lib/cn';
+import { Board } from '@/components/landing/sections/board';
+import { mechanismFor } from '@/components/landing/sections/mechanisms';
 import { getSection } from '@/lib/sections';
 import { appDescription } from '@/lib/shared';
 import { source } from '@/lib/source';
@@ -14,9 +13,12 @@ import { source } from '@/lib/source';
 function getLandingSections() {
   // Identity transform: keep the plain icon instead of the dropdown's wrapper.
   return getSidebarTabs(source.getPageTree(), { transform: (tab) => tab }).map((tab) => {
-    const settings = getSection(tab.url.split('/')[1]);
+    const key = tab.url.split('/')[1];
+    const settings = getSection(key);
     return {
       ...tab,
+      key,
+      name: typeof tab.title === 'string' ? tab.title : key,
       description: settings?.landing ?? tab.description,
       accent: settings?.accent ?? 'var(--color-fd-primary)',
     };
@@ -61,48 +63,28 @@ export default function HomePage() {
         </a>
       </section>
 
-      {/* Section cards, one per root folder of the docs. Fills the screen below the sticky navbar on
-          desktop; content height on mobile. */}
+      {/* Section board: one card per root folder of the docs, each with its own mechanism. */}
       <section
         id="intro"
-        className="mx-auto flex w-full max-w-(--fd-layout-width) scroll-mt-14 flex-col justify-center px-4 py-20 md:min-h-[calc(100svh-3.5rem)]"
+        className="mx-auto w-full max-w-(--fd-layout-width) scroll-mt-14 px-4 py-20 md:py-24"
       >
-        <div className="mx-auto w-full max-w-5xl">
-          <h2 className="mb-10 text-center text-2xl font-semibold tracking-tight md:text-3xl">
-            Jump into any part of my journey
-          </h2>
-
-          {/* Up to 3 per row (4 cards: 2×2); an incomplete last row is centred. */}
-          <ul className="landing-cards flex flex-wrap justify-center gap-4">
-            {sections.map((section) => (
-              <li
-                key={section.url}
-                className={cn(
-                  'flex w-full sm:w-[calc((100%-1rem)/2)]',
-                  sections.length !== 4 && 'lg:w-[calc((100%-2rem)/3)]',
-                )}
-              >
-                <Link
-                  href={section.url}
-                  className="landing-section-card flex w-full flex-col rounded-2xl border bg-fd-card p-6 text-fd-card-foreground shadow-sm"
-                  style={{ '--card-accent': section.accent } as CSSProperties}
-                >
-                  <ArrowUpRight
-                    aria-hidden
-                    className="landing-section-card-arrow absolute top-5 right-5 size-5"
-                  />
-                  <span className="landing-section-card-icon mb-5 flex size-11 items-center justify-center rounded-lg border [&_svg]:size-5.5">
-                    {section.icon}
-                  </span>
-                  <h3 className="mb-2 text-xl font-medium tracking-tight lg:text-2xl">
-                    {section.title}
-                  </h3>
-                  <p className="text-sm text-fd-muted-foreground">{section.description}</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Board
+          header={
+            <h2 className="text-2xl font-semibold tracking-tight text-balance md:text-3xl">
+              Jump into any part of my journey
+            </h2>
+          }
+          sections={sections.map((section) => ({
+            key: section.key,
+            title: section.title,
+            name: section.name,
+            url: section.url,
+            description: section.description,
+            accent: section.accent,
+            icon: section.icon,
+            mechanism: mechanismFor(section.key),
+          }))}
+        />
       </section>
 
       <LandingFooter sections={sections} />
