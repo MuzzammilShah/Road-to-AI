@@ -197,6 +197,132 @@
   display: none;
 }
 
+/* ---- the room's ambient animation ----
+   Subtle, always-on loops while the hero is on screen. All on transform/opacity so the compositor
+   plays them. They pause when an ancestor has [data-room-paused] (set off screen), and are off
+   entirely under prefers-reduced-motion (the static frame stands in). */
+@media (prefers-reduced-motion: no-preference) {
+  /* lamp glow: a slow warm breathe */
+  .room-glow {
+    animation: room-glow 4s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @keyframes room-glow {
+    0%,
+    100% {
+      opacity: 0.85;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* code typing: each row fades in staggered, the block loops; the caret blinks */
+  .room-code-row {
+    animation: room-type 6s steps(1, end) infinite;
+  }
+  @keyframes room-type {
+    0% {
+      opacity: 0;
+    }
+    8%,
+    92% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  .room-caret {
+    animation: room-caret 1s steps(1, end) infinite;
+  }
+  @keyframes room-caret {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* clouds drift slowly right */
+  .room-cloud {
+    animation: room-cloud 40s linear infinite;
+  }
+  @keyframes room-cloud {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(8px);
+    }
+  }
+
+  /* stars twinkle, each offset by its own delay */
+  .room-star {
+    animation: room-star 3s ease-in-out infinite;
+  }
+  @keyframes room-star {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* the plant leaves sway a touch */
+  .room-leaves {
+    animation: room-sway 7s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: bottom center;
+  }
+  @keyframes room-sway {
+    0%,
+    100% {
+      transform: rotate(-1.5deg);
+    }
+    50% {
+      transform: rotate(1.5deg);
+    }
+  }
+
+  /* steam rises from the mug and fades */
+  .room-steam {
+    animation: room-steam 3.5s ease-in infinite;
+    transform-box: fill-box;
+    transform-origin: bottom center;
+  }
+  @keyframes room-steam {
+    0% {
+      opacity: 0;
+      transform: translateY(2px) scaleY(0.4);
+    }
+    40% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-4px) scaleY(1);
+    }
+  }
+
+  /* paused off screen */
+  [data-room-paused] .room-glow,
+  [data-room-paused] .room-code-row,
+  [data-room-paused] .room-caret,
+  [data-room-paused] .room-cloud,
+  [data-room-paused] .room-star,
+  [data-room-paused] .room-leaves,
+  [data-room-paused] .room-steam {
+    animation-play-state: paused;
+  }
+}
+
 @media (min-width: 768px) {
   .landing-surface {
     --lp-section: 80px;

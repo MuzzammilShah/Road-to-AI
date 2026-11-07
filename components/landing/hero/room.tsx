@@ -135,8 +135,9 @@ function sun(): { disc: string; core: string; rays: string } {
   return { disc, core, rays };
 }
 
-/** scattered stars (night), in the upper sky, clear of the moon */
-function stars(): string {
+/** scattered stars (night), in the upper sky, clear of the moon; each a separate cell so it can
+ * twinkle on its own offset */
+function stars(): string[] {
   const pts: Array<[number, number]> = [
     [24, 3],
     [34, 7],
@@ -150,9 +151,7 @@ function stars(): string {
     [48, 16],
     [27, 19],
   ];
-  let d = '';
-  for (const [px, py] of pts) d += rect(GLASS.x + px, GLASS.y + py, 1, 1);
-  return d;
+  return pts.map(([px, py]) => rect(GLASS.x + px, GLASS.y + py, 1, 1));
 }
 
 /** two clouds (day) */
@@ -334,14 +333,20 @@ function mac(): { body: string; hi: string; sh: string; recess: string; slot: st
 }
 
 /** the glowing code screen with syntax-coloured tokens */
-function screen(): { glow: string; tokens: Array<[string, string]> } {
+interface ScreenToken {
+  d: string;
+  tok: string;
+  /** which row (0..n) — used to reveal the code row by row, like typing */
+  row: number;
+}
+function screen(): { glow: string; tokens: ScreenToken[]; caret: string } {
   const sx = MAC.x + 5;
   const sy = MAC.y + 5;
   const sw = MAC.w - 10;
   const sh = MAC.h - 17;
   const glow = rect(sx, sy, sw, sh);
-  // [pathData, colourToken] — rows of little tokens like syntax-highlighted code
-  const rows: Array<Array<[number, number, string]>> = [
+  // [offset, length, colourToken] per row — little tokens like syntax-highlighted code
+  const rowDefs: Array<Array<[number, number, string]>> = [
     [
       [1, 2, '--lp-code-blue'],
       [4, 3, '--lp-code-yellow'],
@@ -360,24 +365,29 @@ function screen(): { glow: string; tokens: Array<[string, string]> } {
       [5, 2, '--lp-code-blue'],
     ],
   ];
-  const tokens: Array<[string, string]> = [];
-  for (let i = 0; i < rows.length && i < sh - 1; i++) {
-    for (const [off, len, tok] of rows[i]) {
+  const tokens: ScreenToken[] = [];
+  const nRows = Math.min(rowDefs.length, sh - 1);
+  for (let i = 0; i < nRows; i++) {
+    for (const [off, len, tok] of rowDefs[i]) {
       if (off + len > sw - 1) continue;
-      tokens.push([rect(sx + off, sy + 1 + i * 2, len, 1), tok]);
+      tokens.push({ d: rect(sx + off, sy + 1 + i * 2, len, 1), tok, row: i });
     }
   }
-  return { glow, tokens };
+  // a blinking caret on the last row
+  const caret = rect(sx + 8, sy + 1 + (nRows - 1) * 2, 1, 1);
+  return { glow, tokens, caret };
 }
 
-/** a mug on the desk, left of the Mac */
-function mug(): { body: string; hi: string; handle: string } {
+/** a mug on the desk, left of the Mac, with two wisps of steam rising from it */
+function mug(): { body: string; hi: string; handle: string; steam: [string, string] } {
   const mx = MAC.x - 8;
   const my = DESK.y - 5;
   return {
     body: rect(mx, my, 5, 5),
     hi: rect(mx, my, 1, 5),
     handle: rect(mx + 5, my + 1, 1, 3) + rect(mx + 4, my + 1, 1, 1) + rect(mx + 4, my + 3, 1, 1),
+    // two short vertical wisps above the mug, animated separately
+    steam: [rect(mx + 1, my - 3, 1, 3), rect(mx + 3, my - 4, 1, 4)],
   };
 }
 
@@ -474,6 +484,7 @@ export function Room({ className }: { className?: string }) {
   const sc = screen();
   const mg = mug();
   const lm = lamp();
+  const st = stars();
 
   return (
     <svg
@@ -502,7 +513,14 @@ export function Room({ className }: { className?: string }) {
         <path d={cityLights()} className="fill-(--lp-sun)" />
         <path d={mn.body} className="fill-(--lp-moon)" />
         <path d={mn.hi} className="fill-white/70" />
-        <path d={stars()} className="fill-(--lp-moon)" />
+        {st.map((d, i) => (
+          <path
+            key={d}
+            d={d}
+            className="room-star fill-(--lp-moon)"
+            style={{ animationDelay: `${(i % 5) * 0.6}s` } as CSSProperties}
+          />
+        ))}
       </g>
       <g className="room-day">
         <path d={rect(GLASS.x, GLASS.y, GLASS.w, GLASS.h)} className="fill-(--lp-sky-day)" />
@@ -512,7 +530,7 @@ export function Room({ className }: { className?: string }) {
         <path d={su.disc} className="fill-(--lp-sun-day)" />
         <path d={su.core} className="fill-white/70" />
         <path d={su.rays} className="fill-(--lp-sun-day)" />
-        <path d={clouds()} className="fill-(--lp-cloud)" />
+        <path d={clouds()} className="room-cloud fill-(--lp-cloud)" />
       </g>
 
       {/* window frame + curtain on top of the view */}
@@ -535,11 +553,13 @@ export function Room({ className }: { className?: string }) {
       <path d={b.pillow} className="fill-(--lp-room-pillow)" />
       <path d={b.pillowSh} className="fill-(--lp-room-metal)" />
 
-      {/* plant */}
+      {/* plant (the leaves sway) */}
       <path d={pl.pot} className="fill-(--lp-room-wood)" />
       <path d={pl.potHi} className="fill-(--lp-room-wood-hi)" />
-      <path d={pl.leaves} className="fill-(--lp-land)" />
-      <path d={pl.leavesHi} className="fill-(--lp-code-green)" />
+      <g className="room-leaves">
+        <path d={pl.leaves} className="fill-(--lp-land)" />
+        <path d={pl.leavesHi} className="fill-(--lp-code-green)" />
+      </g>
 
       {/* bookshelf (coloured spines) */}
       <path d={sh.wood} className="fill-(--lp-room-wood)" />
@@ -569,31 +589,49 @@ export function Room({ className }: { className?: string }) {
       <path d={dk.top} className="fill-(--lp-room-wood)" />
       <path d={dk.topHi} className="fill-(--lp-room-wood-hi)" />
 
-      {/* mug */}
+      {/* steam rising from the mug (behind it), then the mug */}
+      {mg.steam.map((d, i) => (
+        <path
+          key={d}
+          d={d}
+          className="room-steam fill-(--lp-room-metal-hi)"
+          style={{ animationDelay: `${i * 1.6}s` } as CSSProperties}
+        />
+      ))}
       <path d={mg.body} className="fill-(--lp-room-sheet)" />
       <path d={mg.hi} className="fill-(--lp-room-sheet-hi)" />
       <path d={mg.handle} className="fill-(--lp-room-sheet)" />
 
-      {/* Macintosh: body with shading, dark screen recess, syntax-lit code, disk slot */}
+      {/* Macintosh: body with shading, dark screen recess, syntax-lit code (types in a loop) */}
       <path d={mc.body} className="fill-(--lp-room-mac)" />
       <path d={mc.hi} className="fill-(--lp-room-mac-hi)" />
       <path d={mc.sh} className="fill-(--lp-room-mac-sh)" />
       <path d={mc.recess} className="fill-(--lp-room-screen)" />
       <path d={sc.glow} className="fill-(--lp-room-screen)" />
-      {sc.tokens.map(([d, tok]) => (
+      {sc.tokens.map(({ d, tok, row }) => (
         <path
           key={d}
           d={d}
-          className="fill-(--color)"
-          style={{ '--color': `var(${tok})` } as CSSProperties}
+          className="room-code-row fill-(--color)"
+          style={
+            {
+              '--color': `var(${tok})`,
+              animationDelay: `${row * 0.5}s`,
+            } as CSSProperties
+          }
         />
       ))}
+      <path d={sc.caret} className="room-caret fill-(--lp-code-blue)" />
       <path d={mc.slot} className="fill-(--lp-room-mac-sh)" />
 
-      {/* desk lamp: the warm pool on the desk/Mac, then the arm and shade */}
-      <path d={lm.cone} className="fill-(--lp-room-glow)/35" />
+      {/* desk lamp: the warm pool on the desk/Mac + the shade breathe together; the arm is static */}
+      <g className="room-glow">
+        <path d={lm.cone} className="fill-(--lp-room-glow)/35" />
+      </g>
       <path d={lm.arm} className="fill-(--lp-room-metal-sh)" />
-      <path d={lm.head} className="fill-(--lp-room-glow)" />
+      <g className="room-glow">
+        <path d={lm.head} className="fill-(--lp-room-glow)" />
+      </g>
     </svg>
   );
 }

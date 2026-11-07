@@ -13,6 +13,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { appDescription, githubUrl } from '@/lib/shared';
 import { GithubIcon } from '../ui/github-icon';
+import { PauseOffscreen } from './pause-offscreen';
 import { Room } from './room';
 import type { Satellite } from './stage';
 
@@ -90,7 +91,9 @@ export function Hero({ sections }: { sections: HeroSection[] }) {
           fills the space above it (same colour, so no seam), and the intro sits in that upper-left
           wall. The room draws its own wall at the top, so the join is invisible. */}
       <div className="relative hidden flex-1 lg:block">
-        <Room className="absolute inset-x-0 bottom-0 block w-full" />
+        <PauseOffscreen className="absolute inset-x-0 bottom-0">
+          <Room className="block w-full" />
+        </PauseOffscreen>
         <div className="relative mx-auto flex h-full w-full max-w-(--fd-layout-width) items-start px-6 pt-[8vh]">
           <Intro first={first} />
         </div>
@@ -101,7 +104,9 @@ export function Hero({ sections }: { sections: HeroSection[] }) {
         <div className="px-4 pt-10 pb-8">
           <Intro first={first} />
         </div>
-        <Room className="mt-auto block w-full" />
+        <PauseOffscreen className="mt-auto">
+          <Room className="block w-full" />
+        </PauseOffscreen>
       </div>
 
       <a
