@@ -76,23 +76,55 @@
   --lp-moon-dark: #8a8984;
   --lp-pin: #e5484d;
 
-  /* the hero's pixel bedroom (a night scene): a dark wall and floor the same in both themes, so the
-     night mood holds in light mode too (like the computer's --lp-mac-* tokens) */
-  --lp-room-wall: #1b1d22;
-  --lp-room-floor: #141519;
-  --lp-room-line: #33363d;
-  /* furniture greys, lit by the room (same in both themes) */
-  --lp-room-furniture: #6b7079;
-  --lp-room-furniture-dark: #3a3d44;
-  --lp-room-furniture-light: #9aa0a9;
-  /* the night city silhouette against the sky (dark mode) */
-  --lp-city-night: #091a3a;
-  /* the day view outside the window (light mode): a blue sky, sun, clouds and a daylit skyline */
-  --lp-sky-day: #5fa8e0;
-  --lp-sky-day-2: #bfe2f5;
+  /* ---- the hero's pixel bedroom ----
+     A full day/night room: these are the NIGHT values (the default, and dark mode). Light mode
+     overrides them under `.light .landing-surface` below for a bright daytime room. Every object
+     references these semantic tokens, each with a base / shadow / highlight tone, lit from the
+     window and the desk lamp. */
+  /* surfaces */
+  --lp-room-wall: #22252c; /* back wall (lit) */
+  --lp-room-wall-sh: #191b20; /* wall in shadow / corners */
+  --lp-room-floor: #17181d; /* floor */
+  --lp-room-floor-hi: #202228; /* floor catching light */
+  --lp-room-rug: #2d3550; /* the rug */
+  --lp-room-rug-2: #3b4668; /* rug stripe */
+  --lp-room-line: #33363d; /* thin separators */
+  /* wood (bed frame, desk, shelf) */
+  --lp-room-wood: #5a4a3c;
+  --lp-room-wood-hi: #74604e;
+  --lp-room-wood-sh: #3e332a;
+  /* neutral metal / plastic (lamp, clock, mac stand) */
+  --lp-room-metal: #6b7079;
+  --lp-room-metal-hi: #9aa0a9;
+  --lp-room-metal-sh: #3a3d44;
+  /* soft furnishings (pillow, sheet, curtain) */
+  --lp-room-sheet: #2a4a86;
+  --lp-room-sheet-hi: #3a5fa8;
+  --lp-room-pillow: #c9ccd2;
+  --lp-room-curtain: #2b2f52;
+  --lp-room-curtain-hi: #3a3f6b;
+  /* the Macintosh body (beige CRT), its shadow + highlight */
+  --lp-room-mac: #d7d4cb;
+  --lp-room-mac-hi: #efece3;
+  --lp-room-mac-sh: #a9a69d;
+  --lp-room-screen: #10243f; /* the dark code screen */
+  /* syntax colours for the code on the screen */
+  --lp-code-blue: #4ea1e0;
+  --lp-code-yellow: #e6c45a;
+  --lp-code-green: #5fb48a;
+  --lp-code-dim: #3a5676;
+  /* the lamp's warm light */
+  --lp-room-glow: #ffd98a;
+  /* the city silhouette against the sky (night) */
+  --lp-city-night: #0b1d42;
+  --lp-city-night-hi: #16305c;
+  /* the day view outside the window (used by the day window layer, same in both themes) */
+  --lp-sky-day: #6fb3e6;
+  --lp-sky-day-2: #cbe6f6;
   --lp-sun-day: #ffd34d;
-  --lp-cloud: #eef4f8;
-  --lp-city-day: #4a6478;
+  --lp-cloud: #f3f8fb;
+  --lp-city-day: #6a8196;
+  --lp-city-day-hi: #8398ab;
 
   /* the pre-footer computer: a Bondi blue translucent shell, its pale front bezel, and the macOS
      Terminal window on its screen (title bar, title, the three window buttons) */
@@ -122,6 +154,35 @@
 .dark .landing-surface {
   --lp-paper: #121212;
   --lp-paper-2: #191919;
+}
+
+/* Light mode turns the pixel room into a bright daytime room: light walls, lighter wood, daylight
+   on every surface. Only the Macintosh screen stays dark (the computer is on) and the lamp glow
+   stays warm. These override the night values above. */
+.light .landing-surface {
+  --lp-room-wall: #e7e2d6; /* warm off-white wall (lit) */
+  --lp-room-wall-sh: #d3ccbd; /* wall shadow / corners */
+  --lp-room-floor: #c9b79d; /* light wood floor */
+  --lp-room-floor-hi: #d8c8b0;
+  --lp-room-rug: #b7c2d8;
+  --lp-room-rug-2: #9fb0cf;
+  --lp-room-line: #c2bcaf;
+  --lp-room-wood: #b08a62;
+  --lp-room-wood-hi: #c7a57c;
+  --lp-room-wood-sh: #8a6a48;
+  --lp-room-metal: #aeb4bd;
+  --lp-room-metal-hi: #d3d7dd;
+  --lp-room-metal-sh: #808791;
+  --lp-room-sheet: #5a84c8;
+  --lp-room-sheet-hi: #7ba0db;
+  --lp-room-pillow: #f3f1ea;
+  --lp-room-curtain: #c3cbe0;
+  --lp-room-curtain-hi: #d7dcec;
+  --lp-room-mac: #e9e6dd;
+  --lp-room-mac-hi: #fbf9f2;
+  --lp-room-mac-sh: #c4c0b5;
+  /* code screen + syntax stay dark/bright (the monitor is on in both themes) */
+  --lp-city-night-hi: #16305c;
 }
 
 /* The pixel room's window shows a night view by default (and in dark mode) and a day view in light
