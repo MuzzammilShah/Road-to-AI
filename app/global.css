@@ -234,20 +234,6 @@
       opacity: 0;
     }
   }
-  .room-caret {
-    animation: room-caret 1s steps(1, end) infinite;
-  }
-  @keyframes room-caret {
-    0%,
-    50% {
-      opacity: 1;
-    }
-    51%,
-    100% {
-      opacity: 0;
-    }
-  }
-
   /* clouds drift slowly right */
   .room-cloud {
     animation: room-cloud 40s linear infinite;
@@ -314,7 +300,6 @@
   /* paused off screen */
   [data-room-paused] .room-glow,
   [data-room-paused] .room-code-row,
-  [data-room-paused] .room-caret,
   [data-room-paused] .room-cloud,
   [data-room-paused] .room-star,
   [data-room-paused] .room-leaves,

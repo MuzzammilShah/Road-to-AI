@@ -126,80 +126,47 @@ types/topojson-client.d.ts       minimal types for topojson-client
 
 ## 5. The hero
 
+The hero is **one full-bleed pixel-art lofi bedroom**, drawn as pure SVG pixel art (no WebGL). It is the room where the AI journey happens: a window onto a city, a Macintosh running code on the desk under a glowing lamp, a bed, a bookshelf, a wall clock, a plant, a framed picture, a mug and a rug. It transforms completely between themes — a cosy night room in dark mode, a bright day room in light mode — and has a layer of subtle, always-on ambient motion.
+
+**Files:** `hero/index.tsx` (layout + the text overlay), `hero/room.tsx` (the whole scene), `hero/pause-offscreen.tsx` (the off-screen pause). The old globe/character/satellite files (`scene.ts`, `earth.ts`, `engine.ts`, `stage.tsx`, `talk.ts`, `starfield.tsx`, `character/`, `ui/chip.tsx`) are no longer used by the hero.
+
 **Layout** (`hero/index.tsx`)
 
-- Two columns from `lg` (text left, sky right); on phones the sky sits under the text.
-- The section is at least one screen tall minus the navbar.
-- A 1px line is the horizon, with the scroll-down button under it.
-- "Artificial Intelligence" in the description is split out of `appDescription` (`lib/shared.ts`) and set in the muted grey.
+- The scene is one picture that fills the hero. On desktop the room is pinned full-width to the bottom at its natural aspect, and the wall colour fills the space above it (the same colour, so the join is invisible); the logo, description, "Start reading" and "GitHub" overlay that upper-left wall.
+- On phones the intro sits over the wall colour with the room strip below it, reading as one continuous surface.
+- The logo, text and buttons are **theme-reactive** to match the wall: light-on-dark on the night wall, dark-on-light on the day wall (the light/dark logo swap, `fd-foreground` text, `fd-primary` button).
+- The section is at least one screen tall minus the navbar, with the scroll-down button at the bottom.
+- "Artificial Intelligence" in the description is split out of `appDescription` (`lib/shared.ts`) and set apart. There are **no section links in the hero** — the section board below carries them.
 
-**Boot sequence** (`BEAT_AT` in `hero/engine.ts`): it plays once per page load, with motion allowed.
+**The drawing** (`hero/room.tsx`)
 
-| Tick (125 ms) | What happens |
+- A **200×90 cell grid** (square cells), drawn as SVG `<path>`s with `shapeRendering="crispEdges"` and `image-rendering: pixelated`, reusing the stage helpers (`rect`/`art`/`dither` from `sections/stage.tsx`). `preserveAspectRatio="xMidYMid meet"`.
+- Each object is built from a **base tone plus shadow and highlight tones**, lit from the window and the desk lamp, with ambient-occlusion shading where the wall meets the floor and in the corners, and cast shadows (under the desk).
+- **The upper-left quadrant is kept clear dark/light wall** for the text overlay.
+- **What's in the room:** the window (centre), a curtain down its right side, a city skyline; the desk (right) with the Macintosh, a mug and the angle-poise lamp; a bookshelf of colour-coded spines and a wall clock above/over the window; a bed (lower-left); a plant; a framed picture (left of the window); and an area rug on the floor.
+
+**Day ↔ night** (tokens in `app/global.css`, layers in `room.tsx`)
+
+- Every surface reads a **semantic `--lp-room-*` token** (wall, floor, wood, metal, fabrics, the Mac body, the code colours, the rug…). The night values live on `.landing-surface`; `.light .landing-surface` overrides them with day values. So toggling the theme repaints the whole room — dark walls and wood by night, cream walls and light wood by day — in one place, with no JS.
+- **The view outside the window** has two layers in the SVG, `.room-night` and `.room-day`; CSS shows one per theme (`.room-day` is hidden by default and under `.light` the night layer is hidden). Night: a deep sky, a lit city silhouette, a crescent moon and stars. Day: a blue sky, a daylit skyline, a sun and clouds.
+- **The clock hands** also swap by theme (a night hour vs a day hour), via the same `.room-night` / `.room-day` layers.
+- The **Macintosh screen** stays on in both themes (a dark editor with syntax-coloured code) and the **lamp keeps glowing**, so the desk is always the warm focal point.
+
+**Ambient animation** (keyframes in `app/global.css`, classes in `room.tsx`)
+
+All of it is CSS keyframes on `transform`/`opacity` only (so the compositor plays them), gated behind `prefers-reduced-motion: no-preference`, and always-on while the hero is visible:
+
+| Class | Motion |
 |---|---|
-| 0–5 | a mosaic sharpens from 64 px blocks to 2 px dots; the globe rises into place (1.1 s) |
-| 2 | the orbit ring strokes on |
-| 6, 7, 8… | the moon and the satellites pop in, one per tick, each with an ink flash; their labels appear |
-| 10 | the character appears with a flash; the Bangalore pin shows |
-| 15 | his first speech bubble pops |
+| `.room-code-row` | the code "types" — each row fades in on its own delay and the block loops (a red power LED sits steady on the bezel) |
+| `.room-glow` | the lamp's warm cone breathes in opacity |
+| `.room-cloud` | the day clouds drift slowly right |
+| `.room-star` | the night stars twinkle, each on its own delay |
+| `.room-leaves` | the plant's leaves sway |
+| `.room-steam` | two wisps of steam rise from the mug and fade |
 
-**The Earth** (`hero/scene.ts`, `hero/earth.ts`)
-
-- **Land data:** Natural Earth 1:110m land (public domain), from the `world-atlas` package, turned into polygons by `topojson-client`. Both are imported dynamically, so they load after the page (about 23 KB gzip).
-- **Land mask:** `earth.ts` fills the polygons once per page into a 1024×512 equirectangular canvas. Polygons that cross the antimeridian are unwrapped and drawn three times; rings round a pole (Antarctica) are closed along the pole. The canvas is uploaded as a single-channel, mipmapped texture.
-- **Projection:** for each dot of the disc, the shader works out the point on the sphere, undoes the 23.4° axial tilt (the north pole leans right, like a desk globe), adds the spin, and looks up the land mask by longitude and latitude.
-- **Spin:** once every 120 s, west to east, starting on 70°E so Asia, Africa and India face you.
-- **Colours:** blue oceans and green land by day; their darker shades on the night side; the terminator dithered between them. Faint graticule dots every 30° on the day side's ocean are a nod to the old Vanta globe's lines. Until the land mask arrives, the globe is all ocean.
-- **Light:** the sun follows the mouse through a spring (stiffness 38, damping 13), so the terminator moves as you point. On touch screens the light circles by itself.
-- **Setting:** as the hero scrolls away, the whole scene sinks behind the horizon line, driven by a native scroll-driven animation (`ViewTimeline`) when the browser has one.
-
-**The moon and the satellites** (`orbiters()` in `scene.ts`)
-
-- **One orbiter per section,** in dropdown order, on a tilted elliptical ring (one turn every 42 s).
-- **The moon:** the first section (Neural Networks), a grey cratered sphere.
-- **The satellites:** every other section; a grey body with two solar panels in the section's accent colour, turning slowly round its own axis (24–36 s a turn).
-- **Labels:** each is a real link (`ui/chip.tsx`) pinned above its orbiter. A label hides while its orbiter is behind the globe, unless it has keyboard focus, and stays inside the drawing at the edges.
-- **Reduced motion:** nothing moves, so the orbiters are spread over the front half of the ring, where every label is visible.
-- **More sections:** they get more satellites automatically; up to 8 are tinted.
-
-**The Bangalore pin** (`HOME` in `hero/engine.ts`, the element in `hero/stage.tsx`)
-
-- Each frame the engine computes 12.97°N, 77.59°E on the turning, tilted globe and pins the dot's centre there.
-- The pin hides when that point turns away or nears the rim.
-
-**The character** (`character/sprite.ts`, `character/paint.ts`)
-
-- **What he is:** an original 30×57-cell pixel sprite: a swept quiff, rectangular glasses, a smile, a white collared shirt with a slim tie under a dithered blazer, a laptop on his lap, dark trousers and light-soled sneakers.
-- **The format:** the grid is written as text, one character per cell:
-  - `.` clear, `#` outline/dark, `w` light, `:` grey dither;
-  - `y` accent;
-  - `o` the laptop logo.
-- **Painting:** `paint.ts` draws him onto a tiny canvas in the page's colours, with a one-cell paper outline, and the browser scales it up with `image-rendering: pixelated`.
-- **Size and seat:** he is an eighth of the globe's width. Row 40 sits on the globe's crown and his legs hang down its face.
-- **Alive:**
-  - he blinks every 33 ticks;
-  - his eyes look left or right when the mouse is more than 60 px to that side;
-  - his glasses glint every 47 ticks;
-  - the laptop logo flickers on the beat.
-
-**Speech bubbles** (`hero/talk.ts`)
-
-- **Lines:** `LINES` holds four two-line bubbles.
-- **Each bubble:** it pops from a dot over his head, types in at 40 ms a character, holds for 2.2 s, then dissolves through a dither mask.
-- **Order:** the next leans the other way. He ends on the first bubble again and it stays.
-- **Typeface:** the bubbles are set in Geist Pixel.
-- **Pausing:** the bubble clock pauses while the sky is off screen.
-
-**The stars**
-
-- **In the sky** (`skyShader` in `scene.ts`):
-  - a star field on 3px cells, thinning toward the horizon;
-  - bright stars sparkle every few seconds;
-  - a shooting star crosses about every 100 ticks.
-- **Over the text** (`hero/starfield.tsx`):
-  - static SVG stars over the left half on desktop, drawn the same way (3px dots and accent pluses) and placed by a hash, so they are identical on every load;
-  - a few pluses twinkle;
-  - the field fades out behind the text block and stops at the horizon.
+- **Paused off screen:** `PauseOffscreen` (`hero/pause-offscreen.tsx`) is a small client wrapper that toggles `[data-room-paused]` on itself with an `IntersectionObserver` (mirroring the board's `playOnScreen`); the keyframes set `animation-play-state: paused` under it. Idle off screen = no animation work.
+- **Reduced motion:** the whole animation block is inside `@media (prefers-reduced-motion: no-preference)`, so the static frame stands in.
 
 ## 6. The section board
 

@@ -340,41 +340,46 @@ interface ScreenToken {
   row: number;
 }
 function screen(): { glow: string; tokens: ScreenToken[]; caret: string } {
-  const sx = MAC.x + 5;
-  const sy = MAC.y + 5;
-  const sw = MAC.w - 10;
-  const sh = MAC.h - 17;
-  const glow = rect(sx, sy, sw, sh);
+  // the dark screen fills the recess (x159..181, y37..48)
+  const gx = MAC.x + 3;
+  const gy = MAC.y + 3;
+  const gw = MAC.w - 6;
+  const gh = MAC.h - 13;
+  const glow = rect(gx, gy, gw, gh);
+  // the code sits inside the screen with a 2-cell margin; rows at gy+2, +4, +6, +8 (all inside)
+  const sx = gx + 2;
+  const sw = gw - 4;
   // [offset, length, colourToken] per row — little tokens like syntax-highlighted code
   const rowDefs: Array<Array<[number, number, string]>> = [
     [
+      [0, 2, '--lp-code-blue'],
+      [3, 3, '--lp-code-yellow'],
+    ],
+    [
+      [1, 4, '--lp-code-green'],
+      [6, 1, '--lp-code-dim'],
+    ],
+    [
+      [1, 2, '--lp-code-dim'],
+      [4, 3, '--lp-code-blue'],
+    ],
+    [
+      // one line of code, all one colour
       [1, 2, '--lp-code-blue'],
-      [4, 3, '--lp-code-yellow'],
-    ],
-    [
-      [2, 4, '--lp-code-green'],
-      [7, 1, '--lp-code-dim'],
-    ],
-    [
-      [2, 2, '--lp-code-dim'],
-      [5, 3, '--lp-code-blue'],
-    ],
-    [[1, 5, '--lp-code-yellow']],
-    [
-      [2, 2, '--lp-code-green'],
-      [5, 2, '--lp-code-blue'],
+      [4, 2, '--lp-code-blue'],
     ],
   ];
   const tokens: ScreenToken[] = [];
-  const nRows = Math.min(rowDefs.length, sh - 1);
-  for (let i = 0; i < nRows; i++) {
+  for (let i = 0; i < rowDefs.length; i++) {
+    const y = gy + 2 + i * 2;
+    if (y >= gy + gh) break; // keep every row inside the screen
     for (const [off, len, tok] of rowDefs[i]) {
-      if (off + len > sw - 1) continue;
-      tokens.push({ d: rect(sx + off, sy + 1 + i * 2, len, 1), tok, row: i });
+      if (off + len > sw) continue;
+      tokens.push({ d: rect(sx + off, y, len, 1), tok, row: i });
     }
   }
-  // a blinking caret on the last row
-  const caret = rect(sx + 8, sy + 1 + (nRows - 1) * 2, 1, 1);
+  // a red power LED on the computer's front bezel, just below the screen's bottom-left corner
+  const caret = rect(gx + 1, gy + gh + 1, 1, 1);
   return { glow, tokens, caret };
 }
 
@@ -416,7 +421,7 @@ function lamp(): { arm: string; head: string; cone: string } {
 
 /* --- a round wall clock, moved further right (clear of the window) --- */
 
-const CLOCK = { cx: 109, cy: 8, r: 6 } as const;
+const CLOCK = { cx: 108, cy: 8, r: 6 } as const;
 
 function clockFace(): string {
   const { cx, cy, r } = CLOCK;
@@ -450,7 +455,7 @@ function clockHands(day: boolean): string {
 /* --- a small framed picture on the wall, between the window and the bed, to fill the gap --- */
 
 function picture(): { frame: string; mat: string; art: string } {
-  const px = 58;
+  const px = 66;
   const py = 22;
   const w = 10;
   const h = 12;
@@ -621,7 +626,7 @@ export function Room({ className }: { className?: string }) {
           }
         />
       ))}
-      <path d={sc.caret} className="room-caret fill-(--lp-code-blue)" />
+      <path d={sc.caret} className="fill-(--lp-mac-red)" />
       <path d={mc.slot} className="fill-(--lp-room-mac-sh)" />
 
       {/* desk lamp: the warm pool on the desk/Mac + the shade breathe together; the arm is static */}
