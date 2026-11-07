@@ -85,6 +85,14 @@
   --lp-room-furniture: #6b7079;
   --lp-room-furniture-dark: #3a3d44;
   --lp-room-furniture-light: #9aa0a9;
+  /* the night city silhouette against the sky (dark mode) */
+  --lp-city-night: #091a3a;
+  /* the day view outside the window (light mode): a blue sky, sun, clouds and a daylit skyline */
+  --lp-sky-day: #5fa8e0;
+  --lp-sky-day-2: #bfe2f5;
+  --lp-sun-day: #ffd34d;
+  --lp-cloud: #eef4f8;
+  --lp-city-day: #4a6478;
 
   /* the pre-footer computer: a Bondi blue translucent shell, its pale front bezel, and the macOS
      Terminal window on its screen (title bar, title, the three window buttons) */
@@ -114,6 +122,18 @@
 .dark .landing-surface {
   --lp-paper: #121212;
   --lp-paper-2: #191919;
+}
+
+/* The pixel room's window shows a night view by default (and in dark mode) and a day view in light
+   mode. Both layers are in the SVG; CSS picks which is visible, so no JS and no layout shift. */
+.room-day {
+  display: none;
+}
+.light .room-day {
+  display: inline;
+}
+.light .room-night {
+  display: none;
 }
 
 @media (min-width: 768px) {
