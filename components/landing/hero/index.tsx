@@ -9,7 +9,8 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { appDescription, githubUrl } from '@/lib/shared';
 import { GithubIcon } from '../ui/github-icon';
-import { type Satellite, Stage } from './stage';
+import { Room } from './room';
+import type { Satellite } from './stage';
 import { Starfield } from './starfield';
 
 export interface HeroSection extends Satellite {
@@ -79,7 +80,10 @@ export function Hero({ sections }: { sections: HeroSection[] }) {
             </a>
           </div>
         </div>
-        <Stage satellites={sections} />
+        {/* Static pixel-room mockup (dusk/night lofi). Replaces the orbiting-globe stage. */}
+        <div className="relative flex items-center lg:items-stretch">
+          <Room className="h-auto w-full self-center rounded-lg border border-(--lp-room-line)" />
+        </div>
       </div>
       {/* the horizon: the globe sets behind it as the hero scrolls away */}
       <div aria-hidden className="h-16 border-t border-lp-line" />

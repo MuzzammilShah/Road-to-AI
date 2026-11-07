@@ -76,6 +76,16 @@
   --lp-moon-dark: #8a8984;
   --lp-pin: #e5484d;
 
+  /* the hero's pixel bedroom (a night scene): a dark wall and floor the same in both themes, so the
+     night mood holds in light mode too (like the computer's --lp-mac-* tokens) */
+  --lp-room-wall: #1b1d22;
+  --lp-room-floor: #141519;
+  --lp-room-line: #33363d;
+  /* furniture greys, lit by the room (same in both themes) */
+  --lp-room-furniture: #6b7079;
+  --lp-room-furniture-dark: #3a3d44;
+  --lp-room-furniture-light: #9aa0a9;
+
   /* the pre-footer computer: a Bondi blue translucent shell, its pale front bezel, and the macOS
      Terminal window on its screen (title bar, title, the three window buttons) */
   --lp-mac-blue: #0aa0bf;
