@@ -18,7 +18,10 @@ export const metadata: Metadata = {
   applicationName: appName,
   manifest: '/manifest.webmanifest',
   icons: {
-    icon: '/assets/images/docs-logo.png',
+    icon: [
+      { url: '/assets/images/docs-logo.png', media: '(prefers-color-scheme: light)' },
+      { url: '/assets/images/docs-logo-dark.png', media: '(prefers-color-scheme: dark)' },
+    ],
     apple: '/assets/images/icons/apple-touch-icon.png',
   },
   appleWebApp: {
